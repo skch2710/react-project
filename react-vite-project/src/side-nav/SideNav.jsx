@@ -15,9 +15,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { Link } from 'react-router-dom';
+import { IoHomeOutline } from "react-icons/io5";
+import { BsInfoCircle } from "react-icons/bs";
+import { MdOutlineContactPhone } from "react-icons/md";
+import { RiIncreaseDecreaseLine } from "react-icons/ri";
 
 const drawerWidth = 240;
 
@@ -87,10 +89,10 @@ const MainDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open'
 );
 
 const navigationItems = [
-  { path: '/', text: 'Home' },
-  { path: '/about', text: 'About' },
-  { path: '/contact', text: 'Contact' },
-  { path: '/counter', text: 'Counter' },
+  { path: '/', text: 'Home' ,icon:<IoHomeOutline />},
+  { path: '/about', text: 'About' ,icon:<BsInfoCircle />},
+  { path: '/contact', text: 'Contact' ,icon:<MdOutlineContactPhone />},
+  { path: '/counter', text: 'Counter' ,icon:<RiIncreaseDecreaseLine />},
 ];
 
 export default function SideNav() {
@@ -136,7 +138,6 @@ export default function SideNav() {
             <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 component={Link} to={item.path}
-                href={item.path}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -150,7 +151,7 @@ export default function SideNav() {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {item.icon}
                 </ListItemIcon>
                 <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -159,7 +160,7 @@ export default function SideNav() {
         </List>        
       </MainDrawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <DrawerHeader />
+      
       </Box>
     </Box>
   );
