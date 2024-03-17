@@ -20,6 +20,11 @@ import { IoHomeOutline } from "react-icons/io5";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { RiIncreaseDecreaseLine } from "react-icons/ri";
+import { Routes, Route } from 'react-router-dom';
+import About from '../components/About';
+import Contact from '../components/Contact';
+import Home from '../components/Home';
+import Counter from '../increment-test/Counter';
 
 const drawerWidth = 240;
 
@@ -89,10 +94,10 @@ const MainDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open'
 );
 
 const navigationItems = [
-  { path: '/', text: 'Home' ,icon:<IoHomeOutline />},
-  { path: '/about', text: 'About' ,icon:<BsInfoCircle />},
-  { path: '/contact', text: 'Contact' ,icon:<MdOutlineContactPhone />},
-  { path: '/counter', text: 'Counter' ,icon:<RiIncreaseDecreaseLine />},
+  { path: '/', text: 'Home', icon: <IoHomeOutline />, component: Home },
+  { path: '/about', text: 'About', icon: <BsInfoCircle />, component: About },
+  { path: '/contact', text: 'Contact', icon: <MdOutlineContactPhone />, component: Contact },
+  { path: '/counter', text: 'Counter', icon: <RiIncreaseDecreaseLine />, component: Counter },
 ];
 
 export default function SideNav() {
@@ -160,7 +165,11 @@ export default function SideNav() {
         </List>        
       </MainDrawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      
+        <Routes>
+          {navigationItems.map((item) => (
+            <Route key={item.path} path={item.path} element={<item.component />} />
+          ))}
+        </Routes>
       </Box>
     </Box>
   );
