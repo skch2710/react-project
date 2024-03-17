@@ -1,0 +1,18 @@
+Create Vite Project : --> npm create vite@latest
+
+To Run Vite Project : --> npm run dev
+
+To Stop Running : --> q + Enter
+
+Toster : --> npm install react-toastify
+
+Routing : --> npm install react-router-dom
+
+Axios : --> npm install axios
+
+Bootstrap : --> npm install bootstrap
+
+Material UI : https://mui.com/material-ui/getting-started/installation/
+--> npm install @mui/material @emotion/react @emotion/styled
+
+

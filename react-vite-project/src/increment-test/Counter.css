@@ -1,0 +1,13 @@
+.btn {
+  margin-right: 10px;
+}
+
+h1 {
+  font-size: 24px; /* Set the font size */
+  color: #333; /* Set the text color */
+  margin-bottom: 20px; /* Add margin at the bottom to create space */
+}
+
+.container{
+  align-items: center;
+}
