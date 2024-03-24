@@ -12,12 +12,12 @@ const App = () => {
   return (
     <BrowserRouter>
       <SideNav />
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/counter" element={<Counter />} />
-      </Routes>
+      </Routes> */}
     </BrowserRouter>
   );
 };

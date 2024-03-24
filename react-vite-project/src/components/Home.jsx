@@ -5,19 +5,9 @@ import React from 'react'
 const Home = () => {
   return (
     <>
-      <Box height={400}
-    width={800}
-    my={4}
-    display="flex"
-    alignItems="center"
-    gap={4}
-    p={6}
-    // sx={{ paddingLeft: 40, }}
-    >
       <div>
         Home Page ........................................................................
       </div>
-      </Box>
     </>
   )
 }

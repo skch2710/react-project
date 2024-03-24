@@ -34,16 +34,7 @@ const handleClear = () => {
   };
 
   return (
-    <Box
-    height={400}
-    width={800}
-    my={4}
-    // display="flex"
-    alignItems="center"
-    gap={4}
-    p={6}
-    sx={{ paddingLeft: 40, }}
-  >
+    <>
      <p>React Increment and Decrement Example</p>
      <p> Counter: {count}</p>
       <Stack direction="row" spacing={2}>
@@ -57,7 +48,7 @@ const handleClear = () => {
         Clear
       </Button>
       </Stack>
-    </Box>
+    </>
   )
 }
 

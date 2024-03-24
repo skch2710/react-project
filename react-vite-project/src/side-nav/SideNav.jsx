@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -9,8 +9,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -18,15 +16,20 @@ import ListItemText from '@mui/material/ListItemText';
 import { Link } from 'react-router-dom';
 import { IoHomeOutline } from "react-icons/io5";
 import { BsInfoCircle } from "react-icons/bs";
-import { MdOutlineContactPhone } from "react-icons/md";
 import { RiIncreaseDecreaseLine } from "react-icons/ri";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { Routes, Route } from 'react-router-dom';
 import About from '../components/About';
-import Contact from '../components/Contact';
 import Home from '../components/Home';
 import Counter from '../increment-test/Counter';
+import NotFound from '../components/NotFound';
+import LoginPage from '../login-page/LoginPage';
+import { IoMdLogOut ,IoIosPeople } from "react-icons/io";
+import Employees from '../employees/Employees';
+import { Tooltip } from '@mui/material';
+import Hostel from '../hostel/Hostel';
 
-const drawerWidth = 240;
+const drawerWidth = 180;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -49,15 +52,6 @@ const closedMixin = (theme) => ({
   },
 });
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
 const MainAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -68,7 +62,7 @@ const MainAppBar = styled(AppBar, {
   }),
   ...(open && {
     marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
+    // width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -94,51 +88,50 @@ const MainDrawer = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open'
 );
 
 const navigationItems = [
-  { path: '/', text: 'Home', icon: <IoHomeOutline />, component: Home },
+  { path: '/home', text: 'Home', icon: <IoHomeOutline />, component: Home },
   { path: '/about', text: 'About', icon: <BsInfoCircle />, component: About },
-  { path: '/contact', text: 'Contact', icon: <MdOutlineContactPhone />, component: Contact },
   { path: '/counter', text: 'Counter', icon: <RiIncreaseDecreaseLine />, component: Counter },
+  { path: '/employees', text: 'Employees', icon: <FaPeopleGroup />, component: Employees },
+  { path: '/hostel', text: 'Hostel', icon: <IoIosPeople />, component: Hostel },
 ];
 
 export default function SideNav() {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawer = () => {
+    setOpen(!open);
   };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <MainAppBar position="fixed" open={open}>
+      <MainAppBar position="fixed" sx={{ backgroundColor: "#ffffff", color: "#2f2f2f" }} open={open}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={handleDrawer}
             edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: 'none' }),
-            }}
           >
             <MenuIcon />
           </IconButton>
+          <img style={{ marginLeft: '30px' }} src='/logo-one.png' width={160} height={50} />
+          <Tooltip title="Logout" arrow>
+            <IconButton
+              onClick={handleDrawer}
+              style={{
+                marginLeft: 'auto',
+                // cursor: 'pointer',
+              }}>
+              <IoMdLogOut />
+            </IconButton>
+          </Tooltip>
+
         </Toolbar>
       </MainAppBar>
       <MainDrawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{ display: 'block', marginTop: 8, }}>
           {navigationItems.map((item, index) => (
             <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
@@ -162,13 +155,15 @@ export default function SideNav() {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>        
+        </List>
       </MainDrawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: 8 }}>
         <Routes>
+          <Route path="/" element={<LoginPage />} />
           {navigationItems.map((item) => (
             <Route key={item.path} path={item.path} element={<item.component />} />
           ))}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>
     </Box>
