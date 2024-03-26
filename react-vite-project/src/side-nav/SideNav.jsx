@@ -24,9 +24,9 @@ import Home from '../components/Home';
 import Counter from '../increment-test/Counter';
 import NotFound from '../components/NotFound';
 import LoginPage from '../login-page/LoginPage';
-import { IoMdLogOut ,IoIosPeople } from "react-icons/io";
+import { IoMdLogOut, IoIosPeople } from "react-icons/io";
 import Employees from '../employees/Employees';
-import { Tooltip } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import Hostel from '../hostel/Hostel';
 
 const drawerWidth = 180;
@@ -116,17 +116,18 @@ export default function SideNav() {
             <MenuIcon />
           </IconButton>
           <img style={{ marginLeft: '30px' }} src='/logo-one.png' width={160} height={50} />
-          <Tooltip title="Logout" arrow>
-            <IconButton
-              onClick={handleDrawer}
-              style={{
-                marginLeft: 'auto',
-                // cursor: 'pointer',
-              }}>
-              <IoMdLogOut />
-            </IconButton>
-          </Tooltip>
-
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+            <Typography sx={{ marginRight: '10px' }}>
+              Sathish Kumar Ch
+            </Typography>
+            <Tooltip title="Logout" arrow>
+              <IconButton
+                onClick={handleDrawer}
+              >
+                <IoMdLogOut style={{ color: "#000033" }}/>
+              </IconButton>
+            </Tooltip>
+          </div>
         </Toolbar>
       </MainAppBar>
       <MainDrawer variant="permanent" open={open}>

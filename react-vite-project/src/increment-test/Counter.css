@@ -11,3 +11,19 @@ h1 {
 .container{
   align-items: center;
 }
+
+.fixedSize {
+  width: 200px;
+  height: 50px;
+  margin-bottom: 10px;
+  margin-left: 50px;
+  text-align: center;
+  padding-top: 10px;
+  /* text-justify: auto; */
+}
+
+.textCount{
+  color: blueviolet;
+  text-align: center;
+  margin-left: 2px;
+}
