@@ -24,13 +24,12 @@ const postAxiosApi = async (path, payload) => {
         if (response && response.data.statusCode === 200) {
             toast.success(response.data.successMessage, { autoClose: 2000 });
         } else {
-            // Handle non-200 responses
             toast.error(response && response.errorMessage);
         }
         return response;
     } catch (error) {
         console.error('Error posting data:', error);
-        toast.error('Failed to create employee');
+        toast.error('Network Error');
         throw error; // Re-throw the error to handle higher up if needed
     }
 };
