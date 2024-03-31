@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Button, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from '@mui/material';
+import { Button, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Tooltip } from '@mui/material';
 import { BiSolidEdit } from "react-icons/bi";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHostellers,clearHostellersState, resetFormData,updateFormData, } from '../store/hostelSlice';
+import { fetchHostellers, clearHostellersState, resetFormData, updateFormData, updateSearchForm } from '../store/hostelSlice';
 import HostelForm from './HostelForm';
 import moment from 'moment';
+import './Hostel.css'
 
 function Hostel() {
     const [open, setOpen] = useState(false);
+    const hostellers = useSelector((state) => state.hostellers.hostellers);
+    const formData = useSelector((state) => state.hostellers.currentFormData);
+    const searchForm = useSelector((state) => state.hostellers.searchForm);
+    const totalElements = useSelector((state) => state.hostellers.totalElements);
+
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,25 +24,27 @@ function Hostel() {
         };
     }, [dispatch]);
 
-    const hostellers = useSelector((state) => state.hostellers.hostellers);
-    const formData = useSelector((state) => state.hostellers.currentFormData);
+    useEffect(() => {
+        // This effect will run whenever pageNumber or pageSize changes
+        handleSearch();
+    }, [searchForm.pageNumber, searchForm.pageSize]);
 
-    const [searhForm, setSearhForm] = useState({
-        "fullName": "",
-        "emailId": "",
-    });
-
-    const handleForm = (e) => {
+    const handleSearchForm = (e) => {
         const { name, value } = e.target;
-        setSearhForm({
-            ...searhForm,
-            [name]: value
-        });
+        dispatch(updateSearchForm({ [name]: value }));
+    };
+
+    const handlepagechange = (event, newpage) => {
+        dispatch(updateSearchForm({ pageNumber: newpage }));
+    };
+
+    const handlerowperpagechange = (event) => {
+        dispatch(updateSearchForm({ pageSize: +event.target.value, pageNumber: 0 }));
     };
 
     const handlePopup = () => {
         setOpen(!open);
-        if(open){
+        if (open) {
             dispatch(resetFormData());
         }
         console.log(formData);
@@ -44,13 +52,13 @@ function Hostel() {
 
     const handleEdit = (row) => {
         const updatedFormData = {
-          ...row,
-          joiningDate: moment(row.joiningDate).format("YYYY-MM-DD"),
+            ...row,
+            joiningDate: moment(row.joiningDate).format("YYYY-MM-DD"),
         };
         dispatch(updateFormData(updatedFormData));
         handlePopup();
         console.log("Inside Edit.......", row);
-      };
+    };
 
     const columns = [
         { id: 'actions', name: 'Actions' },
@@ -65,14 +73,20 @@ function Hostel() {
         { id: 'vacatedDate', name: 'Vacated Date' },
     ];
 
-    
+
     // Define handleSearch function
     const handleSearch = () => {
-        dispatch(fetchHostellers(searhForm));
+        const formFinal = {
+            ...searchForm,
+            pageNumber: searchForm.pageNumber + 1
+        };
+        dispatch(fetchHostellers(formFinal));
+        console.log(formFinal);
+        console.log(totalElements);
     };
 
     return (
-        <div style={{ margin: '1%' }}>
+        <div>
             <Paper sx={{ padding: 1 }}>
                 <div>
                     <form >
@@ -80,16 +94,16 @@ function Hostel() {
                             <TextField
                                 sx={{ width: 250 }}
                                 name="fullName"
-                                value={searhForm.fullName}
-                                onChange={handleForm}
+                                value={searchForm.fullName}
+                                onChange={handleSearchForm}
                                 variant="outlined"
                                 label="Full Name"
                             />
                             <TextField
                                 sx={{ width: 250 }}
                                 name="emailId"
-                                value={searhForm.emailId}
-                                onChange={handleForm}
+                                value={searchForm.emailId}
+                                onChange={handleSearchForm}
                                 variant="outlined"
                                 label="Email Id"
                             />
@@ -105,11 +119,11 @@ function Hostel() {
                         Add Hosteller (+)
                     </Button>
                 </div>
-                <div style={{ margin: '1%' }}>
+                <div style={{ margin: '1%', maxHeight: '46vh', overflowY: 'auto' }}>
                     <TableContainer >
                         <Table>
-                            <TableHead>
-                                <TableRow style={{ backgroundColor: 'gray' }}>
+                            <TableHead className="sticky-header">
+                                <TableRow style={{ backgroundColor: 'gray'}}>
                                     {columns.map((column) => (
                                         <TableCell key={column.id} style={{ color: 'white', fontSize: '12px' }}>{column.name}</TableCell>
                                     ))}
@@ -121,12 +135,12 @@ function Hostel() {
                                         <TableCell colSpan={columns.length} align="center">No Result Found</TableCell>
                                     </TableRow>
                                 ) : (
-                                    hostellers && hostellers.data && hostellers.data.map((row, i) => (
+                                    hostellers && hostellers.data && hostellers.data.content.map((row, i) => (
                                         <TableRow key={i}>
                                             <TableCell style={{ display: 'flex', alignItems: 'center' }}>
                                                 <Tooltip title="Edit" arrow>
                                                     <IconButton size='small'
-                                                    onClick={e => { handleEdit(row) }}
+                                                        onClick={e => { handleEdit(row) }}
                                                     >
                                                         <BiSolidEdit />
                                                     </IconButton>
@@ -152,6 +166,17 @@ function Hostel() {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <TablePagination
+                        rowsPerPageOptions={[2, 5, 10, 20]}
+                        rowsPerPage={searchForm.pageSize}
+                        page={searchForm.pageNumber}
+                        count={totalElements}
+                        component={'div'}
+                        onPageChange={handlepagechange}
+                        onRowsPerPageChange={handlerowperpagechange}
+                    >
+                    </TablePagination>
+
                 </div>
             </Paper>
             <HostelForm open={open} handlePopup={handlePopup} formData={formData}

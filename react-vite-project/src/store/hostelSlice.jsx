@@ -17,9 +17,23 @@ const initialFormData = {
   modifiedById: 1,
 };
 
+const initialSearchForm = {
+  "pageNumber": 0,
+  "pageSize": 5,
+  "sortBy": "",
+  "sortOrder": "",
+  "columnFilters": [
+  ],
+  "export": false,
+  "fullName": "",
+  "emailId": ""
+}
+
 const initialState = {
   hostellers: {},
   currentFormData: initialFormData, // Initialize currentFormData here
+  searchForm: initialSearchForm,
+  totalElements: 0,
   status: '',
   error: null,
 };
@@ -54,6 +68,8 @@ const hostelSlice = createSlice({
   reducers: {
     clearHostellersState: (state) => {
       state.hostellers = {};
+      state.searchForm = initialSearchForm,
+      state.totalElements = 0,
       state.status = '';
       state.error = null;
     },
@@ -66,6 +82,12 @@ const hostelSlice = createSlice({
     resetFormData: (state) => {
       state.currentFormData = initialFormData;
     },
+    updateSearchForm: (state, action) => {
+      state.searchForm = {
+        ...state.searchForm,
+        ...action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -75,6 +97,11 @@ const hostelSlice = createSlice({
       .addCase(fetchHostellers.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.hostellers = action.payload;
+        if(action.payload && action.payload.statusCode === 200 ){
+          state.totalElements = action.payload.data.totalElements;
+        }else{
+          state.totalElements = 0;
+        }
       })
       .addCase(fetchHostellers.rejected, (state, action) => {
         state.status = 'failed';
@@ -94,6 +121,6 @@ const hostelSlice = createSlice({
   },
 });
 
-export const { clearHostellersState, updateFormData, resetFormData } = hostelSlice.actions;
+export const { clearHostellersState, updateFormData, resetFormData ,updateSearchForm} = hostelSlice.actions;
 
 export default hostelSlice.reducer;
