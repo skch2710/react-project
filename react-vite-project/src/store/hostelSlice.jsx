@@ -36,6 +36,7 @@ const initialState = {
   totalElements: 0,
   status: '',
   error: null,
+  loading: false,
 };
 
 // Your existing createAsyncThunk and other code...
@@ -93,10 +94,12 @@ const hostelSlice = createSlice({
     builder
       .addCase(fetchHostellers.pending, (state) => {
         state.status = 'loading';
+        state.loading = true;
       })
       .addCase(fetchHostellers.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.hostellers = action.payload;
+        state.loading = false;
         if(action.payload && action.payload.statusCode === 200 ){
           state.totalElements = action.payload.data.totalElements;
         }else{
@@ -106,6 +109,7 @@ const hostelSlice = createSlice({
       .addCase(fetchHostellers.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+        state.loading = false;
       })
       .addCase(saveHosteller.pending, (state) => {
         state.status = 'loading';

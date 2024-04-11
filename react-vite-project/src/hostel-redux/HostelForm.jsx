@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateFormData, resetFormData, saveHosteller } from '../store/hostelSlice';
 
 
-const HostelForm = ({ open, handlePopup, formData, handleSearch }) => {
+const HostelForm = ({ open, handlePopup, formData, search }) => {
 
     const dispatch = useDispatch();
+    const searchForm = useSelector((state) => state.hostellers.searchForm);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,7 +19,7 @@ const HostelForm = ({ open, handlePopup, formData, handleSearch }) => {
             // Handle successful save/update
             console.log('Hosteller saved:', response);
             //dispatch(resetFormData()); // Reset form after successful save
-            handleSearch();
+            search(searchForm);
             handlePopup();
         } catch (error) {
             // Handle error

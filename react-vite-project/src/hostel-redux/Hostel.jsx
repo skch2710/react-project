@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Tooltip } from '@mui/material';
+import { Button, IconButton, Pagination, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, TextField, Tooltip, Typography } from '@mui/material';
 import { BiSolidEdit } from "react-icons/bi";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,13 +7,22 @@ import { fetchHostellers, clearHostellersState, resetFormData, updateFormData, u
 import HostelForm from './HostelForm';
 import moment from 'moment';
 import './Hostel.css'
+import { RingLoader } from 'react-spinners';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 function Hostel() {
     const [open, setOpen] = useState(false);
+    const [order, setOrder] = useState("asc");
     const hostellers = useSelector((state) => state.hostellers.hostellers);
     const formData = useSelector((state) => state.hostellers.currentFormData);
     const searchForm = useSelector((state) => state.hostellers.searchForm);
     const totalElements = useSelector((state) => state.hostellers.totalElements);
+    const loading = useSelector((state) => state.hostellers.loading);
+    const [localSearchForm, setLocalSearchForm] = useState({
+        "fullName": "",
+        "emailId": "",
+    });
 
     const dispatch = useDispatch();
 
@@ -24,22 +33,42 @@ function Hostel() {
         };
     }, [dispatch]);
 
-    useEffect(() => {
-        // This effect will run whenever pageNumber or pageSize changes
-        handleSearch();
-    }, [searchForm.pageNumber, searchForm.pageSize]);
+    // useEffect(() => {
+    //     // This effect will run whenever pageNumber or pageSize changes
+    //     search(searchForm);
+    // }, [searchForm.pageNumber, searchForm.pageSize]);
 
+    // const handleSearchForm = (e) => {
+    //     const { name, value } = e.target;
+    //     dispatch(updateSearchForm({ [name]: value }));
+    // };
     const handleSearchForm = (e) => {
         const { name, value } = e.target;
-        dispatch(updateSearchForm({ [name]: value }));
+        setLocalSearchForm({
+            ...localSearchForm,
+            [name]: value
+        });
     };
 
-    const handlepagechange = (event, newpage) => {
-        dispatch(updateSearchForm({ pageNumber: newpage }));
+    const handlePageNumber = async (event, newpage) => {
+        const pageNumber = newpage;
+        const searchFormUpdated = {
+            ...searchForm,
+            pageNumber: pageNumber,
+        }
+        dispatch(updateSearchForm(searchFormUpdated));
+        search(searchFormUpdated);
     };
 
-    const handlerowperpagechange = (event) => {
-        dispatch(updateSearchForm({ pageSize: +event.target.value, pageNumber: 0 }));
+    const handlePageSize = async (event) => {
+        const pageSize = +event.target.value;
+        const searchFormUpdated = {
+            ...searchForm,
+            pageNumber: 0,
+            pageSize: pageSize,
+        }
+        await dispatch(updateSearchForm(searchFormUpdated));
+        search(searchFormUpdated);
     };
 
     const handlePopup = () => {
@@ -75,14 +104,38 @@ function Hostel() {
 
 
     // Define handleSearch function
-    const handleSearch = () => {
+    const handleSearch = async () => {
+        const searchFormUpdated = {
+            ...searchForm,
+            fullName: localSearchForm.fullName,
+            emailId: localSearchForm.emailId,
+            pageNumber: 0,
+        }
+        await dispatch(updateSearchForm(searchFormUpdated));
+        search(searchFormUpdated);
+    };
+
+    const search = (searchForm) => {
         const formFinal = {
             ...searchForm,
-            pageNumber: searchForm.pageNumber + 1
+            pageNumber: searchForm.pageNumber + 1,
         };
         dispatch(fetchHostellers(formFinal));
-        console.log(formFinal);
-        console.log(totalElements);
+    };
+
+    const handleOrder = (sortBy) => {
+        if (order === "asc") {
+            setOrder("desc");
+        } else {
+            setOrder("asc");
+        }
+        const searchFormUpdated = {
+            ...searchForm,
+            sortOrder: order,
+            sortBy: sortBy,
+        }
+        dispatch(updateSearchForm(searchFormUpdated));
+        search(searchFormUpdated);
     };
 
     return (
@@ -94,7 +147,7 @@ function Hostel() {
                             <TextField
                                 sx={{ width: 250 }}
                                 name="fullName"
-                                value={searchForm.fullName}
+                                value={localSearchForm.fullName}
                                 onChange={handleSearchForm}
                                 variant="outlined"
                                 label="Full Name"
@@ -102,7 +155,7 @@ function Hostel() {
                             <TextField
                                 sx={{ width: 250 }}
                                 name="emailId"
-                                value={searchForm.emailId}
+                                value={localSearchForm.emailId}
                                 onChange={handleSearchForm}
                                 variant="outlined"
                                 label="Email Id"
@@ -120,67 +173,87 @@ function Hostel() {
                     </Button>
                 </div>
                 <div style={{ margin: '1%', maxHeight: '46vh', overflowY: 'auto' }}>
+                    <div>
+                        <Typography>Total Elements ({totalElements})</Typography>
+                    </div>
                     <TableContainer >
                         <Table>
-                            <TableHead className="sticky-header">
-                                <TableRow style={{ backgroundColor: 'gray'}}>
+                            <TableHead>
+                                <TableRow style={{ backgroundColor: 'gray', height: '10px'}}>
                                     {columns.map((column) => (
-                                        <TableCell key={column.id} style={{ color: 'white', fontSize: '12px' }}>{column.name}</TableCell>
+                                        <TableCell key={column.id} style={{ color: 'white', fontSize: '10px' }}>{column.name}
+                                            {
+                                                column.id === "actions" ? "" :
+                                                    <IconButton size='small' onClick={e => { handleOrder(column.id) }}>
+                                                        {order === "asc" ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                                                    </IconButton>
+                                            }
+
+                                        </TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {hostellers && hostellers.statusCode !== 200 ? (
-                                    <TableRow style={{ height: 150 }}>
-                                        <TableCell colSpan={columns.length} align="center">No Result Found</TableCell>
-                                    </TableRow>
-                                ) : (
-                                    hostellers && hostellers.data && hostellers.data.content.map((row, i) => (
-                                        <TableRow key={i}>
-                                            <TableCell style={{ display: 'flex', alignItems: 'center' }}>
-                                                <Tooltip title="Edit" arrow>
-                                                    <IconButton size='small'
-                                                        onClick={e => { handleEdit(row) }}
-                                                    >
-                                                        <BiSolidEdit />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Delete" arrow>
-                                                    <IconButton size='small'>
-                                                        <MdOutlineDeleteForever />
-                                                    </IconButton>
-                                                </Tooltip>
+                                {
+                                    loading ? (
+                                        <TableRow style={{ height: 150 }}>
+                                            <TableCell colSpan={columns.length} align="center">
+                                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                                                    <RingLoader loading={loading} color="#3676d6" />
+                                                </div>
                                             </TableCell>
-                                            <TableCell style={{ fontSize: '12px' }} >{row.fullName}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.emailId}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.phoneNumber}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.fee}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.joiningDate}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.address}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.proof}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.reason}</TableCell>
-                                            <TableCell style={{ fontSize: '12px' }}>{row.vacatedDate}</TableCell>
                                         </TableRow>
-                                    ))
-                                )}
+                                    ) : hostellers && hostellers.statusCode !== 200 ? (
+                                        <TableRow style={{ height: 150 }}>
+                                            <TableCell colSpan={columns.length} align="center">No Result Found</TableCell>
+                                        </TableRow>
+                                    ) : (
+                                        hostellers && hostellers.data && hostellers.data.content.map((row, i) => (
+                                            <TableRow key={i}>
+                                                <TableCell style={{ display: 'flex', alignItems: 'center' }}>
+                                                    <Tooltip title="Edit" arrow>
+                                                        <IconButton size='small' onClick={e => { handleEdit(row) }}>
+                                                            <BiSolidEdit />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip title="Delete" arrow>
+                                                        <IconButton size='small'>
+                                                            <MdOutlineDeleteForever />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.fullName}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.emailId}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.phoneNumber}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.fee}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.joiningDate}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.address}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.proof}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.reason}</TableCell>
+                                                <TableCell style={{ fontSize: '10' }}>{row.vacatedDate}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    )
+                                }
                             </TableBody>
                         </Table>
                     </TableContainer>
+                </div>
+                <div>
                     <TablePagination
                         rowsPerPageOptions={[2, 5, 10, 20]}
                         rowsPerPage={searchForm.pageSize}
                         page={searchForm.pageNumber}
                         count={totalElements}
                         component={'div'}
-                        onPageChange={handlepagechange}
-                        onRowsPerPageChange={handlerowperpagechange}
+                        onPageChange={handlePageNumber}
+                        onRowsPerPageChange={handlePageSize}
                     >
                     </TablePagination>
-
                 </div>
             </Paper>
             <HostelForm open={open} handlePopup={handlePopup} formData={formData}
-                handleSearch={handleSearch} />
+                search={search} />
         </div>
     );
 }
