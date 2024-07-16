@@ -6,4 +6,11 @@ node -v # should print `v20.15.1`
 # verifies the right NPM version is in the environment
 npm -v # should print `10.7.0`
 
-#Visual Code for Better Coding
+#Visual Code (VS Code Editor) for Better Coding
+
+# Extention in VS code to use Shortcuts
+-->ES7+ React/Redux/React-Native snippets
+
+# After Clone Run 
+--> npm install
+
