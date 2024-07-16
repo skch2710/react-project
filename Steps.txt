@@ -5,3 +5,5 @@ node -v # should print `v20.15.1`
 
 # verifies the right NPM version is in the environment
 npm -v # should print `10.7.0`
+
+#Visual Code for Better Coding
