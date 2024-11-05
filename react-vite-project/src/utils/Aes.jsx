@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const ENCRYPTION_KEY = 'U2F0aGlzaEt1bWFyQ2gyNw=='; // Base64 encoded key (must be decoded for use)
+const ENCRYPTION_KEY = import.meta.env.VITE_ENC_KEY; // Base64 encoded key (must be decoded for use)
 const GCM_IV_LENGTH = 12; // 12 bytes for AES-GCM IV
 const GCM_TAG_LENGTH = 128; // Tag length in bits
 

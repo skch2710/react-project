@@ -24,7 +24,8 @@ const postAxiosApi = async (path, payload) => {
         if (response && response.data.statusCode === 200) {
             toast.success(response.data.successMessage, { autoClose: 2000 });
         } else {
-            toast.error(response && response.errorMessage);
+            toast.error(response.data.errorMessage, { autoClose: 2000 });
+            // toast.error(response && response.errorMessage);
         }
         return response;
     } catch (error) {

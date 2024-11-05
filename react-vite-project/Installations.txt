@@ -4,6 +4,8 @@ To Run Vite Project : --> npm run dev
 
 To Stop Running : --> q + Enter
 
+To Format Code : ---> Shift + Alt + F
+
 Toster : --> npm install react-toastify
 
 Routing : --> npm install react-router-dom
@@ -22,3 +24,6 @@ npm i @mui/x-date-pickers
 
 
 npm install react-spinners --save
+
+
+>> npm install formik yup
