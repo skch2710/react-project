@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { Avatar, Checkbox, FormControlLabel, Typography, Box } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AxiosApi from '../utils/AxiosApi';
+import { encrypt, decrypt } from '../utils/Aes';
 
 const LoginPage = () => {
   // Move the useState hook inside the component
@@ -22,10 +23,12 @@ const LoginPage = () => {
   const handleSubmit = async (values) => {
     // Reset error message on submit
     setErrorMessage('');
+    const encryptedPwd = await encrypt(values.password);
+    console.log(encryptedPwd);
 
     const loginPayload = {
       emailId: values.email,
-      password: values.password,
+      password: encryptedPwd,
     };
 
     try {
@@ -68,12 +71,17 @@ const LoginPage = () => {
 
       {/* Display error message if it exists */}
       {errorMessage && (
-        <Box sx={{ color: 'red', mb: 2,
+        <Box sx={{
+          color: 'red', // Text color
+          mb: 2,
           mt: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-         }}>
+          backgroundColor: 'lightblue', // Set background color to light green
+          padding: '4px', // Add some padding for better spacing
+          borderRadius: '4px', // Optional: add border-radius for a smoother look
+        }}>
           {errorMessage}
         </Box>
       )}
