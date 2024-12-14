@@ -27,3 +27,7 @@ npm install react-spinners --save
 
 
 >> npm install formik yup
+
+>> npm install file-saver
+
+

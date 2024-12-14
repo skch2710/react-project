@@ -4,13 +4,11 @@ import * as Yup from 'yup';
 import { Avatar, Checkbox, FormControlLabel, Typography, Box } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AxiosApi from '../utils/AxiosApi';
-import { encrypt, decrypt } from '../utils/Aes';
+import { encrypt } from '../utils/Aes';
 
-const LoginPage = () => {
-  // Move the useState hook inside the component
+const LoginPage = ({ setIsAuthenticated }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email format')
@@ -21,10 +19,8 @@ const LoginPage = () => {
   });
 
   const handleSubmit = async (values) => {
-    // Reset error message on submit
     setErrorMessage('');
     const encryptedPwd = await encrypt(values.password);
-    console.log(encryptedPwd);
 
     const loginPayload = {
       emailId: values.email,
@@ -32,17 +28,18 @@ const LoginPage = () => {
     };
 
     try {
-      // Make API call using Axios
-      const response = await AxiosApi('http://localhost:8061/api/authenticate/login', 'post', loginPayload);
+      const response = await AxiosApi(
+        'http://localhost:8061/api/authenticate/login',
+        'post',
+        loginPayload
+      );
 
-      // Check if response contains the data field
       if (response && response.data) {
-        // Assuming the API sends an error message in case of failure
         if (response.data.errorMessage) {
           setErrorMessage(response.data.errorMessage);
         } else {
           console.log('Login successful:', response.data);
-          // You can handle success here, e.g., saving token, redirecting
+          setIsAuthenticated(true); // Update authentication state
         }
       }
     } catch (error) {
@@ -52,7 +49,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto' }}>      
+    <div style={{ maxWidth: '400px', margin: 'auto' }}>
       <Box
         sx={{
           mt: 8,
@@ -69,19 +66,20 @@ const LoginPage = () => {
         </Typography>
       </Box>
 
-      {/* Display error message if it exists */}
       {errorMessage && (
-        <Box sx={{
-          color: 'red', // Text color
-          mb: 2,
-          mt: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'lightblue', // Set background color to light green
-          padding: '4px', // Add some padding for better spacing
-          borderRadius: '4px', // Optional: add border-radius for a smoother look
-        }}>
+        <Box
+          sx={{
+            color: 'red',
+            mb: 2,
+            mt: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'lightblue',
+            padding: '4px',
+            borderRadius: '4px',
+          }}
+        >
           {errorMessage}
         </Box>
       )}

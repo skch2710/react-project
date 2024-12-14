@@ -10,6 +10,7 @@ import './Hostel.css'
 import { RingLoader } from 'react-spinners';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { decrypt } from '../utils/Aes';
 
 function Hostel() {
     const [open, setOpen] = useState(false);
@@ -179,7 +180,7 @@ function Hostel() {
                     <TableContainer >
                         <Table>
                             <TableHead>
-                                <TableRow style={{ backgroundColor: 'gray', height: '10px'}}>
+                                <TableRow style={{ backgroundColor: 'gray', height: '10px' }}>
                                     {columns.map((column) => (
                                         <TableCell key={column.id} style={{ color: 'white', fontSize: '10px' }}>{column.name}
                                             {
@@ -208,31 +209,37 @@ function Hostel() {
                                             <TableCell colSpan={columns.length} align="center">No Result Found</TableCell>
                                         </TableRow>
                                     ) : (
-                                        hostellers && hostellers.data && hostellers.data.content.map((row, i) => (
-                                            <TableRow key={i}>
-                                                <TableCell style={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Tooltip title="Edit" arrow>
-                                                        <IconButton size='small' onClick={e => { handleEdit(row) }}>
-                                                            <BiSolidEdit />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                    <Tooltip title="Delete" arrow>
-                                                        <IconButton size='small'>
-                                                            <MdOutlineDeleteForever />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.fullName}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.emailId}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.phoneNumber}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.fee}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.joiningDate}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.address}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.proof}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.reason}</TableCell>
-                                                <TableCell style={{ fontSize: '10' }}>{row.vacatedDate}</TableCell>
-                                            </TableRow>
-                                        ))
+                                        hostellers &&
+                                        hostellers.data &&
+                                        hostellers.data.content.map((row, i) => {
+                                            console.log(row);
+                                            console.log(row.phoneNumber);
+                                            return (
+                                                <TableRow key={i}>
+                                                    <TableCell style={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Tooltip title="Edit" arrow>
+                                                            <IconButton size="small" onClick={() => handleEdit(row)}>
+                                                                <BiSolidEdit />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                        <Tooltip title="Delete" arrow>
+                                                            <IconButton size="small">
+                                                                <MdOutlineDeleteForever />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                    </TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.fullName}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.emailId}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.phoneNumber}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.fee}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.joiningDate}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.address}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.proof}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.reason}</TableCell>
+                                                    <TableCell style={{ fontSize: '10' }}>{row.vacatedDate}</TableCell>
+                                                </TableRow>
+                                            );
+                                        })
                                     )
                                 }
                             </TableBody>

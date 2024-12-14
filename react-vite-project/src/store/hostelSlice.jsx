@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AxiosApi from '../utils/AxiosApi';
 import moment from 'moment'; // Import moment for date formatting
+import { decrypt } from '../utils/Aes';
 
 const initialFormData = {
   hostellerId: 0,
@@ -43,6 +44,7 @@ const initialState = {
 export const fetchHostellers = createAsyncThunk('hostel/fetchHostellers', async (searhForm) => {
   try {
     const response = await AxiosApi("http://localhost:8061/hostel/get-hostellers", "post", searhForm);
+
     return response.data;
   } catch (error) {
     throw error;
@@ -70,8 +72,8 @@ const hostelSlice = createSlice({
     clearHostellersState: (state) => {
       state.hostellers = {};
       state.searchForm = initialSearchForm,
-      state.totalElements = 0,
-      state.status = '';
+        state.totalElements = 0,
+        state.status = '';
       state.error = null;
     },
     updateFormData: (state, action) => {
@@ -96,13 +98,24 @@ const hostelSlice = createSlice({
         state.status = 'loading';
         state.loading = true;
       })
-      .addCase(fetchHostellers.fulfilled, (state, action) => {
+      .addCase(fetchHostellers.fulfilled, async (state, action) => {
         state.status = 'succeeded';
-        state.hostellers = action.payload;
+        console.log("Inside Slice :: {}", action.payload);
         state.loading = false;
-        if(action.payload && action.payload.statusCode === 200 ){
+
+        if (action.payload && action.payload.statusCode === 200) {
+          state.hostellers = await Promise.all(
+            action.payload.data.content.map(async (hosteller) => {
+              return {
+                ...hosteller,
+                phoneNumber: hosteller.phoneNumber ? await decrypt(hosteller.phoneNumber) : "",
+              };
+            })
+          );
+          
           state.totalElements = action.payload.data.totalElements;
-        }else{
+        } else {
+          state.hostellers = [];
           state.totalElements = 0;
         }
       })
@@ -125,6 +138,6 @@ const hostelSlice = createSlice({
   },
 });
 
-export const { clearHostellersState, updateFormData, resetFormData ,updateSearchForm} = hostelSlice.actions;
+export const { clearHostellersState, updateFormData, resetFormData, updateSearchForm } = hostelSlice.actions;
 
 export default hostelSlice.reducer;

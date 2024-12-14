@@ -284,14 +284,22 @@ export default function SideNav() {
       </MainDrawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: 8 }}>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          {nav.map((itemRout, index) => (
-            itemRout.subNav ?
-              itemRout.subNav.map((subItem, subIndex) => (
-                <Route key={subIndex} path={subItem.resourcePath} element={<subItem.component />} />
+          {navigation.map((navItem, index) => (
+            navItem.subNav
+              ? navItem.subNav.map((subItem, subIndex) => (
+                <Route
+                  key={`${index}-${subIndex}`}
+                  path={subItem.resourcePath}
+                  element={React.createElement(subItem.component)}
+                />
               ))
-              :
-              <Route key={index} path={itemRout.resourcePath} element={<itemRout.component />} />
+              : (
+                <Route
+                  key={index}
+                  path={navItem.resourcePath}
+                  element={React.createElement(navItem.component)}
+                />
+              )
           ))}
           <Route path="*" element={<NotFound />} />
         </Routes>
