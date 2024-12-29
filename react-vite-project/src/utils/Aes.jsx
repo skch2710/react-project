@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-const ENCRYPTION_KEY = import.meta.env.VITE_ENC_KEY; // Base64 encoded key (must be decoded for use)
-const GCM_IV_LENGTH = 12; // 12 bytes for AES-GCM IV
-const GCM_TAG_LENGTH = 128; // Tag length in bits
+const ENCRYPTION_KEY = process.env.VITE_ENC_KEY;
+const GCM_IV_LENGTH = 12;
+const GCM_TAG_LENGTH = 128;
 
 async function getCryptoKey() {
     const rawKey = Uint8Array.from(atob(ENCRYPTION_KEY), c => c.charCodeAt(0));

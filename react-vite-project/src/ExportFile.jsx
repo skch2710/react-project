@@ -1,6 +1,4 @@
 import React from 'react'
-import AxiosApi from './utils/AxiosApi';
-import FileSaver from 'file-saver';
 import AxiosUtil from './utils/AxiosUtil';
 
 const ExportFile = () => {
@@ -13,6 +11,15 @@ const ExportFile = () => {
             console.error("Error downloading the file:", error);
         }
     };
+
+    const handleEnv = async () => {
+      console.log('Button clicked....')
+     const enKey = process.env.VITE_ENC_KEY;
+     console.log(enKey);
+     const decKey = atob(enKey);
+     console.log(decKey); //DECODE
+     console.log(btoa(decKey)); //ENCODE
+  };
 
     const handleDownloadZip = async () => {
       console.log('Button clicked....')
@@ -37,7 +44,7 @@ const ExportFile = () => {
   };
   return (
     <div>ExportFile
-        <button onClick={handleDownload}>Download Excel Template</button>
+        <button onClick={handleEnv}>Download Excel Template</button>
     </div>
   )
 }

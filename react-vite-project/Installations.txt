@@ -15,19 +15,47 @@ Axios : --> npm install axios
 Bootstrap : --> npm install bootstrap
 
 Material UI : https://mui.com/material-ui/getting-started/installation/
---> npm install @mui/material @emotion/react @emotion/styled
+
+--> 	>> npm install @mui/material@6.3.0 
+	>> npm install @emotion/react @emotion/styled
 
 https://react-icons.github.io/react-icons
 --> npm install react-icons --save
 
-npm i @mui/x-date-pickers
+	>>npm install @mui/icons-material
 
+	>>npm install @mui/x-date-pickers dayjs
 
-npm install react-spinners --save
+>> npm install @mui/styles
 
+>> npm install react-spinners --save
+
+>> npm install @mui/x-data-grid
 
 >> npm install formik yup
 
 >> npm install file-saver
+
+>> npm install dotenv
+
+>>  npm install vite-plugin-javascript-obfuscator --save-dev
+
+
+-**********************
+
+>> npm uninstall @mui/material @mui/icons-material @mui/styles @mui/system @emotion/react @emotion/styled
+
+>> npm uninstall @mui/styled-engine-sc
+
+>>npm install -g serve
+
+
+***********************
+>> npm run build  -- After Build Go to dist folder run >> npx serve dist
+
+>> npm run dev
+>> npm run preview
+
+
 
 

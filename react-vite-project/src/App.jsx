@@ -3,12 +3,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SideNav from './side-nav/SideNav';
 import LoginPage from './login-page/LoginPage';
 import ExportFile from './ExportFile';
+import DatePickerGlobal from './GlobalComponents/DatePickerGlobal';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
-    <ExportFile />
+    // <ExportFile />
+    <DatePickerGlobal />
     // <BrowserRouter>
     //   <Routes>
     //     {/* Root route with nested paths */}
