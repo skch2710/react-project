@@ -1,12 +1,10 @@
 *************************************************************************
-			Java Script 
+					Java Script 
 *************************************************************************
 
 VS Code Usages :
 ---------------- 
 
->>>>Open VS Code Terminal:
-	Terminal > New Terminal or press Ctrl + ~
+1. Open VS Code Terminal: Terminal > New Terminal or press "Ctrl + ~"
 
->>>>Run JavaScript file 
-	node JavaScriptEx.js
+2. Run JavaScript file : node JavaScriptEx.js
