@@ -22,6 +22,100 @@ Introduction to JavaScript:
 7. **Usage examples** – Form validation, animations, API calls, and real-time updates.
 
 
+Variables (`var`, `let`, `const`):
+-----------------------------------
+
+There are three Variables:  `var`, `let`, and `const` in JavaScript.
+
+---
+
+## **1. `var`**
+
+* **Introduced in**: Original JavaScript (before ES6).
+* **Scope**:
+
+  * Function-scoped (available anywhere inside the function where declared).
+  * If declared outside any function, becomes global.
+* **Hoisting**: Yes — variable is hoisted and initialized as `undefined`.
+* **Re-declaration**: Allowed in the same scope.
+* **Re-assignment**: Allowed.
+* **Best use**: Rarely used now; replaced by `let`/`const` for better control.
+
+**Example:**
+
+```javascript
+var name = "Sathish";
+var name = "Kumar"; // ✅ Allowed
+console.log(name); // "Kumar"
+```
+
+---
+
+## **2. `let`**
+
+* **Introduced in**: ES6 (2015).
+* **Scope**:
+
+  * Block-scoped (works only within `{}` where declared).
+* **Hoisting**: Yes, but in a "temporal dead zone" (can't use before declaration).
+* **Re-declaration**: ❌ Not allowed in the same scope.
+* **Re-assignment**: ✅ Allowed.
+* **Best use**: For variables whose value will change.
+
+**Example:**
+
+```javascript
+let age = 25;
+age = 26; // ✅ Allowed
+// let age = 30; ❌ Error: already declared in this scope
+```
+
+---
+
+## **3. `const`**
+
+* **Introduced in**: ES6 (2015).
+* **Scope**: Block-scoped (same as `let`).
+* **Hoisting**: Yes, but in a temporal dead zone.
+* **Re-declaration**: ❌ Not allowed in the same scope.
+* **Re-assignment**: ❌ Not allowed (value is constant).
+* **Best use**: For values that never change (constants, config values).
+
+**Example:**
+
+```javascript
+const PI = 3.14159;
+// PI = 3.14; ❌ Error: Assignment to constant variable
+```
+
+---
+
+## **Special Note on `const` with Objects & Arrays**
+
+`const` only makes the **binding** constant, not the data inside; you can still change object properties or array elements.
+
+**Example:**
+
+```javascript
+const user = { name: "Sathish" };
+user.name = "Kumar"; // ✅ Allowed
+console.log(user); // { name: "Kumar" }
+```
+
+---
+
+### **Quick Comparison Table**
+
+| Feature          | `var`    | `let`     | `const`   |
+| ---------------- | -------- | --------- | --------- |
+| Scope            | Function | Block     | Block     |
+| Hoisting         | Yes      | Yes (TDZ) | Yes (TDZ) |
+| Re-declaration   | ✅ Yes    | ❌ No      | ❌ No      |
+| Re-assignment    | ✅ Yes    | ✅ Yes     | ❌ No      |
+| Use in modern JS | ❌ Avoid  | ✅ Common  | ✅ Common  |
+
+
+
 
 
 Map in JavaScript :
