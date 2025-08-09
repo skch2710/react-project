@@ -10,6 +10,19 @@ VS Code Usages :
 2. Run JavaScript file : node JavaScriptEx.js
 
 
+Introduction to JavaScript:
+---------------------------
+
+1. **Definition** – JavaScript is a programming language used mainly for web development.
+2. **Purpose** – It makes websites interactive and dynamic.
+3. **Where it runs** – Runs in web browsers and also on servers (using Node.js).
+4. **Type** – Lightweight, interpreted language.
+5. **Model** – Single-threaded and event-driven.
+6. **Features** – Dynamic typing, prototype-based, first-class functions.
+7. **Usage examples** – Form validation, animations, API calls, and real-time updates.
+
+
+
 
 Map in JavaScript :
 -------------------
