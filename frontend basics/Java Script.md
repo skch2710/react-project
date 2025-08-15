@@ -167,6 +167,17 @@ Summary Points:
 6.var has function scope or becomes global if declared outside a function.
 
 
+### Rules for Variable Names in JavaScript :
+-------------------------------------------
+
+* Variable names can contain: **letters (a–z, A–Z), digits (0–9), underscore (\_) and dollar sign (\$)**.
+* A variable **must start** with a **letter**, **underscore (\_)**, or **dollar sign (\$)** — *cannot start with a number*.
+* Variable names are **case sensitive** (`name`, `Name` and `NAME` are all different).
+* **Camel case** is a commonly used naming convention in JavaScript (like `firstName`, `userEmail`).
+
+
+
+
 Map in JavaScript :
 -------------------
 
