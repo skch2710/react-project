@@ -6,8 +6,49 @@ VS Code Usages :
 ---------------- 
 
 1. Open VS Code Terminal: Terminal > New Terminal or press "Ctrl + ~"
-
 2. Run JavaScript file : node JavaScriptEx.js
+3. 1. In VS Code, create a new file, name it with the `.html`  extension, then type `!`  and press **Tab** — it will auto-generate the basic HTML structure.
+
+
+Calling Script file in HTML:
+----------------------------
+
+To call a JavaScript file in HTML, use the `<script>` tag with the `src` attribute inside your HTML file, like this:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS File Example</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+
+    <!-- Call external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
+```
+`script.js` (same folder as HTML):
+
+```javascript
+console.log("JavaScript file loaded!"); //This is printed on Console network
+// alert("Hello from external JS file!");
+
+let headerMain = document.getElementsByClassName("headerMain");
+
+console.log(headerMain);
+
+document.querySelector(".headerMain").innerHTML = "Sathish Kumar CH";
+
+document.getElementById("h1Id").innerHTML = "SSSSSS";
+```
+If you want the script to run **after** the page loads, add `defer`:
+
+```html
+<script src="script.js" defer></script>
+```
+
 
 
 Introduction to JavaScript:
@@ -115,7 +156,15 @@ console.log(user); // { name: "Kumar" }
 | Use in modern JS | ❌ Avoid  | ✅ Common  | ✅ Common  |
 
 
+Summary Points:
+---------------
 
+1.var and let variables can be reassigned; const cannot be reassigned.
+2.var is hoisted and can be accessed before declaration; let and const cannot.
+3.var allows duplicate declarations; let and const do not.
+4.let and const were introduced in ES6 (2015).
+5.let and const have block-level scope (work only inside { }).
+6.var has function scope or becomes global if declared outside a function.
 
 
 Map in JavaScript :
