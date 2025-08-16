@@ -8,6 +8,11 @@ VS Code Usages :
 1. Open VS Code Terminal: Terminal > New Terminal or press "Ctrl + ~"
 2. Run JavaScript file : node JavaScriptEx.js
 3. 1. In VS Code, create a new file, name it with the `.html`  extension, then type `!`  and press **Tab** — it will auto-generate the basic HTML structure.
+4. Recommended Naming Style for Files - Use lowercase with hyphens (kebab-case)
+	JavaScript: user-login.js
+	HTML: index.html , user-details.html
+	CSS: user-style.css
+
 
 
 Calling Script file in HTML:
@@ -176,6 +181,452 @@ Summary Points:
 * **Camel case** is a commonly used naming convention in JavaScript (like `firstName`, `userEmail`).
 
 
+# Data Types in JavaScript :
+----------------------------
+
+JavaScript is a dynamically typed language, meaning variables can hold values of any type without explicit type declarations. Here are the main data types in JavaScript:
+
+## Primitive Data Types (immutable)
+
+1. **Number**: Represents both integer and floating-point numbers
+   ```javascript
+   let age = 25;
+   let price = 99.99;
+   ```
+
+2. **String**: Represents textual data
+   ```javascript
+   let name = "Alice";
+   let greeting = 'Hello World';
+   ```
+
+3. **Boolean**: Represents logical values `true` or `false`
+   ```javascript
+   let isActive = true;
+   let isCompleted = false;
+   ```
+
+4. **Undefined**: A variable that has been declared but not assigned a value
+   ```javascript
+   let x;
+   console.log(x); // undefined
+   ```
+
+5. **Null**: Represents the intentional absence of any object value
+   ```javascript
+   let emptyValue = null;
+   ```
+
+6. **BigInt**: Represents integers larger than 2^53 - 1
+   ```javascript
+   let bigNumber = 9007199254740991n;
+   ```
+
+7. **Symbol**: A unique and immutable primitive value
+   ```javascript
+   let sym = Symbol('description');
+   ```
+
+## Non-Primitive Data Type (mutable)
+
+1. **Object**: Used to store collections of data and more complex entities
+   ```javascript
+   let person = {
+     name: "John",
+     age: 30
+   };
+   ```
+
+   - This includes:
+     - Arrays: `let colors = ["red", "green", "blue"];`
+     - Functions: `function greet() { console.log("Hello!"); }`
+     - Dates: `let now = new Date();`
+     - Regular Expressions: `let regex = /abc/;`
+
+## Type Checking
+
+You can check a value's type using the `typeof` operator:
+```javascript
+typeof 42;          // "number"
+typeof "hello";     // "string"
+typeof true;        // "boolean"
+typeof undefined;   // "undefined"
+typeof null;        // "object" (this is a known bug in JavaScript)
+typeof {};          // "object"
+typeof [];          // "object"
+typeof function(){}; // "function"
+```
+
+## Type Conversion
+
+JavaScript performs automatic type conversion (coercion) in certain contexts:
+```javascript
+let result = "5" + 2;  // "52" (string concatenation)
+let sum = "5" - 2;     // 3 (numeric subtraction)
+```
+
+You can also explicitly convert types:
+```javascript
+Number("123");  // 123
+String(123);    // "123"
+Boolean(1);     // true
+```
+
+
+Sure! Here’s a quick and clear explanation of **comments in JavaScript**:
+
+---
+
+### 📝 Comments in JavaScript :
+--------------------------------
+JavaScript supports two types of comments:
+
+#### 1. **Single-line Comment**
+
+Used for short notes or to disable one line.
+
+```javascript
+// This is a single-line comment
+let x = 5; // Inline comment
+```
+
+#### 2. **Multi-line Comment**
+
+Used for longer explanations or block comments.
+
+```javascript
+/*
+  This is a multi-line comment.
+  It can span multiple lines.
+*/
+let y = 10;
+```
+
+### ✅ Why comments are used:
+
+* To explain code (for yourself or others)
+* To make code easier to read
+* To temporarily disable code during testing
+
+### ✨ Summary Points:
+
+* `//` → single-line comment
+* `/*  */` → multi-line comment
+* Comments are ignored by the browser
+* Help in documentation and debugging
+
+
+Template Literals in JavaScript :
+----------------------------------
+Template literals use backticks (`) instead of single or double quotes:
+
+const message = `Hello World`;
+
+const user = { name: 'Bob', score: 95 };
+const message = `User ${user.name} scored ${user.score} points`;
+
+
+
+Sure! Here’s a clean summary of **Conditional Statements in JavaScript**:
+
+---
+
+Conditional Statements in JavaScript :
+--------------------------------------
+
+#### 1. **if statement**
+
+Checks a condition – if true, execute the code.
+
+```javascript
+if (condition) {
+   // code to run
+}
+```
+
+---
+
+#### 2. **if...else**
+
+Runs one block if true, otherwise runs the else block.
+
+```javascript
+if (condition) {
+   // code if true
+} else {
+   // code if false
+}
+```
+
+---
+
+#### 3. **else if**
+
+Used for multiple conditions.
+
+```javascript
+if (condition1) {
+   // code
+} else if (condition2) {
+   // code
+} else {
+   // default code
+}
+```
+
+---
+
+#### 4. **switch statement**
+
+Used to compare one value with multiple cases.
+
+```javascript
+switch (value) {
+  case 'A':
+    // code
+    break;
+  case 'B':
+    // code
+    break;
+  default:
+    // code
+}
+```
+
+---
+
+#### 5. **Ternary Operator** (short form of if-else)
+
+```javascript
+condition ? valueIfTrue : valueIfFalse;
+```
+
+---
+
+### Notes:
+
+* Always use `break` in switch cases to stop fall-through.
+* Ternary is good for simple decisions, not for complex logic.
+
+
+Sure! Here's a simple and clear explanation of **Type Conversion in JavaScript**:
+
+---
+
+### Type Conversion in JavaScript :
+--------------------------------------
+
+There are two types:
+
+#### 1. **Implicit Conversion (Type Coercion)**
+
+JavaScript automatically converts one type to another during operations.
+
+Examples:
+
+```javascript
+"5" + 2      // "52"   (number becomes string)
+"5" - 2      // 3      (string becomes number)
+true + 1     // 2
+```
+
+---
+
+#### 2. **Explicit Conversion (Manual)**
+
+We convert the type ourselves using functions.
+
+##### ➤ Convert to Number:
+
+* `Number("45")` → 45
+* `parseInt("20")` → 20
+* `parseFloat("3.14")` → 3.14
+
+##### ➤ Convert to String:
+
+* `String(123)` → "123"
+* `123..toString()` → "123"
+
+##### ➤ Convert to Boolean:
+
+* `Boolean(1)` → true
+* `Boolean(0)` → false
+* `Boolean("text")` → true
+* `Boolean("")` → false
+
+---
+
+### ✅ Truthy & Falsy Values (important for conversion)
+
+**Falsy values in JS:**
+
+* `0`
+* `""` (empty string)
+* `null`
+* `undefined`
+* `false`
+* `NaN`
+
+Everything else is **truthy**.
+
+---
+
+### Summary Points:
+
+* Implicit = auto conversion by JS
+* Explicit = manual conversion using functions
+* Common conversions: Number(), String(), Boolean()
+* Know the falsy values!
+
+
+Sure! Here's a clean and simple list of all the **Loops in JavaScript**, with short explanations:
+
+---
+
+### Types of Loops in JavaScript:
+---------------------------------
+
+#### 1. **for loop**
+
+Used when you know how many times to run.
+
+```javascript
+for (let i = 0; i < 5; i++) {
+  // code
+}
+```
+
+---
+
+#### 2. **while loop**
+
+Runs as long as the condition is true.
+
+```javascript
+while (condition) {
+  // code
+}
+```
+
+---
+
+#### 3. **do...while loop**
+
+Runs the code at least once before checking the condition.
+
+```javascript
+do {
+  // code
+} while (condition);
+```
+
+---
+
+#### 4. **for...of loop**
+
+Used to iterate over arrays or iterable objects (gives values).
+
+```javascript
+for (const item of array) {
+  console.log(item);
+}
+```
+
+---
+
+#### 5. **for...in loop**
+
+Used to loop over object keys or array indexes.
+
+```javascript
+for (const key in object) {
+  console.log(key, object[key]);
+}
+```
+
+---
+
+#### 6. **forEach loop** (array method)
+
+Works only for arrays.
+
+```javascript
+array.forEach((value, index) => {
+  console.log(value);
+});
+```
+
+---
+
+### ✅ Summary Points:
+
+* `for` → traditional loop with counter
+* `while` → runs while condition true
+* `do...while` → runs at least once
+* `for...of` → values of an array
+* `for...in` → keys of an object or index of array
+* `forEach` → array iteration (callback function)
+
+
+
+### Arrays in JavaScript :
+---------------------------
+
+An **array** is a special variable that can hold **multiple values** in a single variable.
+
+```javascript
+let arr = [10, 20, 30, 40];
+```
+
+### 👉 Key Points:
+
+* Arrays are written using **square brackets** `[]`
+
+* The values inside are called **elements**
+
+* JavaScript arrays can store **different data types** in one array
+
+  ```javascript
+  let mix = [1, "hello", true, null];
+  ```
+
+* Elements are accessed using **index numbers** (starting from 0)
+
+  ```javascript
+  console.log(arr[0]); // 10
+  ```
+
+### ✅ Common Array Methods:
+
+| Method name  | Description                        |
+| ------------ | ---------------------------------- |
+| `push()`     | Add element at the **end**         |
+| `pop()`      | Removes element from the **end**   |
+| `shift()`    | Removes element from the **start** |
+| `unshift()`  | Add element at the **start**       |
+| `length`     | Returns total number of elements   |
+| `forEach()`  | Loop through each element          |
+| `includes()` | Check if value exists in array     |
+| `indexOf()`  | Find the index of a value          |
+| `join()`     | Join array into a string           |
+| `slice()`    | Copy a portion of array            |
+| `splice()`   | Add/remove elements inside array   |
+
+---
+
+### Example:
+
+```javascript
+let fruits = ["apple", "banana", "orange"];
+
+fruits.push("mango"); // add at end
+console.log(fruits); // ["apple", "banana", "orange", "mango"]
+
+fruits.pop(); // remove last
+console.log(fruits); // ["apple", "banana", "orange"]
+
+console.log(fruits.length); // 3
+```
 
 
 Map in JavaScript :
@@ -270,6 +721,9 @@ const users = [
 const userMap = new Map(users.map(user => [user.id, user]));
 
 console.log(userMap.get(1)); // Output: { id: 1, name: 'John' }
+
+
+
 
 
 
