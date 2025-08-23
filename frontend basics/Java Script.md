@@ -1886,3 +1886,293 @@ Most modern event handling features work in all modern browsers. For older brows
 JavaScript events are fundamental to creating interactive web applications. Understanding event types, propagation, delegation, and best practices will help you write more efficient and maintainable code. Always consider performance implications and clean up event listeners when they're no longer needed.
 
 
+### JavaScript String methods :
+--------------------------------
+
+// JavaScript String Methods - One File with Examples
+
+// 1. Length
+let str = "Hello World";
+console.log("Length:", str.length); // 11
+
+// 2. charAt()
+console.log("charAt(1):", str.charAt(1)); // e
+
+// 3. charCodeAt()
+console.log("charCodeAt(0):", str.charCodeAt(0)); // 72 (H)
+
+// 4. at()
+console.log("at(-1):", str.at(-1)); // d
+
+// 5. concat()
+console.log("concat:", str.concat("!!!")); // Hello World!!!
+
+// 6. includes()
+console.log("includes('World'):", str.includes("World")); // true
+
+// 7. endsWith()
+console.log("endsWith('World'):", str.endsWith("World")); // true
+
+// 8. startsWith()
+console.log("startsWith('Hello'):", str.startsWith("Hello")); // true
+
+// 9. indexOf()
+console.log("indexOf('o'):", str.indexOf("o")); // 4
+
+// 10. lastIndexOf()
+console.log("lastIndexOf('o'):", str.lastIndexOf("o")); // 7
+
+// 11. match()
+console.log("match(/o/g):", str.match(/o/g)); // [ 'o', 'o' ]
+
+// 12. matchAll()
+console.log("matchAll(/o/g):", [...str.matchAll(/o/g)]);
+
+// 13. padStart()
+console.log("padStart(15, '*'):", str.padStart(15, '*'));
+
+// 14. padEnd()
+console.log("padEnd(15, '-'):", str.padEnd(15, '-'));
+
+// 15. repeat()
+console.log("repeat(3):", "Hi ".repeat(3));
+
+// 16. replace()
+console.log("replace('World','JS'):", str.replace("World", "JS"));
+
+// 17. replaceAll()
+console.log("replaceAll('o','0'):", str.replaceAll("o", "0"));
+
+// 18. search()
+console.log("search('World'):", str.search("World")); // 6
+
+// 19. slice()
+console.log("slice(0,5):", str.slice(0, 5)); // Hello
+
+// 20. split()
+console.log("split(' '):", str.split(" ")); // [ 'Hello', 'World' ]
+
+// 21. substring()
+console.log("substring(0,5):", str.substring(0, 5)); // Hello
+
+// 22. toLowerCase()
+console.log("toLowerCase():", str.toLowerCase()); // hello world
+
+// 23. toUpperCase()
+console.log("toUpperCase():", str.toUpperCase()); // HELLO WORLD
+
+// 24. trim()
+let spaced = "   JS Trim   ";
+console.log("trim():", spaced.trim()); // 'JS Trim'
+
+// 25. trimStart()
+console.log("trimStart():", spaced.trimStart());
+
+// 26. trimEnd()
+console.log("trimEnd():", spaced.trimEnd());
+
+// 27. valueOf()
+console.log("valueOf():", str.valueOf());
+
+// 28. toString()
+console.log("toString():", str.toString());
+
+// 29. localeCompare()
+console.log("localeCompare('Hello'):", str.localeCompare("Hello"));
+
+// 30. normalize()
+let accented = "café";
+console.log("normalize():", accented.normalize("NFD"));
+
+// 31. fromCharCode()
+console.log("fromCharCode(72,69,76,76,79):", String.fromCharCode(72,69,76,76,79)); // HELLO
+
+// 32. raw()
+console.log("String.raw`Hello\\nWorld`:", String.raw`Hello\nWorld`);
+
+// 33. codePointAt()
+console.log("codePointAt(0):", str.codePointAt(0));
+
+// 34. fromCodePoint()
+console.log("fromCodePoint(128512):", String.fromCodePoint(128512)); // 😀
+
+// 35. startsWith() & endsWith() revisited
+console.log("startsWith('He'):", str.startsWith("He"));
+console.log("endsWith('ld'):", str.endsWith("ld"));
+
+
+### **Error Handling in JavaScript** 📘:
+---------------------------------------------
+
+# 🛠️ Error Handling in JavaScript
+
+JavaScript provides mechanisms to handle runtime errors gracefully, so the program doesn’t crash unexpectedly and can recover or give useful messages.
+
+---
+
+## 🔹 1. Types of Errors in JavaScript
+
+1. **Syntax Errors**
+
+   * Occur when the code violates JavaScript grammar rules.
+   * Example:
+
+     ```js
+     console.log("Hello"  // Missing closing parenthesis
+     ```
+
+2. **Runtime Errors**
+
+   * Occur while the program is running.
+   * Example:
+
+     ```js
+     let x = y + 5; // ReferenceError: y is not defined
+     ```
+
+3. **Logical Errors**
+
+   * Code runs without crashing, but gives incorrect results.
+   * Example:
+
+     ```js
+     let total = 10 * 5; // intended to divide, not multiply
+     ```
+
+---
+
+## 🔹 2. Handling Errors with `try...catch`
+
+JavaScript provides `try...catch` to safely handle exceptions.
+
+```js
+try {
+  let result = 10 / 0;
+  console.log("Result:", result);
+
+  throw new Error("Custom error message");
+} catch (error) {
+  console.error("Error caught:", error.message);
+}
+```
+
+✔️ Code inside `try` runs normally.
+✔️ If an error occurs, `catch` executes.
+
+---
+
+## 🔹 3. `finally` Block
+
+* Always executes, regardless of whether an error occurred.
+* Used for cleanup (e.g., closing files, releasing resources).
+
+```js
+try {
+  console.log("Start process");
+  throw new Error("Something went wrong!");
+} catch (err) {
+  console.log("Error:", err.message);
+} finally {
+  console.log("Process ended.");
+}
+```
+
+---
+
+## 🔹 4. Throwing Custom Errors
+
+You can **manually throw errors** using `throw`.
+
+```js
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero not allowed!");
+  }
+  return a / b;
+}
+
+try {
+  console.log(divide(10, 0));
+} catch (err) {
+  console.error("Error:", err.message);
+}
+```
+
+---
+
+## 🔹 5. Error Object Properties
+
+When an error is caught, it is represented by the **Error object**.
+Common properties:
+
+* `name` → Error type (e.g., `ReferenceError`)
+* `message` → Description of the error
+* `stack` → Call stack at the point error occurred
+
+```js
+try {
+  JSON.parse("Invalid JSON");
+} catch (err) {
+  console.log("Name:", err.name);
+  console.log("Message:", err.message);
+  console.log("Stack:", err.stack);
+}
+```
+
+---
+
+## 🔹 6. Types of Built-in Errors
+
+1. **EvalError** – errors related to `eval()`
+2. **RangeError** – number out of range
+3. **ReferenceError** – invalid variable reference
+4. **SyntaxError** – code syntax issue
+5. **TypeError** – invalid type operation
+6. **URIError** – `encodeURI()` or `decodeURI()` issue
+
+Example:
+
+```js
+try {
+  let num = 1;
+  num.toUpperCase(); // TypeError
+} catch (e) {
+  console.log(e.name); // "TypeError"
+}
+```
+
+---
+
+## 🔹 7. Best Practices
+
+✅ Use `try...catch` only for risky code (e.g., network requests, parsing JSON).
+✅ Avoid silent failures—log or display meaningful error messages.
+✅ Use custom error classes for better handling.
+✅ Validate input before executing risky operations.
+
+---
+
+
+### Regular Expressions :
+----------------------------
+
+Regular Expressions in JavaScript are powerful for pattern matching, searching, validation, and string manipulation.
+
+Practical Examples
+
+✅ Validate Email:
+
+let emailRegex = /^[\w.-]+@[\w.-]+\.\w{2,}$/;
+console.log(emailRegex.test("test@mail.com")); // true
+
+
+✅ Validate Phone:
+
+let phoneRegex = /^\d{10}$/;
+console.log(phoneRegex.test("9876543210")); // true
+
+
+✅ Extract Numbers:
+
+let str = "Order number: 12345, amount: 678";
+console.log(str.match(/\d+/g)); // ["12345", "678"]
