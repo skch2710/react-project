@@ -12,6 +12,11 @@ VS Code Usages :
 	JavaScript: user-login.js
 	HTML: index.html , user-details.html
 	CSS: user-style.css
+5. Extensions for VS Code 
+	a. Live Server
+	b. ES7+ React/Redux/React-Native snippets
+	c. Prettier - Code formatter
+	
 
 
 
@@ -327,10 +332,6 @@ const message = `User ${user.name} scored ${user.score} points`;
 
 
 
-Sure! Here’s a clean summary of **Conditional Statements in JavaScript**:
-
----
-
 Conditional Statements in JavaScript :
 --------------------------------------
 
@@ -568,6 +569,200 @@ array.forEach((value, index) => {
 * `forEach` → array iteration (callback function)
 
 
+### Functions :
+-----------------
+
+In **JavaScript**, functions are blocks of reusable code that perform a specific task.
+
+---
+
+### 🔑 Ways to Declare Functions:
+
+1. **Function Declaration**
+
+   ```js
+   function greet(name) {
+     return `Hello, ${name}`;
+   }
+   console.log(greet("Sathish")); // Hello, Sathish
+   ```
+
+2. **Function Expression**
+   (Assigning a function to a variable)
+
+   ```js
+   const greet = function(name) {
+     return `Hello, ${name}`;
+   };
+   console.log(greet("Kumar"));
+   ```
+
+3. **Arrow Functions (ES6)**
+   Shorter syntax, no own `this`.
+
+   ```js
+   const greet = (name) => `Hello, ${name}`; //Single Line
+   
+   //Multiple Lines
+   const greet = (name) => {
+		return `Hello, ${name}`;
+   };
+   
+   console.log(greet("CH"));
+   ```
+
+4. **Anonymous Functions**
+   Functions without a name (often used as callbacks).
+
+   ```js
+   setTimeout(function() {
+     console.log("This runs after 2 sec");
+   }, 2000);
+   ```
+
+5. **Immediately Invoked Function Expression (IIFE)**
+   Executes immediately after creation.
+
+   ```js
+   (function() {
+     console.log("I run instantly!");
+   })();
+   ```
+
+6. **Constructor Function (for creating objects)**
+
+   ```js
+   function Person(name, age) {
+     this.name = name;
+     this.age = age;
+   }
+   const user = new Person("Sathish", 25);
+   console.log(user.name); // Sathish
+   ```
+
+7. **Generator Functions**
+   Can pause and resume with `yield`.
+
+   ```js
+   function* numbers() {
+     yield 1;
+     yield 2;
+     yield 3;
+   }
+   const gen = numbers();
+   console.log(gen.next().value); // 1
+   ```
+
+8. **Async Functions**
+   Always return a Promise; used with `await`.
+
+   ```js
+   async function fetchData() {
+     return "Data received";
+   }
+   fetchData().then(console.log);
+   ```
+
+### 🔑 Key Points about Functions:
+
+* Functions can be **parameters** of other functions (callbacks).
+* Functions can be **returned** from other functions (higher-order functions).
+* Functions form the basis of **closures** in JavaScript.
+
+
+
+### Scope :
+---------------
+
+In **JavaScript**, scope defines where variables, functions, and objects are accessible in your code.
+
+### 🔑 Types of Scope in JavaScript:
+
+1. **Global Scope**
+
+   * Variables declared outside any function/block are in global scope.
+   * Accessible everywhere in the code.
+
+   ```js
+   var globalVar = "I am global";
+
+   function test() {
+     console.log(globalVar); // ✅ Accessible
+   }
+
+   test();
+   console.log(globalVar); // ✅ Accessible
+   ```
+
+2. **Function Scope**
+
+   * Variables declared inside a function are only accessible within that function.
+   * Created using `var`.
+
+   ```js
+   function demo() {
+     var name = "Inside Function";
+     console.log(name); // ✅ Accessible here
+   }
+
+   demo();
+   console.log(name); // ❌ ReferenceError
+   ```
+
+3. **Block Scope (ES6: let, const)**
+
+   * Variables declared with `let` or `const` are limited to the block `{}` where they are defined.
+
+   ```js
+   {
+     let a = 10;
+     const b = 20;
+     var c = 30;
+   }
+
+   console.log(c); // ✅ Accessible (var is not block scoped)
+   console.log(a); // ❌ ReferenceError
+   console.log(b); // ❌ ReferenceError
+   ```
+
+4. **Lexical Scope (Static Scope)**
+
+   * Inner functions have access to variables of outer functions (scope chaining).
+
+   ```js
+   function outer() {
+     let x = "outer value";
+     function inner() {
+       console.log(x); // ✅ Can access outer variable
+     }
+     inner();
+   }
+
+   outer();
+   ```
+
+5. **Module Scope (ES6 Modules)**
+
+   * Variables/functions declared in a module are scoped to that module by default.
+
+   ```js
+   // file1.js
+   const secret = "hidden";
+   export const name = "Sathish";
+
+   // file2.js
+   import { name } from "./file1.js";
+   console.log(name); // ✅ Accessible
+   console.log(secret); // ❌ Not accessible
+   ```
+
+👉 In short:
+
+* `var` → function scope
+* `let` & `const` → block scope
+* Functions → create their own scope
+* Nested functions → use lexical scope
+
 
 ### Arrays in JavaScript :
 ---------------------------
@@ -723,7 +918,971 @@ const userMap = new Map(users.map(user => [user.id, user]));
 console.log(userMap.get(1)); // Output: { id: 1, name: 'John' }
 
 
+]**Default Parameters** and **Rest Parameters** in JavaScript:
+----------------------------------------------------------------
+
+## 🔹 Default Parameters
+
+* Allow you to set default values for function parameters if no value (or `undefined`) is passed.
+
+```js
+function greet(name = "Guest") {
+  console.log(`Hello, ${name}`);
+}
+
+greet("Sathish"); // Hello, Sathish
+greet();          // Hello, Guest
+```
+
+✅ If no argument is passed, `"Guest"` is used by default.
+
+---
+
+## 🔹 Rest Parameters
+
+* Allow a function to accept an **infinite number of arguments** as an array.
+* Uses the syntax `...variableName`.
+
+```js
+function sum(...numbers) {
+  return numbers.reduce((acc, num) => acc + num, 0);
+}
+
+console.log(sum(1, 2, 3));        // 6
+console.log(sum(5, 10, 15, 20));  // 50
+```
+
+✅ Collects all extra arguments into an array.
+
+---
+
+## 🔹 Both Together
+
+You can combine **default** and **rest** parameters in one function:
+
+```js
+function introduce(name = "Guest", ...hobbies) {
+  console.log(`Name: ${name}`);
+  console.log(`Hobbies: ${hobbies.join(", ")}`);
+}
+
+introduce("Sathish", "Coding", "Music", "Cricket");
+/*
+Name: Sathish
+Hobbies: Coding, Music, Cricket
+*/
+
+introduce();
+/*
+Name: Guest
+Hobbies:
+*/
+```
+
+---
+
+👉 In short:
+
+* **Default Parameters** → Provide fallback values.
+* **Rest Parameters** → Collect multiple arguments into an array.
 
 
+
+### Set In JavaScript :
+------------------------
+
+
+In **JavaScript**, `Set` is a built-in **object** that lets you store **unique values** of any type (primitive or object).
+
+---
+
+## 🔹 Creating a Set
+
+```js
+const mySet = new Set([1, 2, 3, 3, 4]);
+console.log(mySet); // Set(4) { 1, 2, 3, 4 }
+```
+
+✅ Duplicates are removed automatically.
+
+---
+
+## 🔹 Common Methods
+
+```js
+const set = new Set();
+
+// Add values
+set.add(10);
+set.add(20);
+set.add(10); // duplicate, ignored
+
+// Check existence
+console.log(set.has(20)); // true
+console.log(set.has(30)); // false
+
+// Delete value
+set.delete(10);
+
+// Size of Set
+console.log(set.size); // 1
+
+// Clear all values
+set.clear();
+console.log(set.size); // 0
+```
+
+---
+
+## 🔹 Iterating over a Set
+
+```js
+const numbers = new Set([1, 2, 3]);
+
+// for..of loop
+for (let num of numbers) {
+  console.log(num);
+}
+
+// forEach
+numbers.forEach(num => console.log(num));
+```
+
+---
+
+## 🔹 Converting Between Set and Array
+
+```js
+const arr = [1, 2, 2, 3, 4, 4];
+const uniqueSet = new Set(arr);
+console.log(uniqueSet); // Set { 1, 2, 3, 4 }
+
+// Convert Set → Array
+const uniqueArr = [...uniqueSet];
+console.log(uniqueArr); // [1, 2, 3, 4]
+```
+
+---
+
+## 🔹 Set Operations (using spread + filter)
+
+JavaScript doesn’t have built-in union/intersection, but you can simulate:
+
+```js
+const a = new Set([1, 2, 3]);
+const b = new Set([3, 4, 5]);
+
+// Union
+const union = new Set([...a, ...b]);
+console.log(union); // {1,2,3,4,5}
+
+// Intersection
+const intersection = new Set([...a].filter(x => b.has(x)));
+console.log(intersection); // {3}
+
+// Difference
+const difference = new Set([...a].filter(x => !b.has(x)));
+console.log(difference); // {1,2}
+```
+
+---
+
+👉 `Set` is mainly used when you want **unique values**, quick **existence checks**, or to perform **set operations** like union, intersection, and difference.
+
+**WeakSet** (the lighter version of Set).
+
+
+
+### Sorting in JavaScript :
+---------------------------
+
+In **JavaScript**, you can sort arrays using the built-in **`sort()`** method.
+---
+
+## 🔹 Default Sorting (as strings)
+
+```js
+const fruits = ["banana", "apple", "cherry"];
+fruits.sort();
+console.log(fruits); // ["apple", "banana", "cherry"]
+
+const nums = [100, 5, 20];
+nums.sort();
+console.log(nums); // [100, 20, 5] ❌ (sorted as strings)
+```
+
+⚠️ By default, `sort()` converts elements to **strings** and sorts alphabetically.
+
+---
+
+## 🔹 Numeric Sorting
+
+Use a **compare function**:
+
+```js
+const numbers = [100, 5, 20];
+
+// Ascending
+numbers.sort((a, b) => a - b);
+console.log(numbers); // [5, 20, 100]
+
+// Descending
+numbers.sort((a, b) => b - a);
+console.log(numbers); // [100, 20, 5]
+```
+
+---
+
+## 🔹 Sorting Strings (Case-insensitive)
+
+```js
+const names = ["Sathish", "kumar", "CH"];
+
+names.sort((a, b) => a.localeCompare(b)); // Ascending
+console.log(names); // ["CH", "Sathish", "kumar"]
+
+names.sort((a, b) => b.localeCompare(a)); // Descending
+console.log(names); // ["kumar", "Sathish", "CH"]
+```
+
+---
+
+## 🔹 Sorting Objects (by property)
+
+```js
+const users = [
+  { name: "Sathish", age: 30 },
+  { name: "Kumar", age: 25 },
+  { name: "CH", age: 35 }
+];
+
+// Sort by age (ascending)
+users.sort((a, b) => a.age - b.age);
+console.log(users);
+
+// Sort by name (alphabetical)
+users.sort((a, b) => a.name.localeCompare(b.name));
+console.log(users);
+```
+
+---
+
+## 🔹 Reverse an Array
+
+```js
+const arr = [1, 2, 3];
+arr.reverse();
+console.log(arr); // [3, 2, 1]
+```
+
+---
+
+👉 In short:
+
+* `sort()` alone → sorts as strings.
+* `sort((a,b)=>a-b)` → numbers ascending.
+* `localeCompare()` → better for strings.
+* Custom compare functions → sort objects.
+
+
+### Objects in Java :
+---------------------
+
+Great topic 👍 — let’s break down **Objects in JavaScript** clearly.
+
+---
+
+## 🔹 What is an Object?
+
+* An **object** is a collection of **key–value pairs**.
+* Keys are called **properties** (or methods if the value is a function).
+* Values can be primitives, arrays, functions, or other objects.
+
+```js
+const person = {
+  name: "Sathish",
+  age: 30,
+  isDeveloper: true,
+  greet: function() {
+    return `Hello, I am ${this.name}`;
+  }
+};
+
+console.log(person.name);      // Sathish
+console.log(person.greet());   // Hello, I am Sathish
+```
+
+---
+
+## 🔹 Creating Objects
+
+1. **Object Literal (most common)**
+
+   ```js
+   const obj = { key: "value" };
+   ```
+
+2. **Using new Object()**
+
+   ```js
+   const obj = new Object();
+   obj.key = "value";
+   ```
+
+3. **Constructor Function**
+
+   ```js
+   function Person(name, age) {
+     this.name = name;
+     this.age = age;
+   }
+   const user = new Person("Kumar", 25);
+   ```
+
+4. **Class Syntax (ES6)**
+
+   ```js
+   class Person {
+     constructor(name, age) {
+       this.name = name;
+       this.age = age;
+     }
+   }
+   const user = new Person("CH", 35);
+   ```
+
+---
+
+## 🔹 Accessing Properties
+
+```js
+const user = { name: "Sathish", age: 30 };
+
+console.log(user.name);    // dot notation → "Sathish"
+console.log(user["age"]);  // bracket notation → 30
+```
+
+---
+
+## 🔹 Adding / Updating / Deleting
+
+```js
+const user = { name: "Kumar" };
+
+user.age = 25;          // add
+user.name = "Sathish";  // update
+delete user.age;        // delete
+
+console.log(user); // { name: "Sathish" }
+```
+
+---
+
+## 🔹 Useful Object Methods
+
+```js
+const user = { name: "CH", age: 35 };
+
+console.log(Object.keys(user));   // ["name", "age"]
+console.log(Object.values(user)); // ["CH", 35]
+console.log(Object.entries(user));// [["name","CH"],["age",35]]
+```
+
+---
+
+## 🔹 Copying & Merging Objects
+
+```js
+const obj1 = { a: 1, b: 2 };
+const obj2 = { b: 3, c: 4 };
+
+// Shallow copy
+const copy = { ...obj1 };
+console.log(copy); // { a:1, b:2 }
+
+// Merge
+const merged = { ...obj1, ...obj2 };
+console.log(merged); // { a:1, b:3, c:4 }
+```
+
+---
+
+## 🔹 Nested Objects
+
+```js
+const user = {
+  name: "Sathish",
+  address: {
+    city: "Chennai",
+    pin: 600001
+  }
+};
+
+console.log(user.address.city); // Chennai
+```
+
+---
+
+👉 In short:
+
+* Objects store **key–value pairs**.
+* You can **create, access, modify, delete** properties.
+* Methods like `Object.keys`, `Object.values`, `Object.entries` help work with objects.
+
+---
+
+## 🔹 Object vs Map in JavaScript :
+--------------------------------------
+
+
+| Feature           | **Object**                                                                                                   | **Map**                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| **Key types**     | Keys must be `string` or `symbol`.                                                                           | Keys can be any type (`string`, `number`, `object`, function, etc.). |
+| **Order of keys** | Property order is not guaranteed (though in modern JS: integer keys → ascending, strings → insertion order). | Maintains insertion order of keys.                                   |
+| **Iteration**     | Needs `for...in`, `Object.keys()`, `Object.values()`, `Object.entries()`.                                    | Directly iterable with `for...of`.                                   |
+| **Performance**   | Optimized for small sets of static properties.                                                               | Optimized for frequent additions/removals.                           |
+| **Size**          | No direct way to know number of properties (need `Object.keys(obj).length`).                                 | Has `.size` property.                                                |
+| **Prototype**     | Objects inherit from `Object.prototype` (may cause key collisions).                                          | Maps have no prototype keys (cleaner).                               |
+| **Serialization** | Easily converted to JSON with `JSON.stringify()`.                                                            | Not directly serializable to JSON (need conversion).                 |
+
+---
+
+## 🔹 Example: Object
+
+```js
+const obj = { name: "Sathish", age: 30 };
+
+obj.city = "Chennai";
+console.log(obj); // { name: "Sathish", age: 30, city: "Chennai" }
+
+console.log(Object.keys(obj));   // ["name", "age", "city"]
+console.log(Object.values(obj)); // ["Sathish", 30, "Chennai"]
+```
+
+---
+
+## 🔹 Example: Map
+
+```js
+const map = new Map();
+
+map.set("name", "Sathish");
+map.set(1, "Number key");
+map.set({ id: 1 }, "Object key");
+
+console.log(map.get("name"));   // "Sathish"
+console.log(map.size);          // 3
+
+// Iteration
+for (let [key, value] of map) {
+  console.log(key, value);
+}
+```
+
+---
+
+👉 **Quick Summary**
+
+* Use **Object** when you need a simple structure (JSON-like, model/entity).
+* Use **Map** when you need **key-value pairs with any key type**, frequent additions/removals, or guaranteed order.
+
+
+### DOM (Document Object Model) in JavaScript :
+------------------------------------------------
+
+---
+
+## 🔹 What is the DOM?
+
+* DOM = **Document Object Model**.
+* It’s a **tree-like structure** representing the HTML document.
+* Each HTML element becomes a **node** (object) in the tree.
+* JavaScript can use the DOM to **create, read, update, and delete** elements dynamically.
+
+---
+
+## 🔹 DOM Tree Example
+
+HTML:
+
+```html
+<html>
+  <body>
+    <h1 id="title">Hello DOM</h1>
+    <p class="msg">This is a paragraph.</p>
+  </body>
+</html>
+```
+
+DOM Structure (simplified):
+
+```
+Document
+ └── html
+     ├── head
+     │   └── title
+     └── body
+         ├── h1 (id="heading")
+         ├── p (class="para")
+         ├── div (id="container")
+         │   ├── p
+         │   └── span
+         └── a (href="#")
+
+```
+
+---
+
+## 🔹 Accessing Elements
+
+```js
+// By ID
+document.getElementById("title");
+
+// By Class
+document.getElementsByClassName("msg");
+
+// By Tag
+document.getElementsByTagName("p");
+
+// Modern query selectors
+document.querySelector(".msg");       // first match
+document.querySelectorAll(".msg");    // all matches
+```
+
+---
+
+## 🔹 Manipulating Content
+
+```js
+const title = document.getElementById("title");
+
+// Change text
+title.textContent = "New Title";
+title.innerHTML = "<i>Italic Title</i>";
+
+// Change style
+title.style.color = "blue";
+title.style.fontSize = "24px";
+
+// Add attribute
+title.setAttribute("data-id", "123");
+```
+
+---
+
+## 🔹 Creating & Removing Elements
+
+```js
+// Create new element
+const newPara = document.createElement("p");
+newPara.textContent = "This is dynamically added!";
+document.body.appendChild(newPara); // add to body
+
+// Remove element
+const oldPara = document.querySelector(".msg");
+oldPara.remove();
+```
+
+---
+
+## 🔹 Event Handling
+
+```js
+const btn = document.createElement("button");
+btn.textContent = "Click Me";
+document.body.appendChild(btn);
+
+btn.addEventListener("click", () => {
+  alert("Button was clicked!");
+});
+```
+
+---
+
+## 🔹 Traversing the DOM
+
+```js
+const body = document.body;
+
+console.log(body.firstChild);    // First child node
+console.log(body.lastChild);     // Last child node
+console.log(body.children);      // All child elements
+console.log(body.parentNode);    // Parent node
+```
+
+---
+
+## 🔹 DOM vs BOM
+
+* **DOM** → Represents HTML document structure (tags, elements, attributes).
+* **BOM (Browser Object Model)** → Represents browser objects (window, navigator, history, screen).
+
+Example:
+
+```js
+console.log(window.innerWidth); // BOM
+console.log(document.title);    // DOM
+```
+
+---
+
+👉 **In summary:**
+
+* DOM lets JavaScript **interact with HTML** (read, update, create, delete).
+* Key parts: **Access → Manipulate → Events → Traverse**.
+
+
+## 🔹 Add Styles in JavaScript :
+
+// Set style directly
+document.getElementById("heading").style.color = "blue";
+document.querySelector(".para").style.fontSize = "20px";
+
+// Multiple styles
+let box = document.getElementById("container");
+box.style.cssText = "background: yellow; padding: 10px; border: 1px solid black;";
+
+
+
+### JavaScript Events :
+-------------------------
+
+JavaScript events are actions or occurrences that happen in the browser, which you can respond to using JavaScript. They form the foundation of interactive web applications by allowing scripts to react to user interactions, browser activities, and other occurrences.
+
+## Table of Contents
+
+1. [Event Basics](#event-basics)
+2. [Event Types](#event-types)
+3. [Event Handling](#event-handling)
+4. [Event Object](#event-object)
+5. [Event Propagation](#event-propagation)
+6. [Event Delegation](#event-delegation)
+7. [Custom Events](#custom-events)
+8. [Best Practices](#best-practices)
+
+## Event Basics
+
+### What are Events?
+Events are signals that something has occurred in the document - user interactions (clicks, key presses), browser events (page loaded, resized), or other occurrences.
+
+### Event Flow
+Events follow a propagation path:
+1. **Capturing Phase**: From window down to target element
+2. **Target Phase**: At the target element
+3. **Bubbling Phase**: From target element back up to window
+
+## Event Types
+
+### Mouse Events
+- `click`: Element is clicked
+- `dblclick`: Element is double-clicked
+- `mousedown`: Mouse button is pressed
+- `mouseup`: Mouse button is released
+- `mousemove`: Mouse is moved over element
+- `mouseover`: Mouse moves onto element
+- `mouseout`: Mouse moves out of element
+- `contextmenu`: Right-click context menu is opened
+
+### Keyboard Events
+- `keydown`: Key is pressed down
+- `keyup`: Key is released
+- `keypress`: Key is pressed (deprecated)
+
+### Form Events
+- `submit`: Form is submitted
+- `change`: Input value changes
+- `focus`: Element receives focus
+- `blur`: Element loses focus
+- `input`: Input value changes (immediate)
+- `select`: Text is selected in input
+
+### Window/Document Events
+- `load`: Page and resources finished loading
+- `DOMContentLoaded`: DOM is ready (no styles/images)
+- `resize`: Window is resized
+- `scroll`: Element is scrolled
+- `hashchange`: URL hash changes
+- `beforeunload`: Window is about to unload
+
+### Touch Events
+- `touchstart`: Touch interaction begins
+- `touchmove`: Finger moves during touch
+- `touchend`: Touch interaction ends
+- `touchcancel`: Touch is interrupted
+
+### Other Events
+- `transitionend`: CSS transition completes
+- `animationend`: CSS animation completes
+- `error`: Error occurs loading resource
+
+## Event Handling
+
+### Inline HTML Event Handlers
+```html
+<button onclick="handleClick()">Click me</button>
+```
+
+### DOM Property Event Handlers
+```javascript
+const button = document.querySelector('button');
+button.onclick = function() {
+  console.log('Button clicked!');
+};
+```
+
+### addEventListener() (Recommended)
+```javascript
+const button = document.querySelector('button');
+
+// Basic syntax
+button.addEventListener('click', function(event) {
+  console.log('Button clicked!');
+});
+
+// With options
+button.addEventListener('click', handlerFunction, {
+  capture: false,    // Use capturing phase
+  once: true,        // Run once then remove
+  passive: false     // Never call preventDefault()
+});
+
+// Named function
+function handleClick(event) {
+  console.log('Button clicked!');
+}
+button.addEventListener('click', handleClick);
+```
+
+### Removing Event Listeners
+```javascript
+// Must reference the same function
+button.removeEventListener('click', handleClick);
+```
+
+## Event Object
+
+When an event occurs, the browser creates an event object containing information about the event.
+
+### Common Properties
+- `type`: Event type ('click', 'keydown', etc.)
+- `target`: Element that triggered the event
+- `currentTarget`: Element that has the event handler
+- `timeStamp`: When event occurred
+- `bubbles`: Whether event bubbles
+- `cancelable`: Whether event can be canceled
+
+### Event Methods
+- `preventDefault()`: Prevents default browser action
+- `stopPropagation()`: Stops event from propagating
+- `stopImmediatePropagation()`: Stops other handlers from executing
+
+### Mouse Event Properties
+- `clientX`, `clientY`: Coordinates relative to viewport
+- `pageX`, `pageY`: Coordinates relative to document
+- `button`: Which mouse button was pressed
+- `altKey`, `ctrlKey`, `shiftKey`: Modifier key states
+
+### Keyboard Event Properties
+- `key`: String representation of key pressed
+- `code`: Physical key code
+- `keyCode`: Numeric code (deprecated)
+- `repeat`: Whether key is being held down
+
+## Event Propagation
+
+### Event Bubbling
+Events bubble up from the target element through its ancestors:
+```html
+<div id="parent">
+  <button id="child">Click me</button>
+</div>
+
+<script>
+  document.getElementById('parent').addEventListener('click', function() {
+    console.log('Parent clicked');
+  });
+  
+  document.getElementById('child').addEventListener('click', function() {
+    console.log('Button clicked');
+  });
+  // Clicking button logs: "Button clicked" then "Parent clicked"
+</script>
+```
+
+### Event Capturing
+Events can be captured on the way down to the target:
+```javascript
+document.getElementById('parent').addEventListener('click', function() {
+  console.log('Parent clicked');
+}, true); // Use capturing phase
+
+document.getElementById('child').addEventListener('click', function() {
+  console.log('Button clicked');
+});
+// Clicking button logs: "Parent clicked" then "Button clicked"
+```
+
+### Stopping Propagation
+```javascript
+document.getElementById('child').addEventListener('click', function(event) {
+  console.log('Button clicked');
+  event.stopPropagation(); // Prevents bubbling to parent
+});
+```
+
+## Event Delegation
+
+Event delegation uses event bubbling to handle events at a higher level:
+
+```html
+<ul id="myList">
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+
+<script>
+  document.getElementById('myList').addEventListener('click', function(event) {
+    if (event.target.tagName === 'LI') {
+      console.log('List item clicked:', event.target.textContent);
+    }
+  });
+  
+  // Add new items dynamically
+  const newItem = document.createElement('li');
+  newItem.textContent = 'Item 4';
+  document.getElementById('myList').appendChild(newItem);
+  // New item will work without adding a new event listener
+</script>
+```
+
+## Custom Events
+
+### Creating and Dispatching Custom Events
+```javascript
+// Create event
+const myEvent = new CustomEvent('myCustomEvent', {
+  detail: { // Custom data
+    message: 'Hello from custom event',
+    time: new Date()
+  },
+  bubbles: true,
+  cancelable: true
+});
+
+// Listen for event
+document.addEventListener('myCustomEvent', function(event) {
+  console.log('Custom event received:', event.detail.message);
+});
+
+// Dispatch event
+document.dispatchEvent(myEvent);
+```
+
+### Event Constructor Types
+- `Event`: Basic event
+- `CustomEvent`: Event with custom data
+- `MouseEvent`: Mouse-related events
+- `KeyboardEvent`: Keyboard-related events
+
+## Best Practices
+
+### 1. Use Event Delegation
+```javascript
+// Instead of adding listeners to each element
+document.querySelectorAll('.item').forEach(item => {
+  item.addEventListener('click', handleClick);
+});
+
+// Use delegation on a common parent
+document.getElementById('container').addEventListener('click', function(event) {
+  if (event.target.classList.contains('item')) {
+    handleClick(event);
+  }
+});
+```
+
+### 2. Throttle and Debounce Events
+```javascript
+// Throttle: Execute at most once every X milliseconds
+function throttle(func, delay) {
+  let lastCall = 0;
+  return function(...args) {
+    const now = new Date().getTime();
+    if (now - lastCall < delay) return;
+    lastCall = now;
+    return func.apply(this, args);
+  };
+}
+
+window.addEventListener('resize', throttle(function() {
+  console.log('Resize event throttled');
+}, 200));
+
+// Debounce: Execute after event stops firing for X milliseconds
+function debounce(func, delay) {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+window.addEventListener('resize', debounce(function() {
+  console.log('Resize event debounced');
+}, 200));
+```
+
+### 3. Use Passive Event Listeners for Performance
+```javascript
+// Improves scrolling performance
+document.addEventListener('touchstart', function(event) {
+  // Handler logic
+}, { passive: true });
+```
+
+### 4. Clean Up Event Listeners
+```javascript
+// Remove event listeners when no longer needed
+function setup() {
+  const button = document.getElementById('myButton');
+  button.addEventListener('click', handleClick);
+  
+  // Later, when cleaning up
+  button.removeEventListener('click', handleClick);
+}
+```
+
+### 5. Use Event Constants
+```javascript
+// Instead of string literals
+const EVENTS = {
+  CLICK: 'click',
+  KEYDOWN: 'keydown',
+  // ...
+};
+
+element.addEventListener(EVENTS.CLICK, handler);
+```
+
+## Browser Compatibility
+
+Most modern event handling features work in all modern browsers. For older browsers like IE, consider:
+
+1. Using polyfills for `addEventListener` and `removeEventListener`
+2. Feature detection before using newer event APIs
+3. Using a library like jQuery for cross-browser event handling
+
+## Common Pitfalls
+
+1. **Memory leaks**: Forgetting to remove event listeners
+2. **Too many event listeners**: Performance issues with many elements
+3. **Event handler conflicts**: Multiple libraries modifying events
+4. **Default behavior**: Forgetting to prevent default when needed
+
+## Conclusion
+
+JavaScript events are fundamental to creating interactive web applications. Understanding event types, propagation, delegation, and best practices will help you write more efficient and maintainable code. Always consider performance implications and clean up event listeners when they're no longer needed.
 
 

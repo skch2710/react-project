@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Events: Complete Documentation</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #4f46e5;
+            --accent: #8b5cf6;
+            --light: #f3f4f6;
+            --dark: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray: #6b7280;
+            --code-bg: #2d3748;
+            --sidebar-width: 280px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            padding: 20px 0;
+            height: 100%;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--gray);
+        }
+        
+        .sidebar h2 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .sidebar li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: var(--light);
+            text-decoration: none;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--primary);
+            color: white;
+        }
+        
+        /* Main Content */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+        
+        h2 {
+            color: var(--primary-dark);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        h3 {
+            color: var(--primary);
+            margin: 25px 0 15px;
+        }
+        
+        h4 {
+            color: var(--secondary);
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            color: #cbd5e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-comment {
+            color: #8a8a8a;
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        /* Demo Area */
+        .demo-area {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+        
+        .interactive-box {
+            width: 200px;
+            height: 200px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .interactive-box:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+        }
+        
+        .keyboard-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        
+        .keyboard-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .event-log {
+            font-family: 'Courier New', monospace;
+            background: var(--code-bg);
+            color: #cbd5e0;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        th {
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background: #f9f9f9;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: var(--gray);
+            border-top: 2px solid var(--light);
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: relative;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>JavaScript Events</h2>
+                <p>Complete Documentation</p>
+            </div>
+            <ul>
+                <li><a href="#intro" class="active">Introduction</a></li>
+                <li><a href="#basics">Event Basics</a></li>
+                <li><a href="#types">Event Types</a></li>
+                <li><a href="#handling">Event Handling</a></li>
+                <li><a href="#object">Event Object</a></li>
+                <li><a href="#propagation">Event Propagation</a></li>
+                <li><a href="#delegation">Event Delegation</a></li>
+                <li><a href="#custom">Custom Events</a></li>
+                <li><a href="#best-practices">Best Practices</a></li>
+                <li><a href="#demos">Interactive Demos</a></li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <header id="intro">
+                <h1>JavaScript Events</h1>
+                <p class="subtitle">Complete Documentation with Interactive Examples</p>
+            </header>
+            
+            <section>
+                <h2>Introduction to JavaScript Events</h2>
+                <p>JavaScript events are actions or occurrences that happen in the browser, which you can respond to using JavaScript. They form the foundation of interactive web applications by allowing scripts to react to user interactions, browser activities, and other occurrences.</p>
+                
+                <h3>Event Flow</h3>
+                <p>Events follow a propagation path:</p>
+                <ol>
+                    <li><strong>Capturing Phase</strong>: From window down to target element</li>
+                    <li><strong>Target Phase</strong>: At the target element</li>
+                    <li><strong>Bubbling Phase</strong>: From target element back up to window</li>
+                </ol>
+            </section>
+            
+            <section id="basics">
+                <h2>Event Basics</h2>
+                <p>Events are signals that something has occurred in the document - user interactions (clicks, key presses), browser events (page loaded, resized), or other occurrences.</p>
+                
+                <div class="code-block">
+                    <span class="code-comment">// Basic event handling example</span><br>
+                    document.querySelector('button').addEventListener('click', function() {<br>
+                    &nbsp;&nbsp;console.log('Button was clicked!');<br>
+                    });
+                </div>
+            </section>
+            
+            <section id="types">
+                <h2>Event Types</h2>
+                
+                <h3>Mouse Events</h3>
+                <ul>
+                    <li><code>click</code>: Element is clicked</li>
+                    <li><code>dblclick</code>: Element is double-clicked</li>
+                    <li><code>mousedown</code>: Mouse button is pressed</li>
+                    <li><code>mouseup</code>: Mouse button is released</li>
+                    <li><code>mousemove</code>: Mouse is moved over element</li>
+                    <li><code>mouseover</code>: Mouse moves onto element</li>
+                    <li><code>mouseout</code>: Mouse moves out of element</li>
+                    <li><code>contextmenu</code>: Right-click context menu is opened</li>
+                </ul>
+                
+                <h3>Keyboard Events</h3>
+                <ul>
+                    <li><code>keydown</code>: Key is pressed down</li>
+                    <li><code>keyup</code>: Key is released</li>
+                    <li><code>keypress</code>: Key is pressed (deprecated)</li>
+                </ul>
+                
+                <h3>Form Events</h3>
+                <ul>
+                    <li><code>submit</code>: Form is submitted</li>
+                    <li><code>change</code>: Input value changes</li>
+                    <li><code>focus</code>: Element receives focus</li>
+                    <li><code>blur</code>: Element loses focus</li>
+                    <li><code>input</code>: Input value changes (immediate)</li>
+                    <li><code>select</code>: Text is selected in input</li>
+                </ul>
+                
+                <h3>Window/Document Events</h3>
+                <ul>
+                    <li><code>load</code>: Page and resources finished loading</li>
+                    <li><code>DOMContentLoaded</code>: DOM is ready (no styles/images)</li>
+                    <li><code>resize</code>: Window is resized</li>
+                    <li><code>scroll</code>: Element is scrolled</li>
+                    <li><code>hashchange</code>: URL hash changes</li>
+                    <li><code>beforeunload</code>: Window is about to unload</li>
+                </ul>
+            </section>
+            
+            <section id="handling">
+                <h2>Event Handling</h2>
+                
+                <h3>Inline HTML Event Handlers</h3>
+                <div class="code-block">
+                    &lt;button onclick="handleClick()"&gt;Click me&lt;/button&gt;
+                </div>
+                
+                <h3>DOM Property Event Handlers</h3>
+                <div class="code-block">
+                    const button = document.querySelector('button');<br>
+                    button.onclick = function() {<br>
+                    &nbsp;&nbsp;console.log('Button clicked!');<br>
+                    };
+                </div>
+                
+                <h3>addEventListener() (Recommended)</h3>
+                <div class="code-block">
+                    const button = document.querySelector('button');<br>
+                    <br>
+                    <span class="code-comment">// Basic syntax</span><br>
+                    button.addEventListener('click', function(event) {<br>
+                    &nbsp;&nbsp;console.log('Button clicked!');<br>
+                    });<br>
+                    <br>
+                    <span class="code-comment">// With options</span><br>
+                    button.addEventListener('click', handlerFunction, {<br>
+                    &nbsp;&nbsp;capture: false,    <span class="code-comment">// Use capturing phase</span><br>
+                    &nbsp;&nbsp;once: true,        <span class="code-comment">// Run once then remove</span><br>
+                    &nbsp;&nbsp;passive: false     <span class="code-comment">// Never call preventDefault()</span><br>
+                    });<br>
+                    <br>
+                    <span class="code-comment">// Named function</span><br>
+                    function handleClick(event) {<br>
+                    &nbsp;&nbsp;console.log('Button clicked!');<br>
+                    }<br>
+                    button.addEventListener('click', handleClick);
+                </div>
+                
+                <h3>Removing Event Listeners</h3>
+                <div class="code-block">
+                    <span class="code-comment">// Must reference the same function</span><br>
+                    button.removeEventListener('click', handleClick);
+                </div>
+            </section>
+            
+            <section id="demos">
+                <h2>Interactive Demos</h2>
+                <p>Try interacting with the elements below to see JavaScript events in action.</p>
+                
+                <div class="demo-area">
+                    <h3>Mouse Events</h3>
+                    <div class="interactive-box" id="mouseBox">
+                        Hover, click or right-click me!
+                    </div>
+                    
+                    <h3>Keyboard Events</h3>
+                    <input type="text" class="keyboard-input" placeholder="Type here to test keyboard events">
+                    
+                    <h3>Button Events</h3>
+                    <div class="button-group">
+                        <button id="clickButton">Click Me</button>
+                        <button id="doubleClickButton">Double-Click Me</button>
+                        <button id="resetButton">Reset Log</button>
+                    </div>
+                    
+                    <h3>Event Log</h3>
+                    <div class="event-log" id="eventLog">
+                        Events will be logged here...<br>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="object">
+                <h2>Event Object</h2>
+                <p>When an event occurs, the browser creates an event object containing information about the event.</p>
+                
+                <h3>Common Properties</h3>
+                <ul>
+                    <li><code>type</code>: Event type ('click', 'keydown', etc.)</li>
+                    <li><code>target</code>: Element that triggered the event</li>
+                    <li><code>currentTarget</code>: Element that has the event handler</li>
+                    <li><code>timeStamp</code>: When event occurred</li>
+                    <li><code>bubbles</code>: Whether event bubbles</li>
+                    <li><code>cancelable</code>: Whether event can be canceled</li>
+                </ul>
+                
+                <h3>Event Methods</h3>
+                <ul>
+                    <li><code>preventDefault()</code>: Prevents default browser action</li>
+                    <li><code>stopPropagation()</code>: Stops event from propagating</li>
+                    <li><code>stopImmediatePropagation()</code>: Stops other handlers from executing</li>
+                </ul>
+            </section>
+            
+            <footer>
+                <p>JavaScript Events Documentation - Created for educational purposes</p>
+                <p>For more JavaScript resources, visit MDN Web Docs</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const mouseBox = document.getElementById('mouseBox');
+        const clickButton = document.getElementById('clickButton');
+        const doubleClickButton = document.getElementById('doubleClickButton');
+        const resetButton = document.getElementById('resetButton');
+        const keyboardInput = document.querySelector('.keyboard-input');
+        const eventLog = document.getElementById('eventLog');
+        
+        // Log event to the event log
+        function logEvent(message) {
+            const now = new Date();
+            const timestamp = now.toTimeString().split(' ')[0];
+            eventLog.innerHTML += `${timestamp}: ${message}<br>`;
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+        
+        // Mouse events on the box
+        mouseBox.addEventListener('click', function(e) {
+            logEvent(`Mouse clicked at (${e.offsetX}, ${e.offsetY})`);
+        });
+        
+        mouseBox.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            logEvent('Right-click detected (contextmenu event)');
+        });
+        
+        mouseBox.addEventListener('mouseenter', function() {
+            logEvent('Mouse entered the box');
+        });
+        
+        mouseBox.addEventListener('mouseleave', function() {
+            logEvent('Mouse left the box');
+        });
+        
+        mouseBox.addEventListener('mousemove', function(e) {
+            // Throttle the mousemove events to avoid flooding the log
+            if (Math.random() < 0.1) {
+                logEvent(`Mouse moving at (${e.offsetX}, ${e.offsetY})`);
+            }
+        });
+        
+        // Button events
+        clickButton.addEventListener('click', function() {
+            logEvent('Button clicked!');
+        });
+        
+        doubleClickButton.addEventListener('dblclick', function() {
+            logEvent('Button double-clicked!');
+        });
+        
+        resetButton.addEventListener('click', function() {
+            eventLog.innerHTML = 'Events will be logged here...<br>';
+            logEvent('Event log cleared');
+        });
+        
+        // Keyboard events
+        keyboardInput.addEventListener('keydown', function(e) {
+            logEvent(`Key down: ${e.key} (KeyCode: ${e.keyCode})`);
+        });
+        
+        keyboardInput.addEventListener('keyup', function(e) {
+            logEvent(`Key up: ${e.key}`);
+        });
+        
+        // Window events
+        window.addEventListener('resize', function() {
+            logEvent(`Window resized: ${window.innerWidth}x${window.innerHeight}`);
+        });
+        
+        window.addEventListener('scroll', function() {
+            logEvent(`Page scrolled: ${window.scrollY}px`);
+        });
+        
+        // Initial log message
+        logEvent('Page loaded and event listeners attached');
+        
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Update active class
+                document.querySelectorAll('.sidebar a').forEach(a => {
+                    a.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
