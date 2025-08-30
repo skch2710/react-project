@@ -6,18 +6,18 @@ ReactJs Ussages :
 -------------------
 1. Go to Node WebSite Download and Install (https://nodejs.org/en/download)
 	Current LTS (22.18.0) AND NPM (10.9.3)
-	>>> node -v
-	>>> npm -v
+	-- node -v
+	-- npm -v
 2. Install React App -- Create one Folder open CMD
-	>>> npm create vite@latest my-project-react
-		>> Select a framework:
+	i.-- npm create vite@latest my-project-react
+		--Select a framework:
 			-->  React
-		>>Select a variant:
+		--Select a variant:
 			--> JavaScript
-	>>> Done. Now run:
-	  >>> cd my-project-react
-	  >>> npm install
-	  >>> npm run dev
+	  -- Done. Now run:
+		-->cd my-project-react
+		-->npm install
+		-->npm run dev
 
 
 
