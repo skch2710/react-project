@@ -10,13 +10,11 @@ ReactJs Ussages :
 	>>> npm -v
 2. Install React App -- Create one Folder open CMD
 	>>> npm create vite@latest my-project-react
-	o  Select a framework:
-	|  React
-	|
-	o  Select a variant:
-	|  JavaScript
-	|
-	—  Done. Now run:
+		>> Select a framework:
+			-->  React
+		>>Select a variant:
+			--> JavaScript
+	>>> Done. Now run:
 	  >>> cd my-project-react
 	  >>> npm install
 	  >>> npm run dev
@@ -110,3 +108,121 @@ class Greeting extends Component {
 ✅ **Conclusion**: Use **Functional Components** with **Hooks** in modern React, while Class Components are mainly seen in older codebases.
 
 
+## 📌 Exports and Imports in React :
+------------------------------------
+
+### **1. What are Exports and Imports?**
+
+* In React (and modern JavaScript), **modules** let you split code into separate files for better readability and reusability.
+* **Export** → makes functions, variables, components, or objects available for use in other files.
+* **Import** → brings those exported items into another file.
+
+---
+
+### **2. Types of Exports**
+
+#### a) **Named Export**
+
+* You can export multiple items from the same file.
+* Must use the same name while importing (unless using `as` for aliasing).
+
+```jsx
+// utils.js
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+```
+
+Importing:
+
+```jsx
+import { add, subtract } from './utils';
+console.log(add(2,3)); // 5
+```
+
+Alias:
+
+```jsx
+import { add as sum } from './utils';
+console.log(sum(2,3)); // 5
+```
+
+---
+
+#### b) **Default Export**
+
+* Only one default export per file.
+* Can import with any name.
+
+```jsx
+// Button.jsx
+export default function Button() {
+  return <button>Click Me</button>;
+}
+```
+
+Importing:
+
+```jsx
+import MyButton from './Button';  // name can be anything
+```
+
+---
+
+### **3. Mixing Default and Named Exports**
+
+```jsx
+// math.js
+export const multiply = (a, b) => a * b;
+export default function divide(a, b) { return a / b; }
+```
+
+Importing:
+
+```jsx
+import divide, { multiply } from './math';
+console.log(divide(10,2)); // 5
+console.log(multiply(2,3)); // 6
+```
+
+---
+
+### **4. Exporting All from Another File (Re-exports)**
+
+```jsx
+// index.js
+export * from './math';
+export { default as divide } from './math';
+```
+
+---
+
+### **5. React Component Example**
+
+```jsx
+// Header.jsx
+export default function Header() {
+  return <h1>Hello, React!</h1>;
+}
+```
+
+```jsx
+// App.jsx
+import Header from './Header';
+
+function App() {
+  return (
+    <div>
+      <Header />
+    </div>
+  );
+}
+export default App;
+```
+
+---
+
+✅ **Best Practices:**
+
+* Use **default export** when the file exports only one main thing (like a React component).
+* Use **named exports** when exporting multiple utilities or constants.
+* Keep import paths relative and consistent.
