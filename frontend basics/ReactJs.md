@@ -649,4 +649,391 @@ function App() {
 export default App;
 ```
 
+## 📌 React Hoocks :
+---------------------
+
+🔹 What are Hooks?
+
+Hooks are special functions in React that let you use state and lifecycle features in functional components.
+
+Introduced in React 16.8.
+
+They make functional components as powerful as class components.
+
+🔹 Rules of Hooks
+
+Only call Hooks at the top level of your component (not inside loops, conditions, or nested functions).
+
+Only call Hooks from React functions (functional components or custom hooks).
+
+---
+
+# 📘 React Hook: useState
+
+## 🔹 What is useState?
+
+* `useState` lets you add **state** to functional components.
+* It returns **two values**:
+
+  1. The **current state**.
+  2. A **function to update the state**.
+* State updates cause **re-rendering** of the component.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+---
+
+## 🔹 Key Points
+
+* Initial value can be any type: string, number, object, array.
+* Updating state is **asynchronous**.
+* If the new state depends on the old state, use a callback:
+
+  ```jsx
+  setCount(prev => prev + 1);
+  ```
+
+---
+
+## 📘 Example: useState
+
+```jsx
+import React, { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState("Sathish");
+
+  return (
+    <div>
+      <h2>useState Example</h2>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(prev => prev + 1)}>Increment</button>
+      <button onClick={() => setCount(prev => prev - 1)}>Decrement</button>
+
+      <p>Name: {name}</p>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+---
+
+# 📘 React Hook: useEffect
+
+## 🔹 What is useEffect?
+
+* `useEffect` lets you run **side effects** in functional components (like lifecycle methods in class components).
+* Examples of side effects: data fetching, timers, DOM manipulation, subscriptions.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+useEffect(() => {
+  // side effect code
+  return () => {
+    // cleanup (optional)
+  };
+}, [dependencies]);
+```
+
+---
+
+## 🔹 Key Points
+
+1. **Runs after render**.
+2. **Dependencies array** controls when it runs:
+
+   * `[]` → runs only once (on mount).
+   * `[var]` → runs when `var` changes.
+   * No array → runs on every render.
+3. Cleanup function is used for things like removing event listeners or clearing timers.
+
+---
+
+## 📘 Example: useEffect
+
+```jsx
+import React, { useState, useEffect } from "react";
+
+function Timer() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log("Effect runs: Count is", count);
+
+    const interval = setInterval(() => setCount(c => c + 1), 1000);
+
+    return () => {
+      clearInterval(interval); // cleanup
+      console.log("Cleanup executed");
+    };
+  }, []);
+
+  return <h2>Timer Count: {count}</h2>;
+}
+
+export default Timer;
+```
+
+---
+
+# 📘 React Hook: useRef
+
+## 🔹 What is useRef?
+
+* `useRef` returns a **mutable ref object**.
+* Value persists across renders but **does not trigger re-renders** when updated.
+* Often used to **access DOM elements** or store mutable values.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const refContainer = useRef(initialValue);
+```
+
+---
+
+## 🔹 Key Points
+
+* `ref.current` holds the value.
+* Useful for:
+
+  1. Accessing DOM nodes.
+  2. Storing previous values.
+  3. Holding mutable values that don’t need re-render.
+
+---
+
+## 📘 Example: useRef
+
+```jsx
+import React, { useRef } from "react";
+
+function InputFocus() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <h2>useRef Example</h2>
+      <input ref={inputRef} type="text" placeholder="Type here" />
+      <button onClick={focusInput}>Focus Input</button>
+    </div>
+  );
+}
+
+export default InputFocus;
+```
+
+---
+
+# 📘 React Hook: useMemo
+
+## 🔹 What is useMemo?
+
+* `useMemo` memoizes (caches) the result of an **expensive calculation**.
+* It only recomputes when its dependencies change.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+---
+
+## 🔹 Key Points
+
+* Improves performance in heavy calculations.
+* Should not be overused (adds complexity).
+
+---
+
+## 📘 Example: useMemo
+
+```jsx
+import React, { useState, useMemo } from "react";
+
+function ExpensiveCalc() {
+  const [num, setNum] = useState(5);
+
+  const squared = useMemo(() => {
+    console.log("Calculating...");
+    return num * num;
+  }, [num]);
+
+  return (
+    <div>
+      <h2>useMemo Example</h2>
+      <p>Number: {num}</p>
+      <p>Squared: {squared}</p>
+      <button onClick={() => setNum(num + 1)}>Increase</button>
+    </div>
+  );
+}
+
+export default ExpensiveCalc;
+```
+
+---
+
+# 📘 React Hook: useCallback
+
+## 🔹 What is useCallback?
+
+* `useCallback` memoizes a **function** so it is not recreated on every render.
+* Useful when passing functions to child components to avoid unnecessary re-renders.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const memoizedCallback = useCallback(() => {
+  doSomething(a, b);
+}, [a, b]);
+```
+
+---
+
+## 📘 Example: useCallback
+
+```jsx
+import React, { useState, useCallback } from "react";
+
+function Button({ onClick }) {
+  console.log("Button rendered");
+  return <button onClick={onClick}>Click</button>;
+}
+
+function App() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    alert("Button clicked");
+  }, []);
+
+  return (
+    <div>
+      <h2>useCallback Example</h2>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <Button onClick={handleClick} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+---
+
+# 📘 React Hook: useReducer
+
+## 🔹 What is useReducer?
+
+* Alternative to `useState` for **complex state logic**.
+* Uses a **reducer function** (like Redux).
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+---
+
+## 📘 Example: useReducer
+
+```jsx
+import React, { useReducer } from "react";
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment": return { count: state.count + 1 };
+    case "decrement": return { count: state.count - 1 };
+    default: return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <div>
+      <h2>useReducer Example</h2>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: "increment" })}>Increment</button>
+      <button onClick={() => dispatch({ type: "decrement" })}>Decrement</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+---
+
+# 📘 React Hook: useContext
+
+## 🔹 What is useContext?
+
+* `useContext` allows components to **consume values** from React Context **without prop drilling**.
+
+---
+
+## 🔹 Syntax
+
+```jsx
+const value = useContext(MyContext);
+```
+
+---
+
+## 📘 Example: useContext
+
+```jsx
+import React, { createContext, useContext } from "react";
+
+const UserContext = createContext();
+
+function Child() {
+  const user = useContext(UserContext);
+  return <h2>Hello {user}</h2>;
+}
+
+function App() {
+  return (
+    <UserContext.Provider value="Sathish">
+      <Child />
+    </UserContext.Provider>
+  );
+}
+
+export default App;
+```
+
 
