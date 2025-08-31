@@ -369,3 +369,284 @@ function Button({ primary }) {
 * Keep **inline styles** only for dynamic or small cases.
 * For **design systems**, consider `styled-components` or `emotion`.
 * Maintain **consistent theme/colors** across components.
+
+
+## 📌 Props in ReactJS :
+------------------------------------------
+
+# 📘 Props in ReactJS
+
+## 🔹 What are Props?
+
+* **Props** (short for *properties*) are used to pass data from a **parent component** to a **child component**.
+* Props make components **reusable**.
+* Props are **read-only (immutable)** → child components cannot modify them directly.
+* They work like **function parameters**.
+
+---
+
+## 🔹 Key Characteristics
+
+1. **Unidirectional Flow** → Props always flow **from parent to child**.
+2. **Immutable** → Props cannot be changed by the child component.
+3. **Reusable** → You can use the same component with different props.
+4. **Type** → Props can be **strings, numbers, booleans, arrays, objects, or functions**.
+
+---
+
+## 🔹 Ways to Use Props
+
+1. **Passing Props**
+
+   * Pass values as attributes in the parent component.
+2. **Receiving Props**
+
+   * Access using `props.propertyName` inside the child.
+   * Or use **destructuring** for cleaner code.
+3. **Default Props**
+
+   * Define fallback values if no prop is passed.
+4. **Children Prop**
+
+   * Special `children` prop allows passing JSX content inside a component.
+5. **Functions as Props**
+
+   * You can pass functions to child components for handling events.
+6. **Spread Operator**
+
+   * You can pass an object as props using `{...objectName}`.
+
+---
+
+## 🔹 Best Practices
+
+* Use **destructuring** in function parameters for cleaner code.
+* Define **defaultProps** for safety.
+* Pass only **necessary props** (avoid over-passing).
+* For larger apps, consider **PropTypes** or **TypeScript** for type-checking.
+
+---
+
+# 📘 Example: Props in React
+
+```jsx
+//Child Component
+import React from "react";
+
+const Child = (props) => {
+  console.log(props);
+  console.log(props.children);
+
+  let parentName = props.name;
+
+  return (
+    <div>
+      <p>Name : {parentName} </p>
+      <p>Age : {props.age} </p>
+      <p>Children Prop</p>
+      {props.children}
+    </div>
+  );
+};
+
+export default Child;
+
+//Parent Component
+import React from "react";
+import Child from "./Child";
+
+const Parent = () => {
+  let parentObj = {
+    name: "Sathish",
+    age: 25,
+  };
+
+  let parentArray = [
+    {
+      name: "Sathish",
+      age: 25,
+    },
+    {
+      name: "Kumar",
+      age: 30,
+    },
+  ];
+
+  return (
+    <div>
+      <p>Parent Component</p>
+      {/* <Child name={parentObj.name} age={parentObj.age} /> */}
+      {/* <Child {...parentObj} /> */}
+      {/* {parentArray.map((obj, index) => (
+        console.log(`Index : ${index} , Obj: ${JSON.stringify(obj)}`),
+        <Child key={index} {...obj} />
+      ))} */}
+      <Child {...parentObj}>
+        <p>Name : {parentObj.name} </p>
+        <p>Age : {parentObj.age} </p>
+      </Child>
+    </div>
+  );
+};
+
+export default Parent;
+
+```
+
+```jsx
+import React from "react";
+
+// Child Component
+function UserCard({ name, age, role = "User" }) {
+  return (
+    <div style={{ border: "1px solid gray", padding: "10px", margin: "5px" }}>
+      <h3>{name}</h3>
+      <p>Age: {age}</p>
+      <p>Role: {role}</p>
+    </div>
+  );
+}
+
+// Child Component with children
+function Card({ children }) {
+  return <div style={{ border: "2px solid blue", padding: "10px" }}>{children}</div>;
+}
+
+// Parent Component
+function App() {
+  const user = { name: "Sathish", age: 25, role: "Developer" };
+
+  // Function as prop
+  const greetUser = (name) => alert(`Hello ${name}`);
+
+  return (
+    <div>
+      <h2>React Props Example</h2>
+
+      {/* Passing props directly */}
+      <UserCard name="John" age={30} role="Admin" />
+
+      {/* Using default prop (role will be "User") */}
+      <UserCard name="Alice" age={28} />
+
+      {/* Passing props using spread operator */}
+      <UserCard {...user} />
+
+      {/* Function as prop */}
+      <button onClick={() => greetUser("Sathish")}>Greet User</button>
+
+      {/* Children prop */}
+      <Card>
+        <h4>Inside Card Component</h4>
+        <p>This content is passed using children prop.</p>
+      </Card>
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+
+## 📌 Event Handling in ReactJS :
+---------------------------------
+
+## 🔹 What is Event Handling?
+
+* Event handling allows us to respond to user actions like clicks, typing, submitting forms, etc.
+* React events are very similar to DOM events but have some differences.
+
+---
+
+## 🔹 Key Points about React Events
+
+1. **CamelCase Naming** → Events use camelCase (`onClick`, `onChange`) instead of lowercase (`onclick`).
+2. **Function Reference** → You pass a function, not a string.
+
+   ```jsx
+   onClick={handleClick} ✅
+   onClick="handleClick()" ❌  
+   ```
+3. **Synthetic Events** → React wraps native events in a cross-browser wrapper for consistency.
+4. **Immutable Event Object** → Events are pooled, so don’t use them asynchronously without persisting.
+5. **Prevent Default** → Use `event.preventDefault()` to stop default browser behavior (e.g., form submit reload).
+
+---
+
+## 🔹 Commonly Used React Events
+
+* **Mouse Events**: `onClick`, `onDoubleClick`, `onMouseEnter`, `onMouseLeave`.
+* **Keyboard Events**: `onKeyDown`, `onKeyUp`, `onKeyPress`.
+* **Form Events**: `onChange`, `onSubmit`, `onFocus`, `onBlur`.
+* **Touch Events**: `onTouchStart`, `onTouchEnd`.
+
+---
+
+## 🔹 Passing Parameters in Event Handlers
+
+* You can pass extra arguments to event handlers using arrow functions.
+
+---
+
+## 🔹 Best Practices
+
+* Keep event handler functions **small and clear**.
+* Use **arrow functions** inside components to avoid binding issues.
+* Use `event.preventDefault()` and `event.stopPropagation()` when needed.
+* Avoid unnecessary anonymous functions directly in JSX for performance.
+
+---
+
+# 📘 Example: Event Handling in React
+
+```jsx
+import React, { useState } from "react";
+
+function App() {
+  const [text, setText] = useState("");
+  const [count, setCount] = useState(0);
+
+  // Click event
+  const handleClick = () => {
+    alert("Button Clicked!");
+  };
+
+  // Change event
+  const handleChange = (event) => {
+    setText(event.target.value);
+  };
+
+  // Submit event
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Form submitted with: ${text}`);
+  };
+
+  return (
+    <div>
+      <h2>React Event Handling</h2>
+
+      {/* Click Event */}
+      <button onClick={handleClick}>Click Me</button>
+
+      {/* Change + Submit Events */}
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={text} onChange={handleChange} />
+        <button type="submit">Submit</button>
+      </form>
+
+      {/* Counter Example with Click */}
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)} disabled={count <= 0}>
+        Decrement
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+
