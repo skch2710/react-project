@@ -21,6 +21,12 @@ ReactJs Ussages :
 				-->npm install
 				-->npm run dev
 
+3. Form and Validation Using Formic & Yup
+    
+    ```
+    >>> npm install formik yup 
+    >>> npm install lodash.debounce
+    ```
 
 
 ## 📌 What is ReactJs Introduction :
@@ -44,7 +50,7 @@ index.css → Global styles.
 ## 📌 Components in React :
 -----------------------------
 
-### 🔹 What are Components?
+7## 🔹 What are Components?
 
 * Components are **independent, reusable pieces of UI** in React.
 * Each component can have its own **logic, data (state), and UI**.
