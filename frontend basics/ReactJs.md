@@ -27,6 +27,10 @@ ReactJs Ussages :
     >>> npm install formik yup 
     >>> npm install lodash.debounce
     ```
+4. MUI for Better and Easy Components 
+    ```
+    >>> npm install @mui/material @emotion/react @emotion/styled
+    ```
 
 
 ## 📌 What is ReactJs Introduction :

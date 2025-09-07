@@ -2,6 +2,7 @@ import Counter from "./pages/counter/Counter"
 import FormExample from "./pages/form-types/FormExample"
 import FormicExample from "./pages/form-types/formic-example/FormicExample"
 import Home from "./pages/home/Home"
+import Hospital from "./pages/hospital/Hospital"
 import Parent from "./pages/parent-child/Parent"
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
       <Counter />
       <Parent /> 
       <FormExample /> */}
-      <FormicExample />
+      {/* <FormicExample /> */}
+      <Hospital />
     </>
   )
 }
