@@ -1,28 +1,38 @@
-import React, { useCallback } from "react";
+import React, { useMemo } from "react";
 import { Field, useFormikContext } from "formik";
 import debounce from "lodash.debounce";
 
-const DebouncedField = ({ name, ...props }) => {
+const DebouncedField = ({ name, regex, ...props }) => {
   const { setFieldValue } = useFormikContext();
-
-  // Debounced setter for Formik state
-  const debouncedChange = useCallback(
-    debounce((value) => {
-      setFieldValue(name, value);
+  
+  // Create debounced function with useMemo
+  const debouncedChange = useMemo(() => 
+    debounce((value, fieldName) => {
+      setFieldValue(fieldName, value);
       console.log("Debounced Input (Formik updated):", value);
-    }, 800),
-    [name, setFieldValue]
+    }, 400),
+    [setFieldValue]
   );
+
+  // Clean up on unmount
+  React.useEffect(() => {
+    return () => {
+      debouncedChange.cancel();
+    };
+  }, [debouncedChange]);
 
   return (
     <Field name={name}>
       {({ field }) => (
         <input
           {...props}
-          {...field} // gives us value + immediate onChange
+          {...field}
           onChange={(e) => {
-            field.onChange(e);          // ✅ update UI immediately
-            debouncedChange(e.target.value); // ✅ delayed update to Formik
+            const { value } = e.target;
+            if (!regex || regex.test(value)) {
+              field.onChange(e);
+              debouncedChange(value, name);
+            }
           }}
         />
       )}

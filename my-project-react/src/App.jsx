@@ -1,22 +1,17 @@
-import Counter from "./pages/counter/Counter"
-import FormExample from "./pages/form-types/FormExample"
-import FormicExample from "./pages/form-types/formic-example/FormicExample"
-import Home from "./pages/home/Home"
-import Hospital from "./pages/hospital/Hospital"
-import Parent from "./pages/parent-child/Parent"
+import React from "react";
+import DropEx from "./components/DropEx";
+import FormicExample from "./pages/form-types/formic-example/FormicExample";
+import Hospital from "./pages/hospital/Hospital";
 
-function App() {
-
+const App = () => {
   return (
-    <>
-      {/* <Home />
-      <Counter />
-      <Parent /> 
-      <FormExample /> */}
+    <div>
+      {/* <h1>Movie Selector</h1> */}
+      {/* <DropEx /> */}
       {/* <FormicExample /> */}
       <Hospital />
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default App
+export default App;
