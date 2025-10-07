@@ -39,7 +39,7 @@ const Popup = (props) => {
       </DialogContent>
       <Divider />
       <DialogActions>
-        <Button label="Save" onClick={onSubmit} color="success" />
+        <Button type="submit" label="Save" onClick={onSubmit} color="success" />
         <Button variant="outlined" label="Cancel" onClick={handleClose} />
       </DialogActions>
     </Dialog>

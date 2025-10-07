@@ -4,3 +4,12 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.css-1hgcujo-MuiPickersInputBase-root-MuiPickersOutlinedInput-root {
+  font-size: 12px !important;
+  height: 30px !important;
+}
+
+.css-5wchs2-MuiDateCalendar-root{
+  max-height: 280px;
+}

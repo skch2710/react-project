@@ -18,3 +18,5 @@ export const REGEX = {
   numericTwoDecimals: /^-?(\d{0,10}(\.\d{0,2})?)$/,
   varcharWithSpacesInBetweenWords: /^[A-Za-z0-9]+(?: ?[A-Za-z0-9]*)*$/,
 };
+
+export const DATE_FORMAT = "MM/DD/YYYY";
