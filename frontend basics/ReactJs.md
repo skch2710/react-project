@@ -30,8 +30,12 @@ ReactJs Ussages :
 4. MUI for Better and Easy Components 
     ```
     >>> npm install @mui/material @emotion/react @emotion/styled
+    >>> npm install @mui/icons-material
     ```
-
+5. Axios for API Calling
+    ```
+    >>> npm install axios
+    ```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------

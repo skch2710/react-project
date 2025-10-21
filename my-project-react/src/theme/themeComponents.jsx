@@ -16,6 +16,7 @@ const themeComponents = (theme) => ({
       },
     },
   },
+  
   // Add other component overrides here as needed
 });
 
