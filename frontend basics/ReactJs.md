@@ -20,6 +20,12 @@ ReactJs Ussages :
 				-->cd my-project-react
 				-->npm install
 				-->npm run dev
+  
+>>> Build the project
+    ```
+    >>> npm run build
+    >>> npm run preview
+    ```
 
 3. Form and Validation Using Formic & Yup
     
@@ -31,6 +37,9 @@ ReactJs Ussages :
     ```
     >>> npm install @mui/material @emotion/react @emotion/styled
     >>> npm install @mui/icons-material
+    >>> npm install @mui/x-data-grid
+    >>> npm install lucide-react
+
     ```
 5. Axios for API Calling
     ```
