@@ -38,6 +38,7 @@ ReactJs Ussages :
     >>> npm install @mui/material @emotion/react @emotion/styled
     >>> npm install @mui/icons-material
     >>> npm install @mui/x-data-grid
+    >>> npm install react-icons --save
     >>> npm install lucide-react
 
     ```
@@ -45,6 +46,21 @@ ReactJs Ussages :
     ```
     >>> npm install axios
     ```
+6. Save Files
+    ```
+    >>> npm install file-saver
+    ```
+7. For Excel Download from React (XLSX or exceljs)
+
+   ```
+   >>> npm install xlsx --have vulnarability
+   >>> npm install exceljs
+
+   ```
+8. For PDF in ReatJs 
+   ```
+   >>>npm install jspdf jspdf-autotable
+   ```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------

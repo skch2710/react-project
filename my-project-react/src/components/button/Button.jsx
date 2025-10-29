@@ -6,9 +6,12 @@ const Button = (props) => {
     label,
     onClick,
     variant = "contained",
-    color,
+    color = "black",
     size = "small",
-    disabled = false,
+    disabled,
+    width = "100",
+    icon = "",
+    startIcon,
   } = props;
   return (
     <MuiButton
@@ -17,8 +20,17 @@ const Button = (props) => {
       color={color}
       size={size}
       disabled={disabled}
+      startIcon={startIcon}
       {...props}
-      sx={{ textTransform: "none", minWidth: 100, width: "auto" }}
+      sx={{ textTransform: "none", minWidth: width, width: "auto",
+        backgroundColor: disabled ? "#E0E0E0" : variant === "contained" ? "green" : "transparent",
+         "& .MuiButton-startIcon": {
+          color: disabled ? "#9E9E9E" : icon ? icon : "inherit",
+          
+        },
+        fontSize: "16px !important",
+        height: "25px",
+      }}
     >
       {label}
     </MuiButton>
