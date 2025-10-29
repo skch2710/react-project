@@ -14,8 +14,8 @@ const App = () => {
       {/* <h1>Movie Selector</h1> */}
       {/* <DropEx /> */}
       {/* <FormicExample /> */}
-      {/* <Hospital /> */}
-      <DataGridUsage />
+      <Hospital />
+      {/* <DataGridUsage /> */}
     </div>
   );
 };

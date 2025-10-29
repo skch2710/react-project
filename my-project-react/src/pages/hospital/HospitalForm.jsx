@@ -11,7 +11,7 @@ const HospitalFormContent = () => {
       <Grid container spacing={3} flexDirection={"column"}>
         {/* First Row */}
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <Grid size={3}>
             <FormicField
               type="text"
               name="hospitalName"
@@ -22,7 +22,7 @@ const HospitalFormContent = () => {
             />
           </Grid>
 
-          <Grid size={{ xs: 8, sm: 6, md: 4 }}>
+          <Grid size={3}>
             <FormicField
               type="email"
               name="hospitalEmail"
@@ -33,21 +33,22 @@ const HospitalFormContent = () => {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={4}>
             <FormicField
-              as="textarea"
+              // as="textarea"
+              type="text"
               name="hospitalAddress"
               label="Hospital Address"
               placeholder="Enter hospital address"
               required
-              rows={3}
+              maxLength={250}
             />
           </Grid>
         </Grid>
 
         {/* Second Row */}
         <Grid container spacing={3}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={3}>
             <FormicField
               type="text"
               name="phoneNumber"
@@ -57,7 +58,7 @@ const HospitalFormContent = () => {
             />
           </Grid>
 
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={2}>
             <FormicDatePicker
               name="startDate"
               label="Hospital Start Date"
