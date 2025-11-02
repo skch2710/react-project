@@ -61,6 +61,10 @@ ReactJs Ussages :
    ```
    >>>npm install jspdf jspdf-autotable
    ```
+9. React Rdux 
+	```
+	>>> npm install @reduxjs/toolkit react-redux
+	```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------
@@ -1074,5 +1078,55 @@ function App() {
 
 export default App;
 ```
+
+
+
+React Redux:
+------------
+
+### Project Structure
+```
+src/
+  ├── store/
+  │   ├── store.js
+  │   ├── slices/
+  │   │   ├── counterSlice.js
+  │   │   └── userSlice.js
+  ├── components/
+  │   ├── Counter.js
+  │   └── UserProfile.js
+  └── App.js
+```
+
+
+## Key Concepts Explained
+
+| Concept      | Description                                                                                    |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| **Store**    | The centralized state container for the entire app.                                            |
+| **State**    | The data managed by Redux. Stored in a single object tree.                                     |
+| **Action**   | An object describing *what happened* (must have a `type` field).                               |
+| **Reducer**  | A pure function that takes the current state and an action, then returns a new state.          |
+| **Dispatch** | A method used to send actions to the store.                                                    |
+| **Selector** | A function that extracts specific data from the state.                                         |
+| **Slice**    | A Redux Toolkit concept combining reducers, actions, and initial state for a specific feature. |
+
+
+useSelector Behavior :
+----------------------
+ 1. useSelector subscribes to the Redux store automatically.
+ 2. It runs every time an action is dispatched (whenever any part of the state changes).
+ 3. It re-renders the component only if the value returned by your selector function is different from the previous one (shallow comparison by default).
+
+
+Redux Store - Centralized state management
+Slices - Modern Redux Toolkit approach with createSlice
+Actions - Auto-generated from slice reducers
+Reducers - State update logic (immutable with Immer)
+Selectors - Functions to extract specific data from state
+useSelector - Hook to read from Redux store
+useDispatch - Hook to dispatch actions
+Multiple Slices - Todos and User state management
+Derived State - Filtered todos based on filter state
 
 

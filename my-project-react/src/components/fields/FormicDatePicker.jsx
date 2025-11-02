@@ -40,6 +40,14 @@ const FormicDatePicker = ({ name, label, required, ...props }) => {
               },
               actionBar: {
                 actions: ["clear", "today"],
+                sx: {
+                  borderTop: () => `1px solid gray`,
+                  mt: 0, // Remove top margin (gap)
+                  pt: 1, // Small padding above buttons
+                  pb: 1,
+                  px: 2, // Optional side padding
+                  textTransform: "none",
+                },
               },
               openPickerIcon: {
                 sx: {
@@ -49,14 +57,6 @@ const FormicDatePicker = ({ name, label, required, ...props }) => {
               clearIcon: {
                 sx: {
                   fontSize: 14,
-                },
-              },
-              popper: {
-                placement: "top-start",
-                sx: {
-                  "& .MuiDateCalendar-root": {
-                    maxHeight: 250,
-                  },
                 },
               },
             }}

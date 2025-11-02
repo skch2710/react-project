@@ -5,6 +5,8 @@ import Hospital from "./pages/hospital/Hospital";
 import TableExample from "./components/TableEx/TableExample";
 import { Typography } from "@mui/material";
 import DataGridUsage from "./components/datagrid/DataGridUsage";
+import CounterRedux from "./pages/counter/CounterRedux";
+import Hostel from "./pages/hostel/Hostel";
 
 const App = () => {
   // const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -14,8 +16,10 @@ const App = () => {
       {/* <h1>Movie Selector</h1> */}
       {/* <DropEx /> */}
       {/* <FormicExample /> */}
-      <Hospital />
+      {/* <Hospital /> */}
       {/* <DataGridUsage /> */}
+      {/* <CounterRedux /> */}
+      <Hostel />
     </div>
   );
 };

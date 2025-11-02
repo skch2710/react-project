@@ -28,8 +28,8 @@ const Button = (props) => {
           color: disabled ? "#9E9E9E" : icon ? icon : "inherit",
           
         },
-        fontSize: "16px !important",
-        height: "25px",
+        fontSize: "14px !important",
+        height: "30px",
       }}
     >
       {label}
