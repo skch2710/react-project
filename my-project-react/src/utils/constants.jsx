@@ -19,4 +19,4 @@ export const REGEX = {
   varcharWithSpacesInBetweenWords: /^[A-Za-z0-9]+(?: ?[A-Za-z0-9]*)*$/,
 };
 
-export const DATE_FORMAT = "MM/DD/YYYY";
+export const DATE_FORMAT = "DD-MM-YYYY";

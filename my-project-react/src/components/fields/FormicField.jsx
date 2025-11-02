@@ -12,11 +12,11 @@ const FormicField = (props) => {
       </FormLabel>
 
       <Field
-        {...otherProps}
         name={name}
         as={as}
         rows={rows}
         className={styles.input}
+        {...otherProps}
       />
 
       <ErrorMessage name={name} component="div" className={styles.errorText} />
