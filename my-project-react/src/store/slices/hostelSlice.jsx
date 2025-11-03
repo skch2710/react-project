@@ -1,23 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { POST } from "../../utils/axiosHelper";
+import { HOSTELLER_SAVE_OR_UPDATE_API } from "../../utils/constants";
 
-const SAVE_API = "/hostel/save-update-hosteller";
-
-export const addHosteller = createAsyncThunk(
-  "hostel/addHosteller",
+export const saveOrUpdateHosteller = createAsyncThunk(
+  "hostel/saveOrUpdateHosteller",
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await POST(SAVE_API, payload);
-      // Ensure the response has data
+      const response = await POST(HOSTELLER_SAVE_OR_UPDATE_API, payload);
       return response?.data || {};
     } catch (error) {
-      // More robust error handling
+      console.error("API error in Redux :", error);
       const message =
         error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "Failed to add hosteller";
+        "Failed to save or update hosteller";
       return rejectWithValue(message);
+      throw error;
     }
   }
 );
@@ -38,15 +37,15 @@ const hostelSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addHosteller.pending, (state) => {
+      .addCase(saveOrUpdateHosteller.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(addHosteller.fulfilled, (state, action) => {
+      .addCase(saveOrUpdateHosteller.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(addHosteller.rejected, (state, action) => {
+      .addCase(saveOrUpdateHosteller.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

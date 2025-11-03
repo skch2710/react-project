@@ -29,3 +29,6 @@ export const validationSchema = Yup.object({
   proof: Yup.string().required("Proof is required"),
   reason: Yup.string().required("Reason is required"),
 });
+
+export const ADD_POPUP_TITLE = "Add Hosteller";
+export const EDIT_POPUP_TITLE = "Edit Hosteller";

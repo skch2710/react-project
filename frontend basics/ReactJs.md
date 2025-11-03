@@ -65,6 +65,10 @@ ReactJs Ussages :
 	```
 	>>> npm install @reduxjs/toolkit react-redux
 	```
+10. For Toaster -- testify
+	```
+	>>> npm install react-toastify
+	```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------

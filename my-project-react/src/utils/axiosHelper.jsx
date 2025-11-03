@@ -1,5 +1,5 @@
-// src/api.js
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 // Create an Axios instance
 const axiosHelper = axios.create({
@@ -16,6 +16,7 @@ export const GET = async (endpoint, params = {}) => {
     return response.data;
   } catch (error) {
     console.error("GET request error:", error);
+    toast.error("Something went wrong!");
     throw error;
   }
 };
@@ -27,6 +28,7 @@ export const POST = async (endpoint, payload) => {
     return response.data;
   } catch (error) {
     console.error("POST request error:", error);
+    toast.error(error.message || "Something went wrong!");
     throw error;
   }
 };

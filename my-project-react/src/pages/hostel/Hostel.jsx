@@ -5,53 +5,50 @@ import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRou
 import Popup from "../../components/popup/Popup";
 import HostelForm from "./HostelForm";
 import { useDispatch, useSelector } from "react-redux";
-import { addHosteller, resetHostellerState } from "../../store/slices/hostelSlice";
+import {
+  saveOrUpdateHosteller,
+  resetHostellerState,
+} from "../../store/slices/hostelSlice";
+import { toast } from "react-toastify";
+import { initialValues, ADD_POPUP_TITLE, EDIT_POPUP_TITLE } from "./helper";
 
 const Hostel = () => {
   const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formValues, setFormValues] = useState(initialValues);
+  const [popupTitle, setPopupTitle] = useState(ADD_POPUP_TITLE);
   const formikRef = useRef();
 
   const dispatch = useDispatch();
   const { loading, data, error } = useSelector((state) => state.hostel);
 
-  const handlePopup = () => {
+  const handlePopup = (action) => {
+    console.log("handlePopup called", action);
+    if (action === "edit") {
+      setPopupTitle(EDIT_POPUP_TITLE);
+      setFormValues({ ...initialValues, fullName: "John Doe" });
+    }
     setOpen(!open);
   };
 
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-     console.log("handleSubmit called with values:", values);
-    setIsSubmitting(true);
+  const handleSubmit = async (values) => {
+    console.log("handleSubmit called with values:", values);
+    toast.info("Submitting hosteller data...");
     try {
       // Dispatch Redux thunk for API call
-      const result = await dispatch(addHosteller(values)).unwrap();
-
+      const result = await dispatch(saveOrUpdateHosteller(values)).unwrap();
+      toast.success("Hosteller data saved successfully!");
       console.log("API success:", result);
-      setOpen(false);
-      resetForm();
-      dispatch(resetHostellerState());
     } catch (err) {
       console.error("API error:", err);
     } finally {
-      setIsSubmitting(false);
-      setSubmitting(false);
+      setOpen(false);
+      dispatch(resetHostellerState());
     }
   };
 
   const handlePopupSubmit = () => {
-    console.log("Submitting from popup");
     if (formikRef.current) {
-      console.log("Submitting from popup - formikRef current exists");
       formikRef.current.handleSubmit();
-    }
-  };
-
-  const handleClose = () => {
-    if (!isSubmitting) {
-      setOpen(false);
-      if (formikRef.current) {
-        formikRef.current.resetForm();
-      }
     }
   };
 
@@ -72,7 +69,7 @@ const Hostel = () => {
                   startIcon={<AddCircleOutlineRoundedIcon />}
                   label="Add Hostel"
                   color="success"
-                  onClick={handlePopup}
+                  onClick={() => handlePopup("add")}
                 />
                 <Button label="Search" color="primary" />
                 <Button label="Clear" color="primary" variant="outlined" />
@@ -93,12 +90,16 @@ const Hostel = () => {
       {/* Popup */}
       <Popup
         open={open}
-        handleClose={handleClose}
-        title="Add Hosteller"
+        handleClose={handlePopup}
+        title={popupTitle}
         onSubmit={handlePopupSubmit}
-        isSubmitting={loading || isSubmitting}
+        isSubmitting={loading}
       >
-        <HostelForm onSubmit={handleSubmit} formikRef={formikRef} />
+        <HostelForm
+          onSubmit={handleSubmit}
+          formikRef={formikRef}
+          formData={formValues}
+        />
       </Popup>
     </Grid>
   );

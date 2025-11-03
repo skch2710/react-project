@@ -1,15 +1,15 @@
 import { Grid } from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
-import { initialValues, validationSchema } from "./helper";
+import { validationSchema } from "./helper";
 import FormicField from "../../components/fields/FormicField";
 import FormicDatePicker from "../../components/fields/FormicDatePicker";
 
-const HostelForm = ({ onSubmit, formikRef }) => {
+const HostelForm = ({ onSubmit, formikRef, formData }) => {
   return (
     <Formik
       innerRef={formikRef}
-      initialValues={initialValues}
+      initialValues={formData}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       enableReinitialize
