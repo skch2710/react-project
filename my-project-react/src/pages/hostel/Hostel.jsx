@@ -88,7 +88,7 @@ const Hostel = () => {
           sx={{
             p: 2,
             position: "relative",
-            minHeight: 150,
+            minHeight: 120,
             overflow: "hidden",
           }}
         >
