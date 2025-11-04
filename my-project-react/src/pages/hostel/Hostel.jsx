@@ -1,4 +1,3 @@
-import { Grid, Paper, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
 import Button from "../../components/button/Button";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
@@ -8,9 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   saveOrUpdateHosteller,
   resetHostellerState,
+  setGridLoading,
 } from "../../store/slices/hostelSlice";
 import { toast } from "react-toastify";
 import { initialValues, ADD_POPUP_TITLE, EDIT_POPUP_TITLE } from "./helper";
+import Loader from "../../components/loader/Loader";
 
 const Hostel = () => {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,9 @@ const Hostel = () => {
   const formikRef = useRef();
 
   const dispatch = useDispatch();
-  const { loading, data, error } = useSelector((state) => state.hostel);
+  const { loading, gridLoading, data, error } = useSelector(
+    (state) => state.hostel
+  );
 
   const handlePopup = (action) => {
     console.log("handlePopup called", action);
@@ -58,7 +61,15 @@ const Hostel = () => {
         <Typography variant="h6">Hostel Management</Typography>
       </Grid>
       <Grid>
-        <Paper elevation={3} sx={{ p: 2 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            position: "relative",
+            minHeight: 150,
+            overflow: "hidden",
+          }}
+        >
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid>
               <Typography variant="body1">Filters</Typography>
@@ -71,8 +82,21 @@ const Hostel = () => {
                   color="success"
                   onClick={() => handlePopup("add")}
                 />
-                <Button label="Search" color="primary" />
-                <Button label="Clear" color="primary" variant="outlined" />
+                <Button
+                  label="Search"
+                  color="primary"
+                  onClick={() => {
+                    dispatch(setGridLoading(true));
+                  }}
+                />
+                <Button
+                  label="Clear"
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => {
+                    dispatch(setGridLoading(false));
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -80,10 +104,20 @@ const Hostel = () => {
       </Grid>
 
       <Grid>
-        <Paper elevation={3} sx={{ p: 2 }}>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 2,
+            position: "relative",
+            minHeight: 200,
+            overflow: "hidden",
+          }}
+        >
           <Grid container>
             <Typography variant="body1">Hosteller List</Typography>
           </Grid>
+
+          {/* {gridLoading && <Loader loading={gridLoading} />} */}
         </Paper>
       </Grid>
 
@@ -100,7 +134,11 @@ const Hostel = () => {
           formikRef={formikRef}
           formData={formValues}
         />
+        {loading && <Loader loading={loading} />}
       </Popup>
+
+      
+      {gridLoading && <Loader loading={gridLoading} />}
     </Grid>
   );
 };

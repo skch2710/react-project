@@ -25,14 +25,19 @@ const hostelSlice = createSlice({
   name: "hostel",
   initialState: {
     loading: false,
+    gridLoading: false,
     data: null,
     error: null,
+
   },
   reducers: {
     resetHostellerState: (state) => {
       state.loading = false;
       state.data = null;
       state.error = null;
+    },
+    setGridLoading: (state, action) => {
+      state.gridLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -52,5 +57,5 @@ const hostelSlice = createSlice({
   },
 });
 
-export const { resetHostellerState } = hostelSlice.actions;
+export const { resetHostellerState, setGridLoading } = hostelSlice.actions;
 export default hostelSlice.reducer;
