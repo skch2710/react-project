@@ -1,3 +1,8 @@
+import { Edit, Visibility } from "@mui/icons-material";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import AddIcon from "@mui/icons-material/Add";
+import { Tooltip } from "@mui/material";
+import { GridActionsCellItem } from "@mui/x-data-grid";
 import * as Yup from "yup";
 
 export const initialValues = {
@@ -30,5 +35,86 @@ export const validationSchema = Yup.object({
   reason: Yup.string().required("Reason is required"),
 });
 
+export const GRID_TITLE = "Hosteller List";
 export const ADD_POPUP_TITLE = "Add Hosteller";
 export const EDIT_POPUP_TITLE = "Edit Hosteller";
+const US_CURRENCY_FORMAT = '"$"#,##0.00_);$(#,##0.00)';
+
+const handleAction = (type, row) => {
+  console.log(`${type}:`, row);
+};
+
+const actionColumn = {
+  field: "actions",
+  type: "actions",
+  headerName: "Actions",
+  width: 160,
+  getActions: (params) => [
+    <GridActionsCellItem
+      icon={
+        <Tooltip title="View Details">
+          <Visibility fontSize="small" />
+        </Tooltip>
+      }
+      label="View"
+      onClick={() => handleAction("View", params.row)}
+    />,
+    <GridActionsCellItem
+      icon={
+        <Tooltip title="Edit Details">
+          <Edit fontSize="small" />
+        </Tooltip>
+      }
+      label="Edit"
+      onClick={() => handleAction("Edit", params.row)}
+    />,
+    <GridActionsCellItem
+      icon={
+        <Tooltip title="Delete">
+          <DeleteForeverOutlinedIcon fontSize="small" />
+        </Tooltip>
+      }
+      label="Delete"
+      onClick={() => handleAction("Delete", params.row)}
+    />,
+    <GridActionsCellItem
+      icon={<AddIcon fontSize="small" />}
+      label="Add"
+      onClick={() => handleAction("Add", params.row)}
+    />,
+  ],
+};
+
+export const revisedFields = [
+  { field: "hostellerId", headerName: "Hosteller ID", width: 120 },
+  { field: "fullName", headerName: "Full Name", width: 150 },
+  { field: "emailId", headerName: "Email ID", width: 200 },
+  { field: "phoneNumber", headerName: "Phone Number", width: 150 },
+  { field: "dob", headerName: "Date of Birth", width: 150 },
+  { field: "fee", headerName: "Fee", width: 120, format: US_CURRENCY_FORMAT },
+  { field: "joiningDate", headerName: "Joining Date", width: 150 },
+  { field: "address", headerName: "Address", width: 250 },
+  { field: "proof", headerName: "Proof", width: 150 },
+  { field: "reason", headerName: "Reason", width: 150 },
+  { field: "vacatedDate", headerName: "Vacated Date", width: 150 },
+  { field: "active", headerName: "Active", width: 150 },
+];
+
+export const columns = [actionColumn, ...revisedFields];
+
+export const rows = [
+  {
+    hostellerId: 1,
+    fullName: "John Doe",
+    emailId: "john.doe@example.com",
+    phoneNumber: "1234567890",
+    dob: "1995-05-15",
+    fee: 1500,
+    joiningDate: "2022-01-10",
+    address: "123 Main St, Cityville",
+    proof: "ID Card",
+    reason: "College Nearby",
+    vacatedDate: "",
+    active: "Yes",
+  },
+];

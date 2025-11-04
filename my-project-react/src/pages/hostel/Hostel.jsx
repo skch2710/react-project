@@ -11,14 +11,26 @@ import {
   setGridLoading,
 } from "../../store/slices/hostelSlice";
 import { toast } from "react-toastify";
-import { initialValues, ADD_POPUP_TITLE, EDIT_POPUP_TITLE } from "./helper";
+import {
+  initialValues,
+  ADD_POPUP_TITLE,
+  EDIT_POPUP_TITLE,
+  GRID_TITLE,
+  columns,
+  rows,
+} from "./helper";
 import Loader from "../../components/loader/Loader";
+import CommonDataGrid from "../../components/datagrid/CommonDataGrid";
 
 const Hostel = () => {
   const [open, setOpen] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [popupTitle, setPopupTitle] = useState(ADD_POPUP_TITLE);
   const formikRef = useRef();
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 25,
+  });
 
   const dispatch = useDispatch();
   const { loading, gridLoading, data, error } = useSelector(
@@ -54,6 +66,15 @@ const Hostel = () => {
     if (formikRef.current) {
       formikRef.current.handleSubmit();
     }
+  };
+
+  const handleExcelExport = () => {
+    console.log("Custom Export to Excel");
+    // Implement your custom export logic here
+  };
+  const handlePdfExport = () => {
+    console.log("Custom Export to PDF");
+    // Implement your custom export logic here
   };
 
   return (
@@ -104,23 +125,25 @@ const Hostel = () => {
         </Paper>
       </Grid>
 
-      <Grid>
-        <Paper
-          elevation={3}
-          sx={{
-            p: 2,
-            position: "relative",
-            minHeight: 200,
-            overflow: "hidden",
-          }}
-        >
-          <Grid container>
-            <Typography variant="body1">Hosteller List</Typography>
-          </Grid>
-
-          {/* {gridLoading && <Loader loading={gridLoading} />} */}
-        </Paper>
-      </Grid>
+      {/* <Grid container> */}
+      <CommonDataGrid
+        title={GRID_TITLE}
+        columns={columns}
+        rows={rows}
+        getRowId={(row) => row.hostellerId}
+        totalRows={rows.length}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        // checkboxSelection
+        // onSelectionChange={setSelectionModel}
+        height={350}
+        exportProp={{
+          handleExcelExport,
+          handlePdfExport,
+          exportDisabled: false,
+        }}
+      />
+      {/* </Grid> */}
 
       {/* Popup */}
       <Popup
@@ -138,7 +161,6 @@ const Hostel = () => {
         {loading && <Loader loading={loading} />}
       </Popup>
 
-      
       {gridLoading && <Loader loading={gridLoading} />}
     </Grid>
   );
