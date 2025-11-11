@@ -101,6 +101,9 @@ const CommonDataGrid = ({
         columnHeaderHeight={30}
         disableRowSelectionOnClick
         showToolbar
+        localeText={{
+          noRowsLabel: "No results found.",
+        }}
         slots={{ toolbar: CustomToolbar }}
         sx={{
           height: height,
