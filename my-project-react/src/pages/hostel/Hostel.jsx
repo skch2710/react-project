@@ -1,14 +1,16 @@
 import { CircularProgress, Grid, Paper, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import Button from "../../components/button/Button";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import Popup from "../../components/popup/Popup";
 import HostelForm from "./HostelForm";
 import { useDispatch, useSelector } from "react-redux";
+import { ADD, EDIT, VIEW, DELETE } from "../../utils/constants";
 import {
   saveOrUpdateHosteller,
-  resetHostellerState,
-  setGridLoading,
+  getHostellers,
+  resetFormState,
+  resetGridState,
 } from "../../store/slices/hostelSlice";
 import { toast } from "react-toastify";
 import {
@@ -16,8 +18,8 @@ import {
   ADD_POPUP_TITLE,
   EDIT_POPUP_TITLE,
   GRID_TITLE,
-  columns,
-  rows,
+  buildColumns,
+  searchPayload,
 } from "./helper";
 import Loader from "../../components/loader/Loader";
 import CommonDataGrid from "../../components/datagrid/CommonDataGrid";
@@ -33,18 +35,35 @@ const Hostel = () => {
   });
 
   const dispatch = useDispatch();
-  const { loading, gridLoading, data, error } = useSelector(
-    (state) => state.hostel
-  );
+  const { form, grid } = useSelector((state) => state.hostel);
 
-  const handlePopup = (action) => {
-    console.log("handlePopup called", action);
-    if (action === "edit") {
-      setPopupTitle(EDIT_POPUP_TITLE);
-      setFormValues({ ...initialValues, fullName: "John Doe" });
+  const handlePopup = (type) => {
+    if (type && type === ADD) {
+      setPopupTitle(ADD_POPUP_TITLE);
+      setFormValues(initialValues);
     }
     setOpen(!open);
   };
+
+  const handleAction = useCallback((action, row) => {
+    console.log("handleAction called:", action, row);
+
+    if (action && action === ADD) {
+      setPopupTitle(ADD_POPUP_TITLE);
+      setFormValues(initialValues);
+      handlePopup();
+    } else if (action === EDIT) {
+      setPopupTitle(EDIT_POPUP_TITLE);
+      setFormValues({ ...initialValues, ...row });
+      handlePopup();
+    } else if (action === VIEW) {
+      console.log("View:", row);
+    } else if (action === DELETE) {
+      console.log("Delete:", row);
+    }
+  }, []);
+
+  const columns = useMemo(() => buildColumns(handleAction), [handleAction]);
 
   const handleSubmit = async (values) => {
     console.log("handleSubmit called with values:", values);
@@ -58,13 +77,25 @@ const Hostel = () => {
       console.error("API error:", err);
     } finally {
       setOpen(false);
-      dispatch(resetHostellerState());
+      dispatch(resetFormState());
+      handleSearch();
     }
   };
 
   const handlePopupSubmit = () => {
     if (formikRef.current) {
       formikRef.current.handleSubmit();
+    }
+  };
+
+  const handleSearch = async () => {
+    console.log("Search clicked");
+    dispatch(resetGridState());
+    try {
+      const result = await dispatch(getHostellers(searchPayload)).unwrap();
+      toast.success("Hosteller data fetched successfully!");
+    } catch (err) {
+      console.error("API error:", err);
     }
   };
 
@@ -102,22 +133,16 @@ const Hostel = () => {
                   startIcon={<AddCircleOutlineRoundedIcon />}
                   label="Add Hostel"
                   color="success"
-                  onClick={() => handlePopup("add")}
+                  onClick={() => handlePopup(ADD)}
                 />
-                <Button
-                  label="Search"
-                  color="primary"
-                  onClick={() => {
-                    dispatch(setGridLoading(true));
-                  }}
-                />
+                <Button label="Search" color="primary" onClick={handleSearch} />
                 <Button
                   label="Clear"
                   color="primary"
                   variant="outlined"
-                  onClick={() => {
-                    dispatch(setGridLoading(false));
-                  }}
+                  // onClick={() => {
+                  //   dispatch(setGridLoading(false));
+                  // }}
                 />
               </Grid>
             </Grid>
@@ -129,9 +154,9 @@ const Hostel = () => {
       <CommonDataGrid
         title={GRID_TITLE}
         columns={columns}
-        rows={rows}
+        rows={grid.data?.content || []}
         getRowId={(row) => row.hostellerId}
-        totalRows={rows.length}
+        totalRows={grid.data?.content?.length || 0}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         // checkboxSelection
@@ -151,17 +176,17 @@ const Hostel = () => {
         handleClose={handlePopup}
         title={popupTitle}
         onSubmit={handlePopupSubmit}
-        isSubmitting={loading}
+        isSubmitting={form.loading}
       >
         <HostelForm
           onSubmit={handleSubmit}
           formikRef={formikRef}
           formData={formValues}
         />
-        {loading && <Loader loading={loading} />}
+        {form.loading && <Loader loading={form.loading} />}
       </Popup>
 
-      {gridLoading && <Loader loading={gridLoading} />}
+      {grid.loading && <Loader loading={grid.loading} />}
     </Grid>
   );
 };

@@ -24,3 +24,14 @@ export const DATE_FORMAT = "DD-MM-YYYY";
 // API URLS
 export const HOSTELLER_SAVE_OR_UPDATE_API = "/hostel/save-update-hosteller";
 export const HOSTELLER_LIST_API = "/hostel/get-hosteller-list";
+export const HOSTELLER_GET_API = "/hostel/get-hostellers";
+
+export const ADD = "Add";
+export const EDIT = "Edit";
+export const VIEW = "View";
+export const DELETE = "Delete";
+
+export const PAGINATION_MODEL = {
+  page: 0,
+  pageSize: 25,
+};
