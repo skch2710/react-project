@@ -1,7 +1,5 @@
 import { CircularProgress, Grid, Paper, Typography } from "@mui/material";
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import Button from "../../components/button/Button";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import Popup from "../../components/popup/Popup";
 import HostelForm from "./HostelForm";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,10 +17,10 @@ import {
   EDIT_POPUP_TITLE,
   GRID_TITLE,
   buildColumns,
-  searchPayload,
 } from "./helper";
 import Loader from "../../components/loader/Loader";
 import CommonDataGrid from "../../components/datagrid/CommonDataGrid";
+import HostelSearchForm from "./HostelSearchForm";
 
 const Hostel = () => {
   const [open, setOpen] = useState(false);
@@ -88,11 +86,12 @@ const Hostel = () => {
     }
   };
 
-  const handleSearch = async () => {
-    console.log("Search clicked");
+  const handleSearch = async (values) => {
+    console.log("Search clicked",values);
+
     dispatch(resetGridState());
     try {
-      const result = await dispatch(getHostellers(searchPayload)).unwrap();
+      const result = await dispatch(getHostellers(values)).unwrap();
       toast.success("Hosteller data fetched successfully!");
     } catch (err) {
       console.error("API error:", err);
@@ -123,28 +122,15 @@ const Hostel = () => {
             overflow: "hidden",
           }}
         >
-          <Grid container alignItems="center" justifyContent="space-between">
+          <Grid container spacing={2} flexDirection={"column"}>
             <Grid>
               <Typography variant="body1">Filters</Typography>
             </Grid>
             <Grid>
-              <Grid container spacing={2} justifyContent="flex-end">
-                <Button
-                  startIcon={<AddCircleOutlineRoundedIcon />}
-                  label="Add Hostel"
-                  color="success"
-                  onClick={() => handlePopup(ADD)}
-                />
-                <Button label="Search" color="primary" onClick={handleSearch} />
-                <Button
-                  label="Clear"
-                  color="primary"
-                  variant="outlined"
-                  // onClick={() => {
-                  //   dispatch(setGridLoading(false));
-                  // }}
-                />
-              </Grid>
+              <HostelSearchForm
+                handlePopup={handlePopup}
+                handleSearch={handleSearch}
+              />
             </Grid>
           </Grid>
         </Paper>
@@ -165,7 +151,7 @@ const Hostel = () => {
         exportProp={{
           handleExcelExport,
           handlePdfExport,
-          exportDisabled: false,
+          exportDisabled: !(grid.data?.content?.length > 0),
         }}
       />
       {/* </Grid> */}

@@ -49,27 +49,31 @@ const CommonDataGrid = ({
 
         <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Export to Excel">
-            <Button
-              variant="outlined"
-              startIcon={<RiFileExcel2Fill size={16} />}
-              onClick={exportProp.handleExcelExport}
-              label="Excel"
-              width="60px"
-              disabled={exportProp.exportDisabled}
-              icon="green"
-            />
+            <span>
+              <Button
+                variant="outlined"
+                startIcon={<RiFileExcel2Fill size={16} />}
+                onClick={exportProp.handleExcelExport}
+                label="Excel"
+                width="60px"
+                disabled={exportProp.exportDisabled}
+                icon="green"
+              />
+            </span>
           </Tooltip>
           {exportProp.handlePdfExport && (
             <Tooltip title="Export to Pdf">
-              <Button
-                variant="outlined"
-                startIcon={<FaRegFilePdf size={16} />}
-                onClick={exportProp.handlePdfExport}
-                label="Pdf"
-                width="60px"
-                disabled={exportProp.exportDisabled}
-                icon="red"
-              />
+              <span>
+                <Button
+                  variant="outlined"
+                  startIcon={<FaRegFilePdf size={16} />}
+                  onClick={exportProp.handlePdfExport}
+                  label="Pdf"
+                  width="60px"
+                  disabled={exportProp.exportDisabled}
+                  icon="red"
+                />
+              </span>
             </Tooltip>
           )}
         </Box>
