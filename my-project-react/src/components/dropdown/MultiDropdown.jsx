@@ -51,7 +51,7 @@ const MultiDropdown = (props) => {
           );
         }}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) => <TextField placeholder={label} {...params} />}
         {...otherProps}
       />
     </Box>

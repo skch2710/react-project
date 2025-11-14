@@ -1,9 +1,10 @@
 import { Grid } from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
-import { validationSchema } from "./helper";
+import { validationSchema, roomTypeOptions } from "./helper";
 import FormicField from "../../components/fields/FormicField";
 import FormicDatePicker from "../../components/fields/FormicDatePicker";
+import Dropdown from "../../components/dropdown/Dropdown";
 
 const HostelForm = ({ onSubmit, formikRef, formData }) => {
   return (
@@ -14,7 +15,7 @@ const HostelForm = ({ onSubmit, formikRef, formData }) => {
       onSubmit={onSubmit}
       enableReinitialize
     >
-      {() => (
+      {({ setFieldValue }) => (
         <Form id="hostelForm">
           <Grid container spacing={3} flexDirection={"column"}>
             {/* First Row */}
@@ -104,7 +105,7 @@ const HostelForm = ({ onSubmit, formikRef, formData }) => {
             </Grid>
 
             {/* Third Row */}
-            <Grid>
+            <Grid container spacing={3}>
               <Grid size={2}>
                 <FormicField
                   type="text"
@@ -113,6 +114,21 @@ const HostelForm = ({ onSubmit, formikRef, formData }) => {
                   placeholder="Enter proof of address"
                   required
                   maxLength={50}
+                />
+              </Grid>
+              <Grid size={2}>
+                <Dropdown
+                  name="roomType"
+                  label="Room Type"
+                  placeholder="Select Room Type"
+                  options={roomTypeOptions}
+                  getOptionLabel={(option) => option.roomType}
+                  required
+                  // onChange={(event, value) => setFieldValue("roomType", value ? value.roomType : "")}
+                  onChange={(event, value) => {
+                    setFieldValue("roomType", value ? value.roomType : "");
+                    setFieldValue("roomTypeId",value ? value.roomTypeId : null);
+                  }}
                 />
               </Grid>
             </Grid>

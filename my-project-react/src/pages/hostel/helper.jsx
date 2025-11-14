@@ -16,6 +16,7 @@ export const initialValues = {
   address: "",
   proof: "",
   reason: "",
+  roomType: "",
 };
 
 export const validationSchema = Yup.object({
@@ -34,6 +35,7 @@ export const validationSchema = Yup.object({
   address: Yup.string().required("Address is required"),
   proof: Yup.string().required("Proof is required"),
   reason: Yup.string().required("Reason is required"),
+  // roomType: Yup.string().required("Room Type is required"),
 });
 
 export const GRID_TITLE = "Hosteller List";
@@ -115,4 +117,10 @@ export const searchPayload = {
   fullName: "",
   emailId: "",
 };
+
+export const roomTypeOptions = [
+  { roomTypeId: 1, roomType: "Single" },
+  { roomTypeId: 2, roomType: "Double" },
+  { roomTypeId: 3, roomType: "Suite" },
+];
 

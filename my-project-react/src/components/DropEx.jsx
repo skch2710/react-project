@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import MultiDropdown from "./dropdown/MultiDropdown";
 import { Typography } from "@mui/material";
 import { movies } from "../SampleData";
+import Dropdown from "./dropdown/Dropdown";
+import MultiDropdown from "./dropdown/MultiDropdown";
 
 const DropEx = () => {
   const [selectedMovies, setSelectedMovies] = useState([]);
@@ -21,6 +22,13 @@ const DropEx = () => {
         isOptionEqualToValue={(option, value) =>
           option.movieName === value.movieName
         }
+      />
+
+      <Dropdown 
+        label="Single Select Movie Dropdown"
+        options={movies}
+        getOptionLabel={(option) => option.movieName}
+        onChange={(event, value) => console.log("Single select:", value)}
       />
 
       <Typography variant="body1" sx={{ mt: 2 }}>

@@ -1,25 +1,64 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import styles from "../fields/FormicField.module.css";
+import { ErrorMessage } from "formik";
+import { FormLabel, Grid } from "@mui/material";
 
 const Dropdown = (props) => {
-  const { label, options, getOptionLabel, onChange } = props;
-
+  const {
+    name,
+    required,
+    label,
+    placeholder,
+    options,
+    getOptionLabel,
+    onChange,
+  } = props;
   return (
-    <Box sx={{ width: 300 }}>
-      <Typography variant="subtitle1" sx={{ mb: 1 }}>
+    <Grid className={styles.fieldContainer}>
+      <FormLabel required={required} className={styles.label}>
         {label}
-      </Typography>
-      <Autocomplete
-        disablePortal
-        {...props} // Spread all other props here
-        onChange={onChange}
-        options={options}
-        getOptionLabel={getOptionLabel}
-        renderInput={(params) => <TextField {...params} label={label} />}
-      />
-    </Box>
+      </FormLabel>
+      <Grid>
+        <Autocomplete
+          disablePortal
+          {...props}
+          onChange={onChange}
+          options={options}
+          getOptionLabel={getOptionLabel}
+          slotProps={{
+            listbox: {
+              sx: {
+                "& li": {
+                  fontSize: "12px",
+                  // padding: "4px 8px",
+                  lineHeight: "1.2",
+                },
+              },
+            },
+          }}
+          renderInput={(params) => (
+            <TextField
+              placeholder={placeholder}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "12px",
+                  padding: "4px 8px !important",
+                },
+              }}
+              {...params}
+            />
+          )}
+          sx={{
+            "& .MuiAutocomplete-inputRoot": {
+              padding: "0 !important",
+              height: "30px !important",
+            },
+          }}
+        />
+      </Grid>
+      <ErrorMessage name={name} component="div" className={styles.errorText} />
+    </Grid>
   );
 };
 
