@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 import DataGridUsage from "./components/datagrid/DataGridUsage";
 import CounterRedux from "./pages/counter/CounterRedux";
 import Hostel from "./pages/hostel/Hostel";
+import LoginPage from "./pages/login/LoginPage";
 
 const App = () => {
   // const VITE_API_URL = import.meta.env.VITE_API_URL;
@@ -19,7 +20,8 @@ const App = () => {
       {/* <Hospital /> */}
       {/* <DataGridUsage /> */}
       {/* <CounterRedux /> */}
-      <Hostel />
+      {/* <Hostel /> */}
+      <LoginPage />
     </div>
   );
 };
