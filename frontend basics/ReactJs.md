@@ -69,6 +69,12 @@ ReactJs Ussages :
 	```
 	>>> npm install react-toastify
 	```
+11. For Routing 
+
+	```
+	>>> npm install react-router-dom
+
+	```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------
@@ -1132,5 +1138,14 @@ useSelector - Hook to read from Redux store
 useDispatch - Hook to dispatch actions
 Multiple Slices - Todos and User state management
 Derived State - Filtered todos based on filter state
+
+
+Local Storage :
+----------------
+
+localStorage.setItem("token", token);
+localStorage.getItem("token");
+localStorage.removeItem("token");
+
 
 

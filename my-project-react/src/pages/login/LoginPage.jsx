@@ -1,10 +1,11 @@
-import { Login } from "@mui/icons-material";
-import { Grid, Box, Divider, Paper } from "@mui/material";
-import React from "react";
+import { Grid, Box, Divider, Paper, Alert } from "@mui/material";
 import LoginForm from "./LoginForm";
 import logo from "../../assets/logo.png";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const { login } = useSelector((state) => state.user);
   return (
     <Grid
       container
@@ -16,20 +17,23 @@ const LoginPage = () => {
       <Grid>
         <Grid container spacing={3}>
           <Grid
+            container
             size={6}
-            sx={
-              {
-                /*border: 1, borderColor: "red" */
-              }
-            }
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+              // border: 1,
+              // borderColor: "red",
+            }}
           >
-            <Box>
-              <img
-                src={logo}
-                alt="Logo"
-                style={{ width: 600, height: "auto", marginTop: 80 }}
-              />
-            </Box>
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                width: 600,
+                height: "auto",
+              }}
+            />
           </Grid>
 
           <Grid
