@@ -17,6 +17,7 @@ import {
   EDIT_POPUP_TITLE,
   GRID_TITLE,
   buildColumns,
+  searchPayload
 } from "./helper";
 import Loader from "../../components/loader/Loader";
 import CommonDataGrid from "../../components/datagrid/CommonDataGrid";
@@ -76,7 +77,7 @@ const Hostel = () => {
     } finally {
       setOpen(false);
       dispatch(resetFormState());
-      handleSearch();
+      handleSearch(searchPayload);
     }
   };
 
