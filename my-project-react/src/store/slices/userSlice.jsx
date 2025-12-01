@@ -14,10 +14,11 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async (payload, { rejectWithValue }) => {
     try {
+      payload.requestVerifyToken = import.meta.env.VITE_REQUEST_VERIFY_TOKEN;
       const response = await POST(LOGIN_API, payload);
       if (response.statusCode === 200 && response.data) {
         console.log("Login successful:", response);
-        localStorage.setItem("user", JSON.stringify(response.data));
+        sessionStorage.setItem("user", JSON.stringify(response.data));
       } else {
         console.log("Login failed:", response);
         return rejectWithValue(response.errorMessage || "Login failed");
@@ -25,7 +26,9 @@ export const loginUser = createAsyncThunk(
       return response;
     } catch (error) {
       console.error("Login error:", error);
-      return rejectWithValue(error.message || "Login failed");
+      return rejectWithValue(
+        error.response?.data?.errorMessage || error.message || "Login failed"
+      );
     }
   }
 );

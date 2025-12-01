@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormicField from "../../components/fields/FormicField";
 import { Form, Formik } from "formik";
-import { Alert, Grid, Typography } from "@mui/material";
+import { Alert, FormLabel, Grid, Typography } from "@mui/material";
 import { loginForm, validationSchema } from "./helper";
 import MailLockOutlinedIcon from "@mui/icons-material/MailLockOutlined";
 import LockOutlineIcon from "@mui/icons-material/LockOutline";
@@ -10,11 +10,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../store/slices/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import MuiCheckbox from "../../components/checkbox/MuiCheckbox";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
   const { login } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const [rememberMe, setRememberMe] = useState(false);
+  const [initialValues, setInitialValues] = useState(loginForm);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("rememberMe");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      setRememberMe(true);
+      setInitialValues({
+        emailId: parsed.emailId || "",
+        password: parsed.password || "",
+      });
+    }
+  }, []);
+
   const handleSubmit = async (values) => {
     console.log("Login Form Values:", values);
     try {
@@ -24,6 +40,12 @@ const LoginForm = () => {
         toast.success("Login successful!");
         console.log("Logged in User:", login.data);
         navigate("/home", { replace: true });
+        // Handle Remember Me
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", JSON.stringify(values));
+        } else if (!rememberMe && localStorage.getItem("rememberMe")) {
+          localStorage.removeItem("rememberMe");
+        }
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -32,12 +54,12 @@ const LoginForm = () => {
 
   return (
     <Formik
-      initialValues={loginForm}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       enableReinitialize
     >
-      {({ handleSubmit, resetForm }) => (
+      {({ handleSubmit, resetForm, setFieldValue }) => (
         <Form id="loginForm">
           <Grid container spacing={2} flexDirection={"column"}>
             {login.error && <Alert severity="error">{login.error}</Alert>}
@@ -68,6 +90,17 @@ const LoginForm = () => {
                 maxLength={50}
                 required
               />
+            </Grid>
+            {/* Remember Me */}
+            <Grid size={6}>
+              <MuiCheckbox
+                name="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => {
+                  setRememberMe(e.target.checked);
+                }}
+              />
+              <FormLabel>Remember Me</FormLabel>
             </Grid>
             {/* Submit Button */}
             <Grid size={7} justifyContent="flex-end" container display="flex">

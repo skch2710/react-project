@@ -75,6 +75,10 @@ ReactJs Ussages :
 	>>> npm install react-router-dom
 
 	```
+12. For JWT token decoder 
+	```
+	>>> npm install jwt-decode
+	```
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------
@@ -1146,6 +1150,21 @@ Local Storage :
 localStorage.setItem("token", token);
 localStorage.getItem("token");
 localStorage.removeItem("token");
+
+**Local Storage vs Session Storage**:
+--------------------------------------
+
+| Feature      | Local Storage                             | Session Storage                          |
+| ------------ | ----------------------------------------- | ---------------------------------------- |
+| **Lifetime** | Stays **until manually cleared**          | Clears **when tab/window is closed**     |
+| **Scope**    | Shared across **all tabs** of same domain | Unique to **each tab**                   |
+| **Capacity** | ~5–10 MB                                  | ~5 MB                                    |
+| **Usage**    | Long-term data (tokens, preferences)      | Temporary data (form inputs, page state) |
+| **Access**   | `localStorage.getItem()`                  | `sessionStorage.getItem()`               |
+
+**One-line summary:**
+**Local Storage persists permanently, Session Storage lives only for the current tab session.**
+
 
 
 
