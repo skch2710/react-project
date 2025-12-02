@@ -11,6 +11,7 @@ import { loginUser } from "../../store/slices/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import MuiCheckbox from "../../components/checkbox/MuiCheckbox";
+import { encrypt, decrypt } from "../../utils/aesHelper";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -20,21 +21,36 @@ const LoginForm = () => {
   const [initialValues, setInitialValues] = useState(loginForm);
 
   useEffect(() => {
-    const stored = localStorage.getItem("rememberMe");
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      setRememberMe(true);
-      setInitialValues({
-        emailId: parsed.emailId || "",
-        password: parsed.password || "",
-      });
-    }
+    const loadData = async () => {
+      const stored = localStorage.getItem("rememberMe");
+
+      if (stored) {
+        const parsed = JSON.parse(stored);
+
+        const decryptedPassword = parsed.password
+          ? await decrypt(parsed.password)
+          : "";
+
+        setRememberMe(true);
+        setInitialValues({
+          emailId: parsed.emailId || "",
+          password: decryptedPassword || "",
+        });
+      }
+    };
+
+    loadData();
   }, []);
 
   const handleSubmit = async (values) => {
     console.log("Login Form Values:", values);
     try {
-      const result = await dispatch(loginUser(values));
+      const encryptedPassword = await encrypt(values.password);
+      const payload = {
+        ...values,
+        password: encryptedPassword,
+      };
+      const result = await dispatch(loginUser(payload));
       console.log("Dispatch Response:", result);
       if (result.meta.requestStatus === "fulfilled") {
         toast.success("Login successful!");
@@ -42,7 +58,7 @@ const LoginForm = () => {
         navigate("/home", { replace: true });
         // Handle Remember Me
         if (rememberMe) {
-          localStorage.setItem("rememberMe", JSON.stringify(values));
+          localStorage.setItem("rememberMe", JSON.stringify(payload));
         } else if (!rememberMe && localStorage.getItem("rememberMe")) {
           localStorage.removeItem("rememberMe");
         }
