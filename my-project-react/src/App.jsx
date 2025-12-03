@@ -3,6 +3,7 @@ import LoginPage from "./pages/login/LoginPage";
 import PrivateRoute from "./routes/PrivateRoute";
 import Home from "./pages/home/Home";
 import Hostel from "./pages/hostel/Hostel";
+import SideNav from "./pages/sidenav/SideNav";
 
 const App = () => {
   return (
@@ -14,10 +15,13 @@ const App = () => {
         {/* Public Route */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Private Route */}
+        {/* Protected area */}
         <Route element={<PrivateRoute />}>
-          <Route path="/home" element={<Home />} />
-          <Route path="/hostel" element={<Hostel />} />
+          <Route element={<SideNav />}>
+            <Route path="/home" element={<Home />} />
+            <Route path="/hostel" element={<Hostel />} />
+            {/* add more protected routes here */}
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
