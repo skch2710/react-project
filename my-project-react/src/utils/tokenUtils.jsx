@@ -8,7 +8,7 @@ export const isTokenExpired = (token) => {
     const decoded = jwtDecode(token);
     console.log("Decoded token:", decoded);
     const now = Math.floor(Date.now() / 1000);
-    return decoded.exp < now;
+    return decoded && decoded.exp < now;
   } catch (e) {
     console.error("Invalid token", e);
     return true;
@@ -19,14 +19,18 @@ export const isValid = (user) => {
   if (!user) return false;
   try {
     const token = user ? JSON.parse(user)?.jwtDTO?.access_token : null;
-    if (!token) return false;
+    if (!token){
+      sessionStorage.clear();
+      return false;
+    }
     const decoded = jwtDecode(token);
     console.log("Decoded token:", decoded);
     if (decoded && decoded.aud === CLIENT_ID) {
       return true;
     }
   } catch (e) {
-    console.error("Invalid token", e);
+    console.error("Invalid token : ", e);
+    sessionStorage.clear();
     return false;
   }
   return false;

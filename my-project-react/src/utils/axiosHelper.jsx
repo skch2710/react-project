@@ -19,7 +19,10 @@ let isRefreshing = false;
 let pendingQueue = [];
 
 axiosHelper.interceptors.request.use(async (config) => {
-  if (config.url.includes(LOGIN_API) || config.url.includes(REFRESH_TOKEN_API)) {
+  if (
+    config.url.includes(LOGIN_API) ||
+    config.url.includes(REFRESH_TOKEN_API)
+  ) {
     return config;
   }
 
@@ -48,22 +51,7 @@ axiosHelper.interceptors.request.use(async (config) => {
   isRefreshing = true;
 
   try {
-    const response = await refreshAxios.post(REFRESH_TOKEN_API, {
-      refresh_token: refreshToken,
-    });
-
-    // ✅ Update session
-    const updatedUser = {
-      ...user,
-      jwtDTO: {
-        access_token: response.data.access_token,
-        refresh_token: response.data.refresh_token,
-      },
-    };
-
-    console.log("Token refreshed successfully:", updatedUser);
-
-    sessionStorage.setItem("user", JSON.stringify(updatedUser));
+    const response = await REFRESH_TOKEN(user);
 
     // ✅ Retry queued calls
     pendingQueue.forEach((cb) => cb(response.data.access_token));
@@ -81,6 +69,34 @@ axiosHelper.interceptors.request.use(async (config) => {
     isRefreshing = false;
   }
 });
+
+const REFRESH_TOKEN = async (user) => {
+  try {
+    const response = await refreshAxios.post(REFRESH_TOKEN_API, {
+      refresh_token: user?.jwtDTO?.refresh_token,
+    });
+
+    if (response && response?.status === 200 && response?.data?.access_token) {
+      const updatedUser = {
+        ...user,
+        jwtDTO: {
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+        },
+      };
+      console.log("Token refreshed successfully:", response);
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
+    } else {
+      sessionStorage.clear();
+      window.location.href = "/login";
+    }
+    return response;
+  } catch (err) {
+    sessionStorage.clear();
+    window.location.href = "/login";
+    throw err;
+  }
+};
 
 // GET request
 export const GET = async (endpoint, params = {}) => {
