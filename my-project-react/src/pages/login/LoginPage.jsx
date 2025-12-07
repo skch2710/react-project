@@ -2,6 +2,7 @@ import { Grid, Box, Divider, Paper, Alert } from "@mui/material";
 import LoginForm from "./LoginForm";
 import logo from "../../assets/logo.png";
 import { useDispatch, useSelector } from "react-redux";
+import { copyRightMessage } from "./helper";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ const LoginPage = () => {
         <Box textAlign="center" p={2}>
           <Divider />
           <Box mt={2} fontSize={14} color="gray">
-            © 2025 Sathish Kumar CH. All rights reserved.
+            {copyRightMessage}
           </Box>
         </Box>
       </Grid>

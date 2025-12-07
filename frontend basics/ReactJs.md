@@ -64,6 +64,7 @@ ReactJs Ussages :
 9. React Rdux 
 	```
 	>>> npm install @reduxjs/toolkit react-redux
+	>>> npm i redux-persist
 	```
 10. For Toaster -- testify
 	```

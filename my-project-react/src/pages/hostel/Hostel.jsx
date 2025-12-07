@@ -1,5 +1,11 @@
 import { CircularProgress, Grid, Paper, Typography } from "@mui/material";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Popup from "../../components/popup/Popup";
 import HostelForm from "./HostelForm";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +23,7 @@ import {
   EDIT_POPUP_TITLE,
   GRID_TITLE,
   buildColumns,
-  searchPayload
+  searchPayload,
 } from "./helper";
 import Loader from "../../components/loader/Loader";
 import CommonDataGrid from "../../components/datagrid/CommonDataGrid";
@@ -35,6 +41,10 @@ const Hostel = () => {
 
   const dispatch = useDispatch();
   const { form, grid } = useSelector((state) => state.hostel);
+
+  useEffect(() => {
+    dispatch(resetGridState());
+  }, []);
 
   const handlePopup = (type) => {
     if (type && type === ADD) {
@@ -88,7 +98,7 @@ const Hostel = () => {
   };
 
   const handleSearch = async (values) => {
-    console.log("Search clicked",values);
+    console.log("Search clicked", values);
 
     dispatch(resetGridState());
     try {

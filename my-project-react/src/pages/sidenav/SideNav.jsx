@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -13,19 +13,25 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Link, Outlet } from "react-router-dom";
-import { IoHomeOutline } from "react-icons/io5";
-import { IoMdLogOut, IoIosPeople } from "react-icons/io";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Grid, Tooltip, Typography } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Home from "../home/Home";
-import Hostel from "../hostel/Hostel";
-import { handleLogout } from "./helper";
+import { IoMdLogOut } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  selectNavigations,
+  selectUserName,
+} from "../../store/slices/userSlice";
+import { logoutUser } from "../../store/slices/authSlice";
+import { getNav } from "./helper";
 import logo from "../../assets/logo.png";
 
-const drawerWidth = 180;
+const drawerWidth = 220;
+
+/* ================== STYLES ================== */
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -82,75 +88,77 @@ const MainDrawer = styled(Drawer, {
   }),
 }));
 
-const nav = [
-  {
-    resourceId: 1,
-    resourceName: "Home",
-    icon: <IoHomeOutline />,
-    resourcePath: "/home",
-    displayOrder: 1,
-    component: Home,
-  },
-  {
-    resourceId: 2,
-    resourceName: "Hostellers",
-    icon: <IoIosPeople />,
-    resourcePath: "/hostel",
-    displayOrder: 2,
-    component: Hostel,
-  },
-];
+/* ================== KEY GENERATOR ================== */
+const generateKey = (item, index, parentIndex = null) => {
+  if (item.resourceId) return `nav-${item.resourceId}`;
+  if (item.resourceName) return `nav-${item.resourceName.replace(/\s+/g, "-")}`;
+  if (parentIndex !== null) return `nav-${parentIndex}-${index}`;
+  return `nav-${index}`;
+};
+
+/* ================== COMPONENT ================== */
 
 export default function SideNav() {
   const [open, setOpen] = useState(true);
-  const [navigation, setNavigation] = useState(nav);
+  const [navigation, setNavigation] = useState([]);
 
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const fullName = user
-    ? user?.user?.firstName + " " + user?.user?.lastName
-    : "";
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleDrawer = () => {
-    setOpen(!open);
-  };
+  // ✅ from userSlice
+  const apiNavigations = useSelector(selectNavigations);
+  const userName = useSelector(selectUserName);
+
+  /* ---------- Convert API Nav ---------- */
+  useEffect(() => {
+    if (apiNavigations?.length) {
+      setNavigation(getNav(apiNavigations));
+    }
+  }, [apiNavigations]);
+
+  const handleDrawer = () => setOpen(!open);
 
   const handleCollapseToggle = (index) => {
-    const updatedNavigation = navigation.map((item, i) => {
-      if (i === index) {
-        return {
-          ...item,
-          collapsed: !item.collapsed,
-        };
-      }
-      return item;
-    });
-    setNavigation(updatedNavigation);
+    setNavigation((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, collapsed: !item.collapsed } : item
+      )
+    );
+  };
+
+  /* ---------- Logout ---------- */
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap(); // ✅ Auth cleared
+      navigate("/login", { replace: true });
+    } catch {
+      navigate("/login", { replace: true });
+    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+
+      {/* ================== APP BAR ================== */}
       <MainAppBar
         position="fixed"
-        sx={{ backgroundColor: "#ffffff", color: "#2f2f2f" }}
+        sx={{ backgroundColor: "#ffffff", color: "#2f2f2f", boxShadow: 1 }}
         open={open}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawer}
-            edge="start"
-          >
+          <IconButton onClick={handleDrawer} edge="start">
             <MenuIcon />
           </IconButton>
+
           <img
-            style={{ marginLeft: "30px" }}
             src={logo}
             alt="Logo"
             width={160}
             height={50}
+            style={{ marginLeft: 20 }}
           />
+
           <div
             style={{
               marginLeft: "auto",
@@ -158,7 +166,10 @@ export default function SideNav() {
               alignItems: "center",
             }}
           >
-            <Typography sx={{ marginRight: "10px" }}>{fullName}</Typography>
+            <Typography sx={{ marginRight: 2 }}>
+              {userName || "User"}
+            </Typography>
+
             <Tooltip title="Logout" arrow>
               <IconButton onClick={handleLogout}>
                 <IoMdLogOut style={{ color: "black" }} />
@@ -167,113 +178,62 @@ export default function SideNav() {
           </div>
         </Toolbar>
       </MainAppBar>
+
+      {/* ================== DRAWER ================== */}
       <MainDrawer variant="permanent" open={open}>
         <Divider />
-        <List sx={{ display: "block", marginTop: 8 }}>
-          {navigation.map((item, index) =>
-            item.subNav ? (
-              <React.Fragment key={index}>
-                <ListItem disablePadding key={index}>
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
-                    }}
-                    onClick={() => handleCollapseToggle(index)}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.resourceName}
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                    {item.collapsed ? (
-                      <ExpandMoreIcon sx={{ marginLeft: open ? 10 : 0 }} />
-                    ) : (
-                      <ExpandLessIcon sx={{ marginLeft: open ? 10 : 0 }} />
-                    )}
-                  </ListItemButton>
-                </ListItem>
-                <Collapse
-                  in={!item.collapsed}
-                  timeout="auto"
-                  unmountOnExit
-                  key={`collapse_${index}`}
-                >
-                  <List component="div" disablePadding>
-                    {item.subNav.map((subItem, subIndex) => (
-                      <ListItem
-                        key={subIndex} // Use subIndex as key
-                        disablePadding
-                        sx={{ display: "block", marginLeft: 1 }}
-                      >
-                        <ListItemButton
-                          component={Link}
-                          to={subItem.resourcePath}
-                          sx={{
-                            minHeight: 48,
-                            justifyContent: open ? "initial" : "center",
-                            px: 2.5,
-                          }}
+        <List sx={{ mt: 8 }}>
+          {navigation.map((item, index) => {
+            const key = generateKey(item, index);
+
+            if (item.subNav?.length) {
+              return (
+                <React.Fragment key={key}>
+                  <ListItem disablePadding>
+                    <ListItemButton onClick={() => handleCollapseToggle(index)}>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.resourceName} />
+                      {item.collapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+                    </ListItemButton>
+                  </ListItem>
+
+                  <Collapse in={!item.collapsed} timeout="auto">
+                    <List component="div" disablePadding>
+                      {item.subNav.map((sub, i) => (
+                        <ListItem
+                          key={generateKey(sub, i, index)}
+                          disablePadding
+                          sx={{ pl: 4 }}
                         >
-                          <ListItemIcon
-                            sx={{
-                              minWidth: 0,
-                              mr: open ? 3 : "auto",
-                              justifyContent: "center",
-                            }}
+                          <ListItemButton
+                            component={Link}
+                            to={sub.resourcePath}
                           >
-                            {subItem.icon}
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={subItem.resourceName}
-                            sx={{ opacity: open ? 1 : 0 }}
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
-              </React.Fragment>
-            ) : (
-              <ListItem key={index} disablePadding>
-                <ListItemButton
-                  component={Link}
-                  to={item.resourcePath}
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.resourceName}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
+                            <ListItemIcon>{sub.icon}</ListItemIcon>
+                            <ListItemText primary={sub.resourceName} />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </React.Fragment>
+              );
+            }
+
+            return (
+              <ListItem key={key} disablePadding>
+                <ListItemButton component={Link} to={item.resourcePath}>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.resourceName} />
                 </ListItemButton>
               </ListItem>
-            )
-          )}
+            );
+          })}
         </List>
       </MainDrawer>
-      <Grid container sx={{ flexGrow: 1, p: 3, marginTop: 8 }}>
+
+      {/* ================== CONTENT ================== */}
+      <Grid component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Outlet />
       </Grid>
     </Box>

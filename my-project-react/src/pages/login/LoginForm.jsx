@@ -1,32 +1,41 @@
-import React, { useEffect, useState } from "react";
-import FormicField from "../../components/fields/FormicField";
+import { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
 import { Alert, FormLabel, Grid, Typography } from "@mui/material";
-import { loginForm, validationSchema } from "./helper";
 import MailLockOutlinedIcon from "@mui/icons-material/MailLockOutlined";
 import LockOutlineIcon from "@mui/icons-material/LockOutline";
-import Button from "../../components/button/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../store/slices/userSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
+import FormicField from "../../components/fields/FormicField";
+import Button from "../../components/button/Button";
 import MuiCheckbox from "../../components/checkbox/MuiCheckbox";
+import { loginForm, validationSchema } from "./helper";
 import { encrypt, decrypt } from "../../utils/aesHelper";
+import {
+  loginUser,
+  resetLoginState,
+  selectLoginError,
+  selectLoginLoading,
+} from "../../store/slices/authSlice";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { login } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  // ✅ Use selectors from auth slice
+  const loginError = useSelector(selectLoginError);
+  const loginLoading = useSelector(selectLoginLoading);
+
   const [rememberMe, setRememberMe] = useState(false);
   const [initialValues, setInitialValues] = useState(loginForm);
 
+  // ✅ Load remember-me from localStorage
   useEffect(() => {
     const loadData = async () => {
       const stored = localStorage.getItem("rememberMe");
-
       if (stored) {
         const parsed = JSON.parse(stored);
-
         const decryptedPassword = parsed.password
           ? await decrypt(parsed.password)
           : "";
@@ -42,6 +51,13 @@ const LoginForm = () => {
     loadData();
   }, []);
 
+  // ✅ Clear login error when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(resetLoginState());
+    };
+  }, [dispatch]);
+
   const handleSubmit = async (values) => {
     console.log("Login Form Values:", values);
     try {
@@ -50,21 +66,32 @@ const LoginForm = () => {
         ...values,
         password: encryptedPassword,
       };
+
       const result = await dispatch(loginUser(payload));
-      console.log("Dispatch Response:", result);
+
       if (result.meta.requestStatus === "fulfilled") {
         toast.success("Login successful!");
-        console.log("Logged in User:", login.data);
-        navigate("/home", { replace: true });
-        // Handle Remember Me
+
         if (rememberMe) {
-          localStorage.setItem("rememberMe", JSON.stringify(payload));
+          localStorage.setItem(
+            "rememberMe",
+            JSON.stringify({
+              emailId: values.emailId,
+              password: encryptedPassword,
+            })
+          );
         } else if (!rememberMe && localStorage.getItem("rememberMe")) {
           localStorage.removeItem("rememberMe");
         }
+
+        // Clear any previous login error
+        dispatch(resetLoginState());
+
+        navigate("/", { replace: true });
       }
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("An unexpected error occurred");
     }
   };
 
@@ -72,17 +99,19 @@ const LoginForm = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => handleSubmit(values)}
+      onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ handleSubmit, resetForm, setFieldValue }) => (
+      {({ handleSubmit }) => (
         <Form id="loginForm">
           <Grid container spacing={2} flexDirection={"column"}>
-            {login.error && <Alert severity="error">{login.error}</Alert>}
+            {/* ✅ Error from auth slice */}
+            {loginError && <Alert severity="error">{loginError}</Alert>}
 
             <Typography variant="h5" mb={2}>
               Login to Your Account !
             </Typography>
+
             {/* EmailId Field */}
             <Grid size={6}>
               <FormicField
@@ -95,6 +124,7 @@ const LoginForm = () => {
                 required
               />
             </Grid>
+
             {/* Password Field */}
             <Grid size={6}>
               <FormicField
@@ -107,25 +137,25 @@ const LoginForm = () => {
                 required
               />
             </Grid>
+
             {/* Remember Me */}
             <Grid size={6}>
               <MuiCheckbox
                 name="rememberMe"
                 checked={rememberMe}
-                onChange={(e) => {
-                  setRememberMe(e.target.checked);
-                }}
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
               <FormLabel>Remember Me</FormLabel>
             </Grid>
+
             {/* Submit Button */}
             <Grid size={7} justifyContent="flex-end" container display="flex">
               <Button
                 label="Login"
                 color="primary"
                 onClick={handleSubmit}
-                loading={login.loading}
-                disabled={login.loading}
+                loading={loginLoading}
+                disabled={loginLoading}
               />
             </Grid>
           </Grid>

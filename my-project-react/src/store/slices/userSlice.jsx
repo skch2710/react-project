@@ -1,62 +1,56 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { POST } from "../../utils/axiosHelper";
-import { LOGIN_API } from "../../utils/constants";
+import { createSlice } from "@reduxjs/toolkit";
+import { loginUser, logoutUser } from "./authSlice";
 
+/* ================== INITIAL STATE ================== */
 const initialState = {
-  login: {
-    loading: false,
-    data: null,
-    error: null,
-  },
+  user: null,
+  userId: null,
+  email: null,
+  firstName: null,
+  lastName: null,
+
+  navigations: [],
+  userPrivileges: [],
 };
 
-export const loginUser = createAsyncThunk(
-  "user/loginUser",
-  async (payload, { rejectWithValue }) => {
-    try {
-      payload.requestVerifyToken = import.meta.env.VITE_REQUEST_VERIFY_TOKEN;
-      const response = await POST(LOGIN_API, payload);
-      if (response.statusCode === 200 && response.data) {
-        console.log("Login successful:", response);
-        sessionStorage.setItem("user", JSON.stringify(response.data));
-      } else {
-        console.log("Login failed:", response);
-        return rejectWithValue(response.errorMessage || "Login failed");
-      }
-      return response;
-    } catch (error) {
-      console.error("Login error:", error);
-      return rejectWithValue(
-        error.response?.data?.errorMessage || error.message || "Login failed"
-      );
-    }
-  }
-);
-
+/* ================== SLICE ================== */
 const userSlice = createSlice({
   name: "user",
   initialState,
+
   reducers: {
-    resetLoginState(state) {
-      state.login = { loading: false, data: null, error: null };
-    },
+    clearUser: () => initialState,
   },
+
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
-        state.login.loading = true;
-        state.login.error = null;
-      })
+      /* -------- Save User Details After Login -------- */
       .addCase(loginUser.fulfilled, (state, action) => {
-        state.login.loading = false;
-        state.login.data = action.payload;
+        const { user, navigations, userPrivileges } = action.payload;
+
+        state.user = user;
+        state.userId = user?.userId || null;
+        state.email = user?.emailId || null;
+        state.firstName = user?.firstName || null;
+        state.lastName = user?.lastName || null;
+
+        state.userPrivileges = userPrivileges || [];
+        state.navigations = navigations || [];
       })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.login.loading = false;
-        state.login.error = action.payload;
-      });
+
+      /* -------- Clear On Logout -------- */
+      .addCase(logoutUser.fulfilled, () => initialState);
   },
 });
 
-export const { resetLoginState } = userSlice.actions;
+/* ================== SELECTORS ================== */
+export const selectUser = (state) => state.user.user;
+export const selectUserName = (state) =>
+  `${state.user.firstName || ""} ${state.user.lastName || ""}`.trim();
+
+export const selectNavigations = (state) => state.user.navigations;
+export const selectUserPrivileges = (state) => state.user.userPrivileges;
+
+/* ================== EXPORTS ================== */
+export const { clearUser } = userSlice.actions;
 export default userSlice.reducer;

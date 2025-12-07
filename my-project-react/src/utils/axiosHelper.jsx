@@ -2,8 +2,21 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { isTokenExpired } from "../utils/tokenUtils";
 import { REFRESH_TOKEN_API, LOGIN_API } from "./constants";
+import { updateToken, logoutUser } from "../store/slices/authSlice";
+import { clearUser } from "../store/slices/userSlice";
 
-// Create an Axios instance
+/* ======================================
+   INJECT REDUX STORE
+====================================== */
+let appStore = null;
+
+export const injectStore = (_store) => {
+  appStore = _store;
+};
+
+/* ======================================
+   AXIOS INSTANCES
+====================================== */
 const axiosHelper = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
@@ -15,10 +28,17 @@ const refreshAxios = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+/* ======================================
+   REFRESH CONTROL
+====================================== */
 let isRefreshing = false;
 let pendingQueue = [];
 
+/* ======================================
+   REQUEST INTERCEPTOR
+====================================== */
 axiosHelper.interceptors.request.use(async (config) => {
+  // ✅ Skip auth endpoints
   if (
     config.url.includes(LOGIN_API) ||
     config.url.includes(REFRESH_TOKEN_API)
@@ -26,18 +46,26 @@ axiosHelper.interceptors.request.use(async (config) => {
     return config;
   }
 
-  const user = JSON.parse(sessionStorage.getItem("user"));
-  const accessToken = user?.jwtDTO?.access_token;
-  const refreshToken = user?.jwtDTO?.refresh_token;
+  if (!appStore) return config;
 
-  // ✅ If access token valid → attach and go
-  if (accessToken && !isTokenExpired(accessToken)) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const state = appStore.getState();
+
+  // ✅ Read from authSlice
+  const { token, refreshToken } = state?.auth || {};
+
+  // ✅ Token valid → continue request
+  if (token && !isTokenExpired(token)) {
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   }
 
-  console.log("Access token expired or missing.");
-  // ✅ If refreshing already → wait in queue
+  // ✅ No refresh token → logout
+  if (!refreshToken) {
+    handleLogout();
+    return Promise.reject("No refresh token");
+  }
+
+  // ✅ Queue calls while refreshing
   if (isRefreshing) {
     return new Promise((resolve) => {
       pendingQueue.push((newToken) => {
@@ -47,76 +75,67 @@ axiosHelper.interceptors.request.use(async (config) => {
     });
   }
 
-  // ✅ Start refresh flow
   isRefreshing = true;
 
   try {
-    const response = await REFRESH_TOKEN(user);
+    const response = await REFRESH_TOKEN(refreshToken);
 
-    // ✅ Retry queued calls
-    pendingQueue.forEach((cb) => cb(response.data.access_token));
+    const newAccessToken = response.data.access_token;
+    const newRefreshToken = response.data.refresh_token;
+
+    // ✅ Update tokens in auth slice
+    appStore.dispatch(
+      updateToken({
+        access_token: newAccessToken,
+        refresh_token: newRefreshToken,
+      })
+    );
+
+    // ✅ Resume queued requests
+    pendingQueue.forEach((cb) => cb(newAccessToken));
     pendingQueue = [];
 
-    // ✅ Attach token to original request
-    config.headers.Authorization = `Bearer ${response.data.access_token}`;
+    // ✅ Retry original request
+    config.headers.Authorization = `Bearer ${newAccessToken}`;
     return config;
   } catch (err) {
     pendingQueue = [];
-    sessionStorage.clear();
-    window.location.href = "/login";
+    handleLogout();
     return Promise.reject(err);
   } finally {
     isRefreshing = false;
   }
 });
 
-const REFRESH_TOKEN = async (user) => {
-  try {
-    const response = await refreshAxios.post(REFRESH_TOKEN_API, {
-      refresh_token: user?.jwtDTO?.refresh_token,
-    });
-
-    if (response && response?.status === 200 && response?.data?.access_token) {
-      const updatedUser = {
-        ...user,
-        jwtDTO: {
-          access_token: response.data.access_token,
-          refresh_token: response.data.refresh_token,
-        },
-      };
-      console.log("Token refreshed successfully:", response);
-      sessionStorage.setItem("user", JSON.stringify(updatedUser));
-    } else {
-      sessionStorage.clear();
-      window.location.href = "/login";
-    }
-    return response;
-  } catch (err) {
-    sessionStorage.clear();
-    window.location.href = "/login";
-    throw err;
-  }
+/* ======================================
+   REFRESH TOKEN CALL
+====================================== */
+const REFRESH_TOKEN = async (refreshToken) => {
+  return await refreshAxios.post(REFRESH_TOKEN_API, {
+    refresh_token: refreshToken,
+  });
 };
 
-// GET request
+/* ======================================
+   API HELPERS
+====================================== */
 export const GET = async (endpoint, params = {}) => {
   try {
     const response = await axiosHelper.get(endpoint, { params });
     return response.data;
   } catch (error) {
-    console.error("GET request error:", error);
+    console.error("GET error:", error);
     toast.error("Something went wrong!");
     throw error;
   }
 };
 
-// POST request
 export const POST = async (endpoint, payload) => {
   try {
     const response = await axiosHelper.post(endpoint, payload);
     return response.data;
   } catch (error) {
-    console.error("POST request error:", error);
+    console.error("POST error:", error);
     toast.error(error.response?.data?.errorMessage || error.message);
     throw error;
   }

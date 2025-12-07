@@ -1,37 +1,33 @@
 import { jwtDecode } from "jwt-decode";
 
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
-
 export const isTokenExpired = (token) => {
   if (!token) return true;
   try {
     const decoded = jwtDecode(token);
     console.log("Decoded token:", decoded);
-    const now = Math.floor(Date.now() / 1000);
-    return decoded && decoded.exp < now;
-  } catch (e) {
-    console.error("Invalid token", e);
+
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    console.log("Decoded payload:", payload);
+    const expiry = payload.exp * 1000;
+    return Date.now() >= expiry;
+  } catch (error) {
+    console.error("Error parsing token:", error);
     return true;
   }
 };
 
-export const isValid = (user) => {
-  if (!user) return false;
+// Helper to get token from Redux store
+export const getToken = () => {
   try {
-    const token = user ? JSON.parse(user)?.jwtDTO?.access_token : null;
-    if (!token){
-      sessionStorage.clear();
-      return false;
-    }
-    const decoded = jwtDecode(token);
-    console.log("Decoded token:", decoded);
-    if (decoded && decoded.aud === CLIENT_ID) {
-      return true;
-    }
-  } catch (e) {
-    console.error("Invalid token : ", e);
-    sessionStorage.clear();
-    return false;
+    const state = store.getState();
+    return state.user?.token;
+  } catch {
+    return null;
   }
-  return false;
+};
+
+// Helper to check if user is authenticated
+export const isValid = () => {
+  const token = getToken();
+  return token && !isTokenExpired(token);
 };

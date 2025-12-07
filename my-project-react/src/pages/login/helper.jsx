@@ -11,3 +11,5 @@ export const validationSchema = Yup.object({
     .required("Email ID is required"),
   password: Yup.string().trim().required("Password is required"),
 });
+
+export const copyRightMessage = `© 2025 Sathish Kumar CH. All rights reserved.`;
