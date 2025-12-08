@@ -80,6 +80,9 @@ ReactJs Ussages :
 	```
 	>>> npm install jwt-decode
 	```
+13 GitHub pages --  npm install gh-pages
+
+14. 
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------
