@@ -82,7 +82,10 @@ ReactJs Ussages :
 	```
 13 GitHub pages --  npm install gh-pages
 
-14. 
+14. idle time -- npm install react-idle-timer
+		 npm install react-timer-hook
+
+
 
 ## 📌 What is ReactJs Introduction :
 -------------------------------------
