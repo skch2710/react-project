@@ -65,6 +65,8 @@ ReactJs Ussages :
 	```
 	>>> npm install @reduxjs/toolkit react-redux
 	>>> npm i redux-persist
+	>>> npm install redux-persist-transform-encrypt
+
 	```
 10. For Toaster -- testify
 	```
