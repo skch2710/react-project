@@ -1,0 +1,917 @@
+## REACT JS INTERVIEW QUESTIONS & ANSWERS
+
+---
+
+### CORE REACT BASICS
+
+**1. What is React?**
+React is a JavaScript library used to build fast and interactive user interfaces.
+It follows a component-based architecture and efficiently updates the UI using a Virtual DOM.
+
+**2. Why is React preferred for large applications?**
+React allows UI to be broken into reusable components, improving maintainability.
+Its Virtual DOM minimizes direct DOM manipulation, improving performance.
+
+**3. What is JSX?**
+JSX is a syntax extension that allows writing HTML-like code inside JavaScript.
+It improves readability and helps developers visualize UI structure easily.
+
+**4. Is JSX mandatory in React?**
+No, React can work without JSX using `React.createElement`.
+However, JSX is preferred because it makes code simpler and more readable.
+
+**5. What are components in React?**
+Components are independent and reusable UI blocks.
+Each component controls its own logic, UI, and optionally state.
+
+**6. Functional vs Class components?**
+Functional components use hooks and are simpler and cleaner.
+Class components use lifecycle methods and are now mostly legacy.
+
+**7. What are props?**
+Props are read-only data passed from parent to child components.
+They help make components reusable and configurable.
+
+**8. What is state?**
+State is mutable data managed within a component.
+When state changes, React re-renders the component.
+
+**9. Why should state not be mutated directly?**
+Direct mutation prevents React from detecting changes properly.
+It can lead to unpredictable UI behavior.
+
+**10. What is Virtual DOM?**
+Virtual DOM is an in-memory representation of the real DOM.
+React compares changes and updates only the necessary DOM nodes.
+
+---
+
+### RENDERING & LIFECYCLE
+
+**11. What is reconciliation?**
+Reconciliation is the process where React compares old and new Virtual DOM trees.
+It determines the minimum number of DOM updates required.
+
+**12. Why are keys important in lists?**
+Keys help React uniquely identify list elements.
+They improve performance and prevent incorrect re-renders.
+
+**13. What happens if keys are missing?**
+React may re-render elements incorrectly.
+This can cause performance issues or UI bugs.
+
+**14. What is conditional rendering?**
+Conditional rendering displays UI based on conditions.
+It is commonly implemented using `if`, ternary, or logical operators.
+
+**15. What are React Fragments?**
+Fragments allow grouping multiple elements without adding extra DOM nodes.
+They help keep the DOM clean and minimal.
+
+---
+
+### HOOKS (IMPORTANT INTERVIEW AREA)
+
+**16. What are React Hooks?**
+Hooks are functions that let functional components use state and lifecycle features.
+They eliminate the need for class components.
+
+**17. Why were hooks introduced?**
+Hooks simplify component logic and reduce boilerplate code.
+They also allow reuse of logic through custom hooks.
+
+**18. Explain useState.**
+`useState` is used to manage local state in functional components.
+Updating state triggers a re-render of the component.
+
+**19. Explain useEffect.**
+`useEffect` handles side effects like API calls and subscriptions.
+It runs after render and depends on the dependency array.
+
+**20. How does dependency array work in useEffect?**
+An empty array runs effect once on mount.
+Specific dependencies run the effect only when they change.
+
+**21. What is cleanup function in useEffect?**
+Cleanup functions remove subscriptions or timers.
+They help prevent memory leaks.
+
+**22. What is useRef?**
+`useRef` stores mutable values that persist across renders.
+Updating it does not trigger a re-render.
+
+**23. Difference between useRef and useState?**
+`useState` triggers re-render on update.
+`useRef` does not affect rendering.
+
+**24. What is useMemo?**
+`useMemo` memoizes expensive calculations.
+It improves performance by avoiding unnecessary recomputation.
+
+**25. What is useCallback?**
+`useCallback` memoizes function references.
+It prevents unnecessary re-renders of child components.
+
+---
+
+### FORMS & EVENTS
+
+**26. What are controlled components?**
+Form elements controlled by React state are called controlled components.
+They provide better control and validation.
+
+**27. What are uncontrolled components?**
+Form elements managed by the DOM using refs.
+They are simpler but harder to validate.
+
+**28. How does event handling work in React?**
+React uses Synthetic Events for cross-browser compatibility.
+Event handling syntax is camelCase.
+
+**29. How do you prevent default form submission?**
+Use `event.preventDefault()` inside event handler.
+It prevents browser reload.
+
+**30. How is form validation handled in React?**
+Validation can be done using custom logic or libraries like React Hook Form.
+Libraries reduce boilerplate and improve performance.
+
+---
+
+### CONTEXT API
+
+**31. What is Context API?**
+Context API allows sharing data globally without prop drilling.
+It is useful for themes, auth, and locale data.
+
+**32. When should Context API be used?**
+When multiple components need the same data.
+It avoids deeply nested props.
+
+**33. When should Context API be avoided?**
+For frequently changing data.
+It may cause unnecessary re-renders.
+
+**34. Context API vs Redux?**
+Context is simpler and built-in.
+Redux is better for complex global state.
+
+**35. What is useContext?**
+`useContext` is a hook to consume context values.
+It simplifies accessing global data.
+
+---
+
+### REDUX (REAL INTERVIEW FOCUS)
+
+**36. What is Redux?**
+Redux is a predictable state management library.
+It stores global application state in a single store.
+
+**37. Why Redux Toolkit is recommended?**
+It reduces boilerplate and enforces best practices.
+It simplifies async logic and store setup.
+
+**38. Explain Redux data flow.**
+Actions describe events, reducers update state.
+The store holds state and updates UI.
+
+**39. What is a reducer?**
+A reducer is a pure function that updates state based on actions.
+It should not mutate state directly.
+
+**40. What is a slice in Redux Toolkit?**
+A slice combines reducer logic and actions for a feature.
+It improves modularity and readability.
+
+---
+
+### REACT QUERY
+
+**41. What is React Query?**
+React Query manages server-side state like API data.
+It handles caching, refetching, and background updates.
+
+**42. Why use React Query instead of Redux for API data?**
+Redux is better for client state.
+React Query simplifies server data handling automatically.
+
+**43. What does useQuery do?**
+It fetches data and caches it.
+It automatically refetches when data becomes stale.
+
+**44. What does useMutation do?**
+It handles create, update, and delete operations.
+It helps manage side effects after API calls.
+
+---
+
+### AXIOS & API
+
+**45. What is Axios?**
+Axios is a promise-based HTTP client.
+It simplifies API calls and error handling.
+
+**46. Axios vs fetch?**
+Axios supports interceptors and auto JSON parsing.
+Fetch requires manual handling.
+
+**47. What are Axios interceptors?**
+They handle requests or responses globally.
+Commonly used for token refresh.
+
+---
+
+### AUTH & SECURITY
+
+**48. What is JWT authentication?**
+JWT is a stateless authentication mechanism.
+Tokens are sent with each request for validation.
+
+**49. Access token vs Refresh token?**
+Access tokens are short-lived.
+Refresh tokens generate new access tokens.
+
+**50. Why use HttpOnly cookies?**
+They prevent JavaScript access to tokens.
+This protects against XSS attacks.
+
+---
+
+### REACT + SPRING BOOT
+
+**51. How does React communicate with Spring Boot?**
+Through REST APIs using Axios or fetch.
+Spring Boot exposes endpoints consumed by React.
+
+**52. How to handle CORS issues?**
+Configure CORS in Spring Security.
+Allow frontend origin explicitly.
+
+**53. How are APIs secured in Spring Boot?**
+JWT filters validate incoming requests.
+Unauthorized requests are rejected.
+
+Perfect 👍
+Continuing in the **same format** — **2–3 line explanations**, **copy-paste ready**, **no single-line answers**.
+
+---
+
+## REACT JS INTERVIEW QUESTIONS & ANSWERS
+
+**(Continued: 54–120)**
+
+---
+
+### AUTH, SECURITY & SESSION HANDLING
+
+**54. How do you handle token expiration in React?**
+When the access token expires, the API returns 401.
+An Axios interceptor can call a refresh token API and retry the failed request.
+
+**55. What is refresh token rotation?**
+Each refresh token is invalidated after use and replaced with a new one.
+This improves security and prevents token replay attacks.
+
+**56. Where should JWT tokens be stored?**
+Access tokens should preferably be stored in memory or HttpOnly cookies.
+Avoid localStorage for sensitive tokens due to XSS risks.
+
+**57. How do you implement role-based access control in React?**
+User roles are fetched after login and stored in state.
+Components and routes are conditionally rendered based on roles.
+
+**58. How do you secure frontend routes?**
+Private routes check authentication before rendering components.
+Unauthorized users are redirected to the login page.
+
+**59. Can frontend security alone protect APIs?**
+No, frontend checks are only for UX.
+Actual security must be enforced in the backend.
+
+---
+
+### ROUTING (REACT ROUTER)
+
+**60. What is React Router?**
+React Router enables client-side navigation without page reloads.
+It helps build single-page applications with multiple views.
+
+**61. Difference between BrowserRouter and HashRouter?**
+BrowserRouter uses HTML5 history API.
+HashRouter uses URL hash and works without server configuration.
+
+**62. What is useNavigate?**
+useNavigate is used for programmatic navigation.
+It replaces history.push from older versions.
+
+**63. What are route parameters?**
+Route parameters allow dynamic values in URLs.
+They are commonly used for IDs and detail pages.
+
+**64. How do you handle 404 pages in React?**
+A wildcard route (*) is defined at the end.
+It renders a NotFound component for unmatched paths.
+
+---
+
+### PERFORMANCE OPTIMIZATION
+
+**65. What causes unnecessary re-renders in React?**
+Changing state or props unnecessarily causes re-renders.
+Inline functions and objects also trigger re-renders.
+
+**66. How does React.memo help?**
+React.memo prevents re-rendering if props do not change.
+It is useful for pure functional components.
+
+**67. When should useMemo be used?**
+For expensive calculations that depend on specific values.
+It avoids recalculating on every render.
+
+**68. When should useCallback be used?**
+When passing functions to child components.
+It prevents unnecessary child re-renders.
+
+**69. What is lazy loading?**
+Lazy loading loads components only when needed.
+It reduces initial bundle size and improves performance.
+
+**70. What is code splitting?**
+Code splitting breaks the bundle into smaller chunks.
+Chunks are loaded dynamically when required.
+
+**71. What is virtualization?**
+Virtualization renders only visible items in large lists.
+It improves performance for huge datasets.
+
+---
+
+### ERROR HANDLING
+
+**72. What are Error Boundaries?**
+Error boundaries catch JavaScript errors in UI rendering.
+They prevent the entire app from crashing.
+
+**73. What errors do Error Boundaries not catch?**
+They do not catch async errors or event handler errors.
+Those must be handled separately.
+
+**74. How do you handle API errors globally?**
+Using Axios response interceptors.
+Errors are handled in one centralized place.
+
+**75. Why centralized error handling is important?**
+It avoids repetitive try-catch logic.
+It ensures consistent error messages across the app.
+
+---
+
+### TESTING
+
+**76. What is unit testing in React?**
+Unit testing verifies individual functions or components.
+Jest is commonly used for this purpose.
+
+**77. What is React Testing Library?**
+It tests components from a user’s perspective.
+Focuses on behavior rather than implementation.
+
+**78. What is MSW?**
+Mock Service Worker mocks API calls in tests.
+It simulates real backend responses.
+
+**79. What is end-to-end testing?**
+E2E testing verifies complete user flows.
+Cypress is widely used for this.
+
+**80. Why snapshot testing is used?**
+It detects unexpected UI changes.
+Snapshots compare rendered output over time.
+
+---
+
+### REACT 18 FEATURES
+
+**81. What is automatic batching?**
+React batches multiple state updates automatically.
+This reduces unnecessary re-renders.
+
+**82. What is startTransition?**
+It marks non-urgent state updates.
+Helps keep the UI responsive.
+
+**83. What is useDeferredValue?**
+It delays updating expensive UI parts.
+Useful for search and filtering.
+
+**84. What is concurrent rendering?**
+React can pause and resume rendering.
+Improves user experience in heavy UIs.
+
+---
+
+### REACT + SPRING BOOT INTEGRATION
+
+**85. How does React consume Spring Boot APIs?**
+React calls REST endpoints using Axios.
+Spring Boot returns JSON responses.
+
+**86. How is authentication handled with Spring Boot?**
+Spring Boot issues JWT tokens after login.
+React sends tokens with API requests.
+
+**87. How do you handle CORS issues?**
+CORS must be configured in Spring Security.
+Frontend-only fixes are not sufficient.
+
+**88. How do you upload files from React to Spring Boot?**
+Use FormData in React with multipart/form-data.
+Spring Boot handles it using MultipartFile.
+
+**89. How is pagination handled?**
+Backend returns paginated data.
+Frontend renders pages based on response metadata.
+
+---
+
+### REAL INTERVIEW SCENARIOS
+
+**90. User refreshes page and loses state – solution?**
+Persist required state or re-fetch from backend.
+Authentication must be validated again.
+
+**91. Multiple API calls on page load – how to optimize?**
+Combine APIs in backend or use caching.
+Avoid duplicate requests.
+
+**92. Dashboard is slow – how to debug?**
+Check API response time and re-renders.
+Use React DevTools and profiling.
+
+**93. How do you sync logout across tabs?**
+Use browser storage events or BroadcastChannel API.
+Logout all tabs simultaneously.
+
+**94. How do you handle idle logout?**
+Track user activity using timers.
+Logout user after inactivity.
+
+---
+
+### SENIOR / ARCHITECT LEVEL
+
+**95. CSR vs SSR?**
+CSR loads UI in browser, SSR renders HTML on server.
+SSR improves SEO and first load performance.
+
+**96. What is hydration?**
+Hydration attaches event listeners to server-rendered HTML.
+It enables interactivity in SSR apps.
+
+**97. What are micro-frontends?**
+Micro-frontends split UI into independent deployments.
+They improve scalability for large teams.
+
+**98. How does React handle memory leaks?**
+Leaks occur when effects are not cleaned up.
+Cleanup functions prevent them.
+
+**99. What are Web Vitals?**
+Metrics that measure real user performance.
+Used to improve UX and SEO.
+
+**100. How do you design a scalable React app?**
+Use feature-based architecture and proper state separation.
+Optimize performance and enforce coding standards.
+
+You’re right 👍 — **100–120 was missed**.
+Below is the **missing section**, written in the **same 2–3 line explanation format**, **copy-paste ready**, **no single-line answers**.
+
+---
+
+## REACT JS INTERVIEW QUESTIONS & ANSWERS
+
+**(Missing Section: 100–120)**
+
+---
+
+### ARCHITECTURE & DESIGN PATTERNS
+
+**100. What is a scalable React architecture?**
+A scalable architecture organizes code by features rather than types.
+It improves maintainability, readability, and team collaboration.
+
+**101. What is feature-based folder structure?**
+Each feature contains its components, hooks, services, and styles.
+It avoids tightly coupled global folders.
+
+**102. What is separation of concerns in React?**
+UI logic, business logic, and API logic are separated.
+This makes components easier to test and maintain.
+
+**103. What are presentational and container components?**
+Presentational components focus on UI.
+Container components handle data and logic.
+
+**104. Why is this pattern useful?**
+It improves reusability and testability.
+UI changes don’t affect business logic.
+
+---
+
+### STATE & DATA FLOW
+
+**105. What is unidirectional data flow?**
+Data flows from parent to child via props.
+This makes application behavior predictable.
+
+**106. Why is unidirectional flow important?**
+It simplifies debugging and state tracking.
+Changes are easier to reason about.
+
+**107. How do you share state between siblings?**
+Lift the state to the nearest common parent.
+Pass data down via props.
+
+**108. What is state colocation?**
+Keeping state as close as possible to where it’s used.
+It reduces unnecessary global state.
+
+---
+
+### PERFORMANCE & MEMORY
+
+**109. What causes memory leaks in React apps?**
+Uncleared timers, subscriptions, or event listeners.
+They keep references alive after component unmounts.
+
+**110. How do you prevent memory leaks?**
+Always clean up effects using return functions.
+Remove listeners and cancel API calls.
+
+**111. What is referential equality in React?**
+Objects and functions are compared by reference.
+New references can trigger re-renders.
+
+**112. Why are inline objects a problem?**
+They create new references on each render.
+This can cause unnecessary re-renders.
+
+---
+
+### UI & UX PRACTICES
+
+**113. How do you improve perceived performance?**
+Show loaders, skeleton screens, and placeholders.
+Users feel the app is faster.
+
+**114. What are skeleton loaders?**
+UI placeholders shown while data loads.
+They improve user experience.
+
+**115. How do you handle empty states?**
+Show meaningful messages or illustrations.
+Avoid blank screens.
+
+---
+
+### ACCESSIBILITY (A11Y)
+
+**116. What is accessibility in React?**
+Building apps usable by all users, including disabilities.
+It improves usability and compliance.
+
+**117. What are ARIA roles?**
+ARIA attributes help screen readers understand UI elements.
+They improve accessibility for assistive technologies.
+
+**118. Why accessibility is important in interviews?**
+Many companies enforce accessibility standards.
+Ignoring it is considered a design flaw.
+
+---
+
+### BUILD & DEPLOYMENT
+
+**119. What is tree shaking?**
+Removing unused code during build time.
+It reduces bundle size.
+
+**120. Difference between development and production build?**
+Production builds are optimized and minified.
+Development builds include debugging tools.
+
+Got it 👍
+Here is **120–150**, **complete**, **in order**, **2–3 line explanations**, **copy-paste ready**, **no single-line answers**.
+
+---
+
+## REACT JS INTERVIEW QUESTIONS & ANSWERS
+
+**(120–150)**
+
+---
+
+### ADVANCED HOOKS & REUSABILITY
+
+**120. What are custom hooks?**
+Custom hooks are reusable functions that encapsulate React hook logic.
+They help avoid code duplication and improve readability.
+
+**121. Naming convention for custom hooks?**
+Custom hooks must start with `use`.
+This allows React to enforce hook rules.
+
+**122. Can hooks be used conditionally?**
+No, hooks must be called unconditionally.
+This ensures consistent hook order across renders.
+
+**123. Why hooks cannot be called inside loops or conditions?**
+React relies on call order to manage hook state.
+Changing order can break state mapping.
+
+**124. How do you share logic between components?**
+Use custom hooks or higher-order components.
+Custom hooks are the preferred modern approach.
+
+---
+
+### ADVANCED COMPONENT PATTERNS
+
+**125. What is Higher-Order Component (HOC)?**
+An HOC is a function that takes a component and returns an enhanced component.
+It is used for cross-cutting concerns like authentication.
+
+**126. Render props pattern?**
+Render props pass a function as a prop to control rendering.
+It enables flexible component reuse.
+
+**127. HOC vs custom hooks?**
+HOCs wrap components, while hooks share logic directly.
+Hooks are simpler and more readable.
+
+**128. What is compound component pattern?**
+Components share implicit state through context.
+It provides flexible and expressive APIs.
+
+**129. When to use compound components?**
+When multiple components work together closely.
+Example: Tabs, Accordions.
+
+---
+
+### DATA FETCHING & ASYNC HANDLING
+
+**130. How do you handle loading states?**
+Use local state or React Query status flags.
+Always provide visual feedback to users.
+
+**131. How do you handle empty API responses?**
+Display meaningful empty states.
+Avoid blank or broken UI.
+
+**132. How do you handle API retries?**
+Use React Query retry mechanism or custom logic.
+Retries improve reliability.
+
+**133. How do you cancel in-flight API requests?**
+Use AbortController or Axios cancel tokens.
+This prevents memory leaks.
+
+**134. What is optimistic UI update?**
+UI updates before API response is confirmed.
+Improves perceived performance.
+
+---
+
+### AUTHENTICATION & AUTHORIZATION (ADVANCED)
+
+**135. How do you protect sensitive UI actions?**
+Validate permissions before rendering actions.
+Also enforce checks on backend.
+
+**136. Why frontend authorization is not enough?**
+Frontend can be bypassed easily.
+Backend must enforce security rules.
+
+**137. How do you refresh token silently?**
+Intercept failed requests and refresh token in background.
+Retry the original request after refresh.
+
+**138. How do you prevent multiple refresh calls?**
+Queue failed requests until refresh completes.
+This avoids race conditions.
+
+**139. How do you handle logout properly?**
+Clear tokens and state.
+Redirect user and invalidate backend session if needed.
+
+---
+
+### PERFORMANCE & SCALABILITY
+
+**140. What is memoization?**
+Memoization stores computed results for reuse.
+It avoids repeated expensive calculations.
+
+**141. When memoization should be avoided?**
+When computation is cheap.
+Overuse can increase complexity.
+
+**142. How do you optimize large tables?**
+Use virtualization libraries like react-window.
+Render only visible rows.
+
+**143. How do you reduce bundle size?**
+Use code splitting and tree shaking.
+Remove unused dependencies.
+
+**144. What is tree shaking?**
+Removing unused code during build.
+Reduces final bundle size.
+
+---
+
+### REAL INTERVIEW & DEBUGGING
+
+**145. How do you debug React performance issues?**
+Use React DevTools Profiler.
+Identify unnecessary re-renders.
+
+**146. How do you trace state changes?**
+Use Redux DevTools or logging.
+Helps identify incorrect updates.
+
+**147. How do you handle production bugs?**
+Reproduce locally and add monitoring.
+Fix and deploy patch carefully.
+
+**148. How do you log frontend errors?**
+Use error boundaries and logging services.
+Capture stack traces.
+
+**149. How do you ensure code quality?**
+Use linting, formatting, and code reviews.
+Follow best practices.
+
+**150. How do you prepare React app for production?**
+Enable production build and optimize assets.
+Test performance and security.
+
+Perfect 👍
+Here is **150–180**, written **cleanly**, **in order**, **2–3 line explanations**, **copy-paste ready**, and **no single-line answers**.
+
+---
+
+## REACT JS INTERVIEW QUESTIONS & ANSWERS
+
+**(150–180)**
+
+---
+
+### REACT 18 & MODERN FEATURES
+
+**150. What is React 18?**
+React 18 introduces concurrent rendering features.
+It improves performance and user experience in large applications.
+
+**151. What is automatic batching in React 18?**
+React groups multiple state updates into a single re-render.
+This reduces unnecessary renders and improves performance.
+
+**152. What problem does startTransition solve?**
+It marks non-urgent state updates.
+Urgent UI updates remain responsive during heavy rendering.
+
+**153. When should startTransition be used?**
+For operations like filtering or search results.
+It prevents UI freezing.
+
+**154. What is useDeferredValue?**
+It delays rendering of expensive values.
+Useful for optimizing input-heavy components.
+
+**155. Difference between useTransition and useDeferredValue?**
+useTransition controls state updates.
+useDeferredValue delays rendering of derived values.
+
+---
+
+### SERVER-SIDE RENDERING & SEO
+
+**156. What is Server-Side Rendering (SSR)?**
+SSR renders HTML on the server before sending it to the browser.
+It improves SEO and first page load time.
+
+**157. What is hydration in React?**
+Hydration attaches event handlers to server-rendered HTML.
+It enables interactivity on the client.
+
+**158. SSR vs CSR?**
+SSR improves SEO and initial load.
+CSR offers richer client-side interactivity.
+
+**159. What is Static Site Generation (SSG)?**
+SSG generates HTML at build time.
+It is faster and suitable for content-heavy sites.
+
+**160. When to choose SSR over CSR?**
+When SEO and fast first paint are important.
+Examples include marketing and public websites.
+
+---
+
+### ARCHITECTURE & SCALABILITY
+
+**161. How do you structure a large React application?**
+Use feature-based folder structure.
+Separate UI, logic, and API layers.
+
+**162. What is micro-frontend architecture?**
+Micro-frontends split UI into independent deployable apps.
+They help scale large teams.
+
+**163. Challenges of micro-frontends?**
+Increased complexity and shared dependencies.
+Requires strong standards and tooling.
+
+**164. How do you share state across micro-frontends?**
+Use shared services or events.
+Avoid tight coupling.
+
+**165. How do you manage environment configurations?**
+Use environment-specific config files.
+Avoid hardcoding values.
+
+---
+
+### REAL-WORLD PERFORMANCE & DEBUGGING
+
+**166. How do you identify performance bottlenecks?**
+Use React DevTools Profiler.
+Measure re-renders and slow components.
+
+**167. What causes slow initial load?**
+Large bundles and blocking scripts.
+Can be improved with code splitting.
+
+**168. How do you improve Time to Interactive (TTI)?**
+Lazy load non-critical components.
+Optimize API calls.
+
+**169. How do you handle large datasets in UI?**
+Use pagination or virtualization.
+Avoid rendering all data at once.
+
+**170. How do you optimize images in React apps?**
+Use compressed images and lazy loading.
+Serve appropriate image sizes.
+
+---
+
+### SECURITY & BEST PRACTICES
+
+**171. How do you prevent XSS attacks in React?**
+Avoid using dangerouslySetInnerHTML.
+Sanitize user inputs.
+
+**172. Why frontend security is not sufficient?**
+Frontend can be manipulated easily.
+Backend must enforce all security rules.
+
+**173. How do you protect sensitive configuration?**
+Use environment variables.
+Never expose secrets in frontend code.
+
+**174. How do you secure API communication?**
+Use HTTPS and token-based authentication.
+Validate tokens on backend.
+
+---
+
+### TEAM & PROJECT PRACTICES
+
+**175. How do you handle code reviews in React projects?**
+Review for readability, performance, and best practices.
+Ensure consistent coding standards.
+
+**176. How do you onboard new developers?**
+Provide clear documentation and folder structure.
+Use shared coding guidelines.
+
+**177. How do you manage technical debt?**
+Refactor regularly and prioritize critical areas.
+Avoid quick hacks.
+
+**178. How do you ensure UI consistency?**
+Use shared components and design systems.
+Follow common styling guidelines.
+
+**179. How do you prepare for React interviews?**
+Practice explaining concepts clearly.
+Focus on real-world scenarios.
+
+**180. What do interviewers expect from senior React developers?**
+Strong fundamentals, architecture knowledge, and performance skills.
+Ability to explain decisions and trade-offs.

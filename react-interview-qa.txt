@@ -1,0 +1,1722 @@
+================================================================================
+                    REACT.JS INTERVIEW QUESTIONS & ANSWERS
+================================================================================
+
+TABLE OF CONTENTS:
+==================
+I. Basic Level Questions (1-25)
+II. Intermediate Level Questions (26-75)
+III. Advanced Level Questions (76-120)
+IV. Practical Questions (121-130)
+V. Behavioral Questions (131-140)
+
+================================================================================
+I. BASIC LEVEL QUESTIONS (1-25)
+================================================================================
+
+1. WHAT IS REACT AND WHY USE IT?
+========================================================================
+React is an open-source JavaScript library for building user interfaces,
+developed by Facebook. It's used because:
+
+- Component-Based Architecture
+- Virtual DOM for performance
+- Declarative programming model
+- Large ecosystem and community
+- Reusable components
+- Unidirectional data flow
+
+2. EXPLAIN VIRTUAL DOM VS REAL DOM
+========================================================================
+VIRTUAL DOM:
+- Lightweight copy of Real DOM
+- JavaScript object representation
+- Updates are fast
+- Batch updates before applying to Real DOM
+
+REAL DOM:
+- Actual browser DOM
+- Updates are slow and expensive
+- Direct manipulation causes reflows/repaints
+
+3. WHAT ARE COMPONENTS IN REACT?
+========================================================================
+Components are independent, reusable pieces of UI.
+
+TYPES:
+1. Functional Components (with Hooks)
+2. Class Components
+
+EXAMPLE:
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+
+4. DIFFERENCE BETWEEN ELEMENT AND COMPONENT
+========================================================================
+ELEMENT: Plain object describing what to render
+const element = <h1>Hello</h1>;
+
+COMPONENT: Function or class that returns elements
+function Greeting() {
+  return <h1>Hello</h1>;
+}
+
+5. WHAT IS JSX?
+========================================================================
+JSX = JavaScript XML
+- Syntax extension for JavaScript
+- Looks like HTML but compiles to React.createElement()
+- Must be compiled to JavaScript
+
+6. HOW TO WRITE COMMENTS IN JSX?
+========================================================================
+{/* Single line comment */}
+{/* 
+  Multi-line
+  comment 
+*/}
+
+7. DIFFERENCE BETWEEN FUNCTIONAL AND CLASS COMPONENTS
+========================================================================
+| Aspect          | Functional Component       | Class Component           |
+|-----------------|---------------------------|---------------------------|
+| Syntax          | Function                  | Class extending Component |
+| State           | useState hook             | this.state               |
+| Lifecycle       | useEffect hook           | Lifecycle methods        |
+| this keyword    | Not used                  | Required                 |
+| Performance     | Slightly better           | Slightly heavier         |
+
+8. WHAT ARE PROPS?
+========================================================================
+Props = Properties
+- Read-only data passed from parent to child
+- Immutable within the child component
+
+EXAMPLE:
+// Parent
+<Child name="John" age={25} />
+
+// Child
+function Child(props) {
+  return <div>{props.name} - {props.age}</div>;
+}
+
+9. WHAT ARE PROPTYPES?
+========================================================================
+Runtime type checking for props.
+
+EXAMPLE:
+import PropTypes from 'prop-types';
+
+User.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.number
+};
+
+10. CAN YOU MODIFY PROPS DIRECTLY?
+========================================================================
+NO. Props are read-only. Components should be pure functions.
+
+11. WHAT IS STATE IN REACT?
+========================================================================
+State = Internal data that changes over time.
+
+EXAMPLE:
+const [count, setCount] = useState(0);
+
+12. DIFFERENCE BETWEEN STATE AND PROPS
+========================================================================
+| State                        | Props                       |
+|------------------------------|-----------------------------|
+| Managed within component     | Passed from parent          |
+| Can be modified              | Read-only                  |
+| Component-specific           | Reusable                   |
+| Causes re-render when changed| Causes re-render when changed |
+
+13. HOW TO UPDATE STATE CORRECTLY?
+========================================================================
+// Functional component
+setCount(prevCount => prevCount + 1);
+
+// Class component
+this.setState(prevState => ({
+  count: prevState.count + 1
+}));
+
+// NEVER do this:
+this.state.count = 5;  // WRONG
+
+14. WHAT IS SETSTATE()?
+========================================================================
+- Schedules state update
+- Asynchronous operation
+- Accepts callback for post-update actions
+
+15. REACT COMPONENT LIFECYCLE METHODS (CLASS)
+========================================================================
+MOUNTING:
+constructor() -> render() -> componentDidMount()
+
+UPDATING:
+shouldComponentUpdate() -> render() -> componentDidUpdate()
+
+UNMOUNTING:
+componentWillUnmount()
+
+16. HOW TO HANDLE EVENTS IN REACT?
+========================================================================
+<button onClick={handleClick}>
+  Click me
+</button>
+
+17. SYNTHETIC EVENTS VS NATIVE EVENTS
+========================================================================
+SYNTHETIC:
+- React's cross-browser wrapper
+- Same interface across browsers
+- Event pooling for performance
+
+NATIVE:
+- Browser's native events
+- Different APIs across browsers
+
+18. WHAT IS EVENT POOLING?
+========================================================================
+- React reuses event objects for performance
+- Event properties are nullified after callback
+- Use event.persist() if needed later
+
+19. HOW TO PASS ARGUMENTS TO EVENT HANDLERS?
+========================================================================
+// Arrow function
+<button onClick={() => handleClick(id)}>
+  Click
+</button>
+
+// Bind method
+<button onClick={handleClick.bind(this, id)}>
+  Click
+</button>
+
+20. WHAT ARE HOOKS?
+========================================================================
+Functions that let you use React features in functional components.
+Introduced in React 16.8.
+
+21. RULES OF HOOKS
+========================================================================
+1. Only call hooks at the top level
+2. Only call hooks from React functions
+3. Hook names must start with "use"
+
+22. USESTATE HOOK
+========================================================================
+const [state, setState] = useState(initialValue);
+
+23. USEEFFECT HOOK
+========================================================================
+useEffect(() => {
+  // Side effect code
+  return () => {
+    // Cleanup code
+  };
+}, [dependencies]);
+
+24. DIFFERENCE BETWEEN USEEFFECT AND LIFECYCLE METHODS
+========================================================================
+useEffect combines:
+- componentDidMount
+- componentDidUpdate
+- componentWillUnmount
+
+25. USECONTEXT HOOK
+========================================================================
+Consume context without Context.Consumer.
+
+const value = useContext(MyContext);
+
+================================================================================
+II. INTERMEDIATE LEVEL QUESTIONS (26-75)
+================================================================================
+
+26. CUSTOM HOOKS
+========================================================================
+Reusable hook logic.
+
+EXAMPLE:
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : initialValue;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+}
+
+27. CONDITIONAL RENDERING
+========================================================================
+METHODS:
+1. if/else statements
+2. Ternary operator
+3. Logical && operator
+4. Switch statements
+5. Immediately Invoked Function
+
+28. RENDERING LISTS
+========================================================================
+{items.map(item => (
+  <ListItem key={item.id} item={item} />
+))}
+
+29. IMPORTANCE OF KEY PROP
+========================================================================
+- Helps React identify which items changed
+- Improves performance
+- Should be unique and stable
+
+30. WHAT HAPPENS WITHOUT KEY?
+========================================================================
+- React uses index as default key
+- Performance issues
+- Incorrect component state
+- Re-render all items on changes
+
+31. CONTROLLED VS UNCONTROLLED COMPONENTS
+========================================================================
+CONTROLLED:
+- Form data handled by React state
+- Single source of truth
+- onChange handlers update state
+
+UNCONTROLLED:
+- Form data handled by DOM
+- useRef to access values
+- Default values via defaultValue
+
+32. HOW TO HANDLE FORMS?
+========================================================================
+CONTROLLED EXAMPLE:
+function Form() {
+  const [value, setValue] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(value);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+    </form>
+  );
+}
+
+33. FORM VALIDATION APPROACHES
+========================================================================
+1. HTML5 validation attributes
+2. Custom validation functions
+3. Form libraries (Formik, React Hook Form)
+4. Schema validation (Yup, Zod)
+
+34. REACT ROUTER
+========================================================================
+- Client-side routing library
+- No page reload on navigation
+- Dynamic routing
+
+35. BROWSERROUTER VS HASHROUTER
+========================================================================
+BROWSERROUTER:
+- Uses HTML5 History API
+- Clean URLs (example.com/about)
+- Requires server configuration
+
+HASHROUTER:
+- Uses URL hash (#)
+- Works without server config
+- URLs like example.com/#/about
+
+36. PASSING PARAMETERS IN ROUTES
+========================================================================
+// Route definition
+<Route path="/users/:id" component={User} />
+
+// Accessing params
+const { id } = useParams();
+
+37. PROGRAMMATIC NAVIGATION
+========================================================================
+import { useNavigate } from 'react-router-dom';
+
+function Component() {
+  const navigate = useNavigate();
+  
+  const handleClick = () => {
+    navigate('/home');
+  };
+}
+
+38. CONTEXT API
+========================================================================
+- Global state management
+- Avoids prop drilling
+- Provider/Consumer pattern
+
+39. CREATE AND CONSUME CONTEXT
+========================================================================
+// Create
+const MyContext = React.createContext();
+
+// Provide
+<MyContext.Provider value={value}>
+  <Child />
+</MyContext.Provider>
+
+// Consume
+const value = useContext(MyContext);
+
+40. CONTEXT API VS REDUX
+========================================================================
+CONTEXT API:
+- Built into React
+- Simple for small apps
+- Less boilerplate
+
+REDUX:
+- External library
+- DevTools, middleware
+- Better for complex apps
+
+41. REACT.MEMO
+========================================================================
+- Memoizes functional components
+- Prevents unnecessary re-renders
+- Similar to PureComponent
+
+const MemoizedComponent = React.memo(MyComponent);
+
+42. USEMEMO HOOK
+========================================================================
+Memoizes expensive calculations.
+
+const memoizedValue = useMemo(() => 
+  computeExpensiveValue(a, b), 
+  [a, b]
+);
+
+43. USECALLBACK HOOK
+========================================================================
+Memoizes functions.
+
+const memoizedCallback = useCallback(
+  () => {
+    doSomething(a, b);
+  },
+  [a, b],
+);
+
+44. CODE SPLITTING
+========================================================================
+const OtherComponent = React.lazy(() => 
+  import('./OtherComponent')
+);
+
+<Suspense fallback={<div>Loading...</div>}>
+  <OtherComponent />
+</Suspense>
+
+45. SHOULDCOMPONENTUPDATE
+========================================================================
+Optimization method for class components.
+
+shouldComponentUpdate(nextProps, nextState) {
+  return this.props.value !== nextProps.value;
+}
+
+46. PURE COMPONENT
+========================================================================
+Class component with shallow comparison.
+
+class MyComponent extends React.PureComponent {
+  render() {
+    return <div>{this.props.value}</div>;
+  }
+}
+
+47. WHY ARE KEYS IMPORTANT FOR PERFORMANCE?
+========================================================================
+- Efficient DOM updates
+- Preserves component state
+- Minimizes re-renders
+- Helps React's diffing algorithm
+
+48. USEFORWARDREF
+========================================================================
+Pass ref through component.
+
+const FancyButton = React.forwardRef((props, ref) => (
+  <button ref={ref} className="FancyButton">
+    {props.children}
+  </button>
+));
+
+49. USELAYOUTEFFECT
+========================================================================
+- Fires synchronously after DOM mutations
+- Use for DOM measurements
+- Blocks visual updates
+
+50. ERROR BOUNDARIES
+========================================================================
+Catch JavaScript errors in child components.
+
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    logErrorToService(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+51. PORTAL
+========================================================================
+Render children into different DOM node.
+
+ReactDOM.createPortal(
+  child,
+  container
+);
+
+52. HIGHER ORDER COMPONENTS (HOC)
+========================================================================
+Function that takes component, returns enhanced component.
+
+function withAuth(WrappedComponent) {
+  return function(props) {
+    if (!isAuthenticated) {
+      return <Redirect to="/login" />;
+    }
+    return <WrappedComponent {...props} />;
+  };
+}
+
+53. RENDER PROPS
+========================================================================
+Prop that is a function returning React element.
+
+<DataProvider render={data => (
+  <h1>Hello {data.target}</h1>
+)} />
+
+54. COMPOUND COMPONENTS
+========================================================================
+Components that work together.
+
+<Tabs>
+  <Tabs.List>
+    <Tabs.Tab>Tab 1</Tabs.Tab>
+    <Tabs.Tab>Tab 2</Tabs.Tab>
+  </Tabs.List>
+  <Tabs.Panels>
+    <Tabs.Panel>Content 1</Tabs.Panel>
+    <Tabs.Panel>Content 2</Tabs.Panel>
+  </Tabs.Panels>
+</Tabs>
+
+55. USEIMPERATIVEHANDLE
+========================================================================
+Customize instance value exposed with ref.
+
+useImperativeHandle(ref, () => ({
+  focus: () => {
+    inputRef.current.focus();
+  }
+}));
+
+56. USEREDUCER HOOK
+========================================================================
+Alternative to useState for complex state.
+
+const [state, dispatch] = useReducer(reducer, initialState);
+
+57. WHEN TO USE USEREDUCER VS USESTATE?
+========================================================================
+USE USESTATE:
+- Simple state (boolean, string, number)
+- Independent state updates
+- No complex transitions
+
+USE USEREDUCER:
+- Complex state logic
+- Multiple sub-values
+- Next state depends on previous
+- Better for state machines
+
+58. USEREF HOOK
+========================================================================
+- Access DOM elements
+- Store mutable values without re-renders
+- Similar to instance variables
+
+const inputRef = useRef();
+
+useEffect(() => {
+  inputRef.current.focus();
+}, []);
+
+59. REFS VS STATE
+========================================================================
+REFS:
+- Mutable
+- Changing doesn't trigger re-render
+- Access DOM nodes
+
+STATE:
+- Immutable via setState
+- Changing triggers re-render
+- Store component data
+
+60. REACT FIBER
+========================================================================
+- Complete rewrite of React's core algorithm
+- Incremental rendering
+- Better priority handling
+- Enables features like Suspense
+
+61. RECONCILIATION
+========================================================================
+Process of comparing previous Virtual DOM with new one.
+
+STEPS:
+1. Elements of different types -> tear down, build new
+2. Same DOM element types -> update attributes
+3. Same component types -> update props
+4. Recursion on children
+
+62. HOW DOES REACT DECIDE TO RE-RENDER?
+========================================================================
+1. State changes (useState, setState)
+2. Props changes
+3. Context value changes
+4. Parent component re-renders (unless optimized)
+
+63. PROFILING REACT APPLICATIONS
+========================================================================
+1. React DevTools Profiler
+2. Chrome Performance tab
+3. why-did-you-render library
+4. React.memo, useMemo, useCallback
+
+64. VIRTUALIZED LISTS
+========================================================================
+Render only visible items for large lists.
+
+LIBRARIES:
+- react-window
+- react-virtualized
+- react-virtuoso
+
+65. WEB WORKERS IN REACT
+========================================================================
+Run JavaScript in background threads.
+
+EXAMPLE:
+const worker = new Worker('worker.js');
+
+worker.postMessage(data);
+worker.onmessage = (event) => {
+  console.log(event.data);
+};
+
+66. TESTING STRATEGIES
+========================================================================
+1. Unit tests (Jest)
+2. Component tests (React Testing Library)
+3. Integration tests
+4. E2E tests (Cypress, Playwright)
+
+67. JEST AND REACT TESTING LIBRARY
+========================================================================
+JEST: Test runner
+RTL: DOM testing utilities
+
+EXAMPLE:
+import { render, screen } from '@testing-library/react';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
+68. WHAT TO TEST?
+========================================================================
+TEST:
+- Component rendering
+- User interactions
+- State changes
+- Props changes
+
+DON'T TEST:
+- Implementation details
+- Third-party libraries
+- Internal React behavior
+
+69. SNAPSHOT TESTING
+========================================================================
+Capture component output, compare against saved snapshot.
+
+test('renders correctly', () => {
+  const tree = renderer
+    .create(<MyComponent />)
+    .toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+70. TESTING HOOKS
+========================================================================
+Use @testing-library/react-hooks
+
+import { renderHook } from '@testing-library/react-hooks';
+
+test('should increment counter', () => {
+  const { result } = renderHook(() => useCounter());
+  act(() => {
+    result.current.increment();
+  });
+  expect(result.current.count).toBe(1);
+});
+
+71. FOLDER STRUCTURE
+========================================================================
+COMMON PATTERNS:
+
+1. Feature-based:
+src/
+  features/
+    auth/
+    dashboard/
+    profile/
+
+2. Layer-based:
+src/
+  components/
+  pages/
+  hooks/
+  utils/
+  services/
+
+72. COMPONENT DESIGN PATTERNS
+========================================================================
+1. Container/Presentational
+2. Compound Components
+3. Render Props
+4. HOC
+5. Custom Hooks
+
+73. CONTAINER VS PRESENTATIONAL
+========================================================================
+CONTAINER:
+- Handle data/logic
+- Stateful
+- Connect to stores/APIs
+
+PRESENTATIONAL:
+- Handle UI
+- Stateless
+- Receive data via props
+
+74. HOW TO HANDLE API CALLS?
+========================================================================
+1. useEffect for data fetching
+2. Custom hooks (useFetch, useQuery)
+3. Libraries (React Query, SWR)
+4. Redux with middleware (redux-thunk, redux-saga)
+
+75. AUTHENTICATION PATTERNS
+========================================================================
+1. JWT tokens
+2. Protected routes
+3. Context/Redux for auth state
+4. Axios interceptors
+
+================================================================================
+III. ADVANCED LEVEL QUESTIONS (76-120)
+================================================================================
+
+76. REACT 18 CONCURRENT FEATURES
+========================================================================
+- Automatic batching
+- Transitions (useTransition)
+- Suspense for data fetching
+- New hooks (useId, useSyncExternalStore)
+
+77. AUTOMATIC BATCHING
+========================================================================
+Multiple state updates batched into single re-render.
+
+// React 17: Two re-renders
+setTimeout(() => {
+  setCount(c => c + 1);
+  setFlag(f => !f);
+}, 1000);
+
+// React 18: One re-render (auto-batched)
+
+78. TRANSITIONS
+========================================================================
+Mark updates as non-urgent.
+
+const [isPending, startTransition] = useTransition();
+
+startTransition(() => {
+  setSearchQuery(input);
+});
+
+79. SUSPENSE FOR DATA FETCHING
+========================================================================
+<Suspense fallback={<Spinner />}>
+  <ProfilePage />
+</Suspense>
+
+80. USEID HOOK
+========================================================================
+Generate unique IDs.
+
+const id = useId();
+
+<input id={`name-${id}`} />
+
+81. USESYNCEXTERNALSTORE
+========================================================================
+Subscribe to external stores.
+
+const state = useSyncExternalStore(
+  subscribe,
+  getSnapshot
+);
+
+82. SERVER-SIDE RENDERING (SSR)
+========================================================================
+- Render React on server
+- Send HTML to client
+- Hydrate on client
+
+LIBRARIES: Next.js, Remix
+
+83. STATIC SITE GENERATION (SSG)
+========================================================================
+- Generate HTML at build time
+- Faster loading
+- Better SEO
+
+84. PROGRESSIVE WEB APPS (PWA)
+========================================================================
+- Service workers
+- Offline support
+- Installable
+
+85. MICRO-FRONTENDS
+========================================================================
+- Split app into independent features
+- Multiple teams
+- Independent deployment
+
+TECHNIQUES:
+1. Module Federation (Webpack 5)
+2. Iframes
+3. Web Components
+
+86. WEBPACK CONFIGURATION
+========================================================================
+- Entry point
+- Output
+- Loaders (babel, css)
+- Plugins
+- Dev server
+
+87. TREE SHAKING
+========================================================================
+Remove unused code from bundle.
+
+REQUIREMENTS:
+- ES6 modules (import/export)
+- Side-effect free code
+- Proper package.json configuration
+
+88. BUNDLE OPTIMIZATION
+========================================================================
+1. Code splitting
+2. Lazy loading
+3. Compression
+4. Minification
+5. CDN for libraries
+
+89. STATE MANAGEMENT LIBRARIES
+========================================================================
+1. Redux (predictable state container)
+2. MobX (reactive state management)
+3. Recoil (Facebook experimental)
+4. Zustand (minimal state management)
+5. Jotai (atomic state)
+
+90. REDUX BASICS
+========================================================================
+COMPONENTS:
+1. Store: Holds state
+2. Actions: Describe what happened
+3. Reducers: Update state
+4. Dispatch: Send actions
+
+91. REDUX TOOLKIT
+========================================================================
+- Official Redux toolset
+- Less boilerplate
+- Immer for immutable updates
+
+92. WHEN TO USE REDUX?
+========================================================================
+USE REDUX:
+- Large complex applications
+- Shared state between components
+- Need for time-travel debugging
+- Centralized state management
+
+DON'T USE:
+- Small apps (use Context)
+- Simple state (use useState)
+- Form state (use libraries)
+
+93. MIDDLEWARE IN REDUX
+========================================================================
+- Intercept dispatched actions
+- Perform side effects
+- Modify actions
+
+EXAMPLES:
+- redux-thunk (async actions)
+- redux-saga (complex side effects)
+- redux-logger (logging)
+
+94. SELECTORS IN REDUX
+========================================================================
+- Compute derived data
+- Memoized with Reselect
+- Prevent unnecessary re-renders
+
+95. OPTIMISTIC UPDATES
+========================================================================
+Update UI before server response.
+
+STEPS:
+1. Update state immediately
+2. Make API call
+3. Revert on error
+
+96. LAZY LOADING ROUTES
+========================================================================
+const Home = React.lazy(() => import('./Home'));
+const About = React.lazy(() => import('./About'));
+
+<Suspense fallback={<Loading />}>
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/about" element={<About />} />
+  </Routes>
+</Suspense>
+
+97. PERFORMANCE METRICS
+========================================================================
+1. First Contentful Paint (FCP)
+2. Largest Contentful Paint (LCP)
+3. First Input Delay (FID)
+4. Cumulative Layout Shift (CLS)
+
+98. MEMORY LEAKS IN REACT
+========================================================================
+COMMON CAUSES:
+1. Unsubscribed event listeners
+2. Unclosed intervals/timeouts
+3. Unmounted component state updates
+
+PREVENTION:
+1. Cleanup in useEffect
+2. AbortController for fetch
+3. Check mounted state
+
+99. SECURITY CONCERNS
+========================================================================
+1. XSS (Cross-Site Scripting)
+2. CSRF (Cross-Site Request Forgery)
+3. SQL Injection
+4. Data exposure
+
+PREVENTION:
+1. Sanitize user input
+2. Use HTTPS
+3. Proper authentication
+4. Content Security Policy
+
+100. ACCESSIBILITY IN REACT
+========================================================================
+1. Semantic HTML
+2. ARIA attributes
+3. Keyboard navigation
+4. Screen reader support
+5. Focus management
+
+TOOLS:
+- eslint-plugin-jsx-a11y
+- React Aria
+- Reach UI
+
+================================================================================
+IV. PRACTICAL CODING QUESTIONS (121-130)
+================================================================================
+
+121. COUNTER COMPONENT
+========================================================================
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+      <button onClick={() => setCount(count - 1)}>
+        Decrement
+      </button>
+      <button onClick={() => setCount(0)}>
+        Reset
+      </button>
+    </div>
+  );
+}
+
+122. TODO APP
+========================================================================
+function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState('');
+
+  const addTodo = () => {
+    if (input.trim()) {
+      setTodos([...todos, {
+        id: Date.now(),
+        text: input,
+        completed: false
+      }]);
+      setInput('');
+    }
+  };
+
+  const toggleTodo = (id) => {
+    setTodos(todos.map(todo =>
+      todo.id === id 
+        ? {...todo, completed: !todo.completed}
+        : todo
+    ));
+  };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
+  return (
+    <div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+      />
+      <button onClick={addTodo}>Add</button>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>
+            <span
+              style={{
+                textDecoration: todo.completed ? 'line-through' : 'none'
+              }}
+              onClick={() => toggleTodo(todo.id)}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => deleteTodo(todo.id)}>
+              Delete
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+123. FORM WITH VALIDATION
+========================================================================
+function SignupForm() {
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    
+    if (!form.email) newErrors.email = 'Email required';
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      newErrors.email = 'Invalid email';
+    
+    if (!form.password) newErrors.password = 'Password required';
+    else if (form.password.length < 6)
+      newErrors.password = 'Password too short';
+    
+    if (form.password !== form.confirmPassword)
+      newErrors.confirmPassword = 'Passwords must match';
+    
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    
+    if (Object.keys(validationErrors).length === 0) {
+      console.log('Form submitted:', form);
+      // Submit to API
+    } else {
+      setErrors(validationErrors);
+    }
+  };
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: ''
+      });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <input
+          name="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="Email"
+        />
+        {errors.email && <span style={{color: 'red'}}>{errors.email}</span>}
+      </div>
+      
+      <div>
+        <input
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={handleChange}
+          placeholder="Password"
+        />
+        {errors.password && <span style={{color: 'red'}}>{errors.password}</span>}
+      </div>
+      
+      <div>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          placeholder="Confirm Password"
+        />
+        {errors.confirmPassword && <span style={{color: 'red'}}>{errors.confirmPassword}</span>}
+      </div>
+      
+      <button type="submit">Sign Up</button>
+    </form>
+  );
+}
+
+124. API INTEGRATION
+========================================================================
+function UserList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('https://jsonplaceholder.typicode.com/users');
+      if (!response.ok) throw new Error('Failed to fetch');
+      const data = await response.json();
+      setUsers(data);
+      setError('');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      <h1>Users</h1>
+      <button onClick={fetchUsers}>Refresh</button>
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>
+            <strong>{user.name}</strong> - {user.email}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+125. THEME SWITCHER WITH CONTEXT
+========================================================================
+// ThemeContext.js
+const ThemeContext = React.createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  const value = { theme, toggleTheme };
+
+  return (
+    <ThemeContext.Provider value={value}>
+      <div className={`app ${theme}`}>
+        {children}
+      </div>
+    </ThemeContext.Provider>
+  );
+};
+
+export const useTheme = () => useContext(ThemeContext);
+
+// App.js
+function App() {
+  return (
+    <ThemeProvider>
+      <Header />
+      <Main />
+    </ThemeProvider>
+  );
+}
+
+// Header.js
+function Header() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <header>
+      <h1>My App</h1>
+      <button onClick={toggleTheme}>
+        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+      </button>
+    </header>
+  );
+}
+
+126. CUSTOM HOOK FOR LOCALSTORAGE
+========================================================================
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
+
+  const setValue = (value) => {
+    try {
+      const valueToStore = 
+        value instanceof Function ? value(storedValue) : value;
+      
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const removeValue = () => {
+    try {
+      window.localStorage.removeItem(key);
+      setStoredValue(initialValue);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return [storedValue, setValue, removeValue];
+}
+
+// Usage
+function App() {
+  const [name, setName, removeName] = useLocalStorage('name', '');
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter your name"
+      />
+      <button onClick={() => removeName()}>Clear</button>
+    </div>
+  );
+}
+
+127. HIGHER ORDER COMPONENT FOR AUTHENTICATION
+========================================================================
+const withAuth = (WrappedComponent) => {
+  return function WithAuthComponent(props) {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+      // Check auth status
+      const token = localStorage.getItem('token');
+      setIsAuthenticated(!!token);
+      setLoading(false);
+    }, []);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (!isAuthenticated) {
+      return <div>Please log in to view this page</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
+
+// Usage
+const ProfilePage = ({ user }) => {
+  return <div>Welcome, {user?.name}</div>;
+};
+
+const ProtectedProfilePage = withAuth(ProfilePage);
+
+128. ERROR BOUNDARY IMPLEMENTATION
+========================================================================
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      hasError: false,
+      error: null,
+      errorInfo: null 
+    };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    this.setState({
+      error: error,
+      errorInfo: errorInfo
+    });
+    
+    // Log to error reporting service
+    logErrorToService(error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div>
+          <h2>Something went wrong.</h2>
+          <details style={{ whiteSpace: 'pre-wrap' }}>
+            {this.state.error && this.state.error.toString()}
+            <br />
+            {this.state.errorInfo && this.state.errorInfo.componentStack}
+          </details>
+          <button onClick={() => window.location.reload()}>
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+// Usage
+function App() {
+  return (
+    <ErrorBoundary>
+      <MyApp />
+    </ErrorBoundary>
+  );
+}
+
+129. CODE SPLITTING WITH LAZY LOADING
+========================================================================
+// MainApp.js
+import React, { Suspense } from 'react';
+
+const Dashboard = React.lazy(() => import('./Dashboard'));
+const Reports = React.lazy(() => import('./Reports'));
+const Settings = React.lazy(() => import('./Settings'));
+
+function MainApp() {
+  const [currentTab, setCurrentTab] = useState('dashboard');
+
+  const renderContent = () => {
+    switch (currentTab) {
+      case 'dashboard':
+        return <Dashboard />;
+      case 'reports':
+        return <Reports />;
+      case 'settings':
+        return <Settings />;
+      default:
+        return <Dashboard />;
+    }
+  };
+
+  return (
+    <div>
+      <nav>
+        <button onClick={() => setCurrentTab('dashboard')}>
+          Dashboard
+        </button>
+        <button onClick={() => setCurrentTab('reports')}>
+          Reports
+        </button>
+        <button onClick={() => setCurrentTab('settings')}>
+          Settings
+        </button>
+      </nav>
+      
+      <Suspense fallback={<div>Loading module...</div>}>
+        {renderContent()}
+      </Suspense>
+    </div>
+  );
+}
+
+130. PERFORMANCE OPTIMIZATION EXAMPLE
+========================================================================
+// Problem: Expensive computation on every render
+function ExpensiveComponent({ data }) {
+  const [filter, setFilter] = useState('');
+  
+  // WRONG: Expensive computation on every render
+  const filteredData = data.filter(item =>
+    item.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  return (
+    <div>
+      <input
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      <ul>
+        {filteredData.map(item => (
+          <ListItem key={item.id} item={item} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// Solution: Optimized with useMemo and React.memo
+const ListItem = React.memo(function ListItem({ item }) {
+  return <li>{item.name}</li>;
+});
+
+function OptimizedExpensiveComponent({ data }) {
+  const [filter, setFilter] = useState('');
+  
+  // CORRECT: Memoized expensive computation
+  const filteredData = useMemo(() => {
+    console.log('Filtering data...');
+    return data.filter(item =>
+      item.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }, [data, filter]);
+
+  return (
+    <div>
+      <input
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      <ul>
+        {filteredData.map(item => (
+          <ListItem key={item.id} item={item} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+================================================================================
+V. BEHAVIORAL & SCENARIO QUESTIONS (131-140)
+================================================================================
+
+131. HOW DO YOU DEBUG A REACT APPLICATION?
+========================================================================
+1. React DevTools for components, props, state
+2. Browser DevTools for network, console
+3. Error boundaries for error handling
+4. Console.log strategically
+5. Debugger statements
+6. React Profiler for performance
+7. why-did-you-render library
+8. Unit tests for regression
+
+132. WHAT'S THE MOST COMPLEX REACT COMPONENT YOU'VE BUILT?
+========================================================================
+(Your personal experience - describe a complex component you've built)
+
+EXAMPLE STRUCTURE:
+- What it did (multi-step form, real-time dashboard, etc.)
+- Challenges faced (state management, performance, etc.)
+- Solutions implemented (custom hooks, optimization techniques)
+- Technologies used (libraries, patterns)
+- What you learned
+
+133. HOW DO YOU HANDLE STATE MANAGEMENT IN LARGE APPLICATIONS?
+========================================================================
+1. Assess state type:
+   - Local state -> useState
+   - Shared state -> Context or state management library
+   - Server state -> React Query/SWR
+
+2. Choose appropriate tool:
+   - Small apps: Context API
+   - Medium apps: Zustand/Recoil
+   - Large apps: Redux Toolkit
+
+3. Implement patterns:
+   - Feature-based structure
+   - Normalized state shape
+   - Selectors for derived data
+   - Middleware for side effects
+
+134. DESCRIBE YOUR APPROACH TO TESTING REACT COMPONENTS
+========================================================================
+1. Unit tests for utilities/hooks
+2. Component tests with React Testing Library
+3. Integration tests for user flows
+4. E2E tests for critical paths
+5. Snapshot tests for UI consistency
+6. Test pyramid: More unit, fewer E2E
+7. Mock external dependencies
+8. Test user behavior, not implementation
+
+135. HOW DO YOU OPTIMIZE REACT APP PERFORMANCE?
+========================================================================
+1. Measure first (React Profiler, Lighthouse)
+2. Optimize renders:
+   - React.memo for components
+   - useMemo for expensive calculations
+   - useCallback for function props
+   - Avoid inline objects/functions
+
+3. Code splitting:
+   - Route-based splitting
+   - Component lazy loading
+   - Library splitting
+
+4. Bundle optimization:
+   - Tree shaking
+   - Compression
+   - CDN for libraries
+
+5. Image optimization:
+   - Lazy loading
+   - WebP format
+   - Responsive images
+
+136. EXPLAIN HOW TO IMPLEMENT PAGINATION
+========================================================================
+1. Client-side pagination:
+   - Slice array of data
+   - Store current page in state
+   - Calculate total pages
+
+2. Server-side pagination:
+   - API endpoints with page/limit params
+   - Load more/Infinite scroll
+   - Keep page state
+
+3. Libraries: react-paginate, react-infinite-scroll
+
+EXAMPLE IMPLEMENTATION:
+function PaginatedList({ items, itemsPerPage }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedItems = items.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <div>
+      {paginatedItems.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+      <div>
+        <button 
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(p => p - 1)}
+        >
+          Previous
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(p => p + 1)}
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  );
+}
+
+137. HOW DO YOU HANDLE AUTHENTICATION IN REACT APPS?
+========================================================================
+1. Authentication flow:
+   - Login form -> API call -> JWT token
+   - Store token (localStorage, httpOnly cookie)
+   - Add Authorization header to requests
+   - Handle token refresh
+
+2. Protected routes:
+   - Higher Order Component
+   - Custom hook
+   - Route guard component
+
+3. State management:
+   - Context for auth state
+   - Persist login state
+   - Handle logout (clear token, redirect)
+
+4. Security:
+   - HTTPS only
+   - Token expiration
+   - Input validation
+   - XSS protection
+
+138. COMMON SECURITY CONCERNS IN REACT APPS?
+========================================================================
+1. XSS (Cross-Site Scripting):
+   - Sanitize user input
+   - Use dangerouslySetInnerHTML carefully
+   - Content Security Policy
+
+2. CSRF (Cross-Site Request Forgery):
+   - Use CSRF tokens
+   - SameSite cookies
+   - Anti-CSRF libraries
+
+3. Data exposure:
+   - Don't store sensitive data in client
+   - Environment variables for API keys
+   - Input validation on server
+
+4. Dependency vulnerabilities:
+   - Regular npm audit
+   - Update dependencies
+   - Use trusted packages
+
+139. HOW DO YOU STAY UPDATED WITH REACT ECOSYSTEM?
+========================================================================
+1. Official channels:
+   - React blog
+   - GitHub releases
+   - React Conf
+
+2. Community:
+   - Twitter/Reddit communities
+   - Discord/Slack groups
+   - Local meetups
+
+3. Learning:
+   - New projects/tutorials
+   - Read source code
+   - Contribute to open source
+
+4. Practice:
+   - Experiment with new features
+   - Build proof of concepts
+   - Follow best practices
+
+140. EXPLAIN YOUR CODE REVIEW PROCESS FOR REACT CODE
+========================================================================
+CHECKLIST:
+1. Code structure and organization
+2. Component design and reusability
+3. State management approach
+4. Performance considerations
+5. Testing coverage
+6. Accessibility
+7. Security
+8. Error handling
+9. Documentation
+10. Follows team conventions
+
+PROCESS:
+1. Self-review first
+2. Create descriptive PR
+3. Request review from team
+4. Address comments
+5. Automated checks (CI/CD)
+6. Merge when approved
+
+================================================================================
+                            END OF DOCUMENT
+================================================================================
