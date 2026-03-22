@@ -11,6 +11,12 @@ npm -v # should print `10.7.0`
 # Extention in VS code to use Shortcuts
 -->ES7+ React/Redux/React-Native snippets
 
+--> Formatter for better code view 
+	>>> Alt+Shift+F 
+--> Organize Imports 
+	>>> Alt+Shift+O
+
+
 # After Clone Run 
 --> npm install
 
