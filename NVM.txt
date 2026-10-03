@@ -1,0 +1,6 @@
+>> nvm -v
+>> nvm list
+>> nvm install 22.21.0
+>> nvm set 22.21.0
+>> node -v
+>> npm -v
