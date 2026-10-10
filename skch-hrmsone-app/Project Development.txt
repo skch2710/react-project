@@ -1,0 +1,7 @@
+This Notes Steps to Project Development:
+----------------------------------------
+
+1. Create the Project with Latest Vite and Node 24.21.0 
+	>> npm create vite@latest skch-hrmsone-app -- --template react
+	>>ESLint
+2. 
