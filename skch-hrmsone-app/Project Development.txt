@@ -4,4 +4,8 @@ This Notes Steps to Project Development:
 1. Create the Project with Latest Vite and Node 24.21.0 
 	>> npm create vite@latest skch-hrmsone-app -- --template react
 	>>ESLint
-2. 
+2. Run the Project using >>npm run dev
+	It will run in local port http://localhost:5173
+3. Tab favicon and Project Name change in index.html 
+4. Remove the code App.jsx , App.css and inedex.css
+	Create Arrow function in App.jsx >> rafce
