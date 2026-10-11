@@ -9,3 +9,6 @@ This Notes Steps to Project Development:
 3. Tab favicon and Project Name change in index.html 
 4. Remove the code App.jsx , App.css and inedex.css
 	Create Arrow function in App.jsx >> rafce
+5. .env file for environment values inside project root folder
+		import.meta.env.VITE_API_URL
+6.
