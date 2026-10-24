@@ -1,5 +1,12 @@
 This Notes Steps to Project Development:
 ----------------------------------------
+VS Code Extensions:
+-------------------
+a. ES7+ React/Redux/React-Native snippets
+b. Prettier - Code formatter
+c. Jest
+
+////////////////**************////////////////////
 
 1. Create the Project with Latest Vite and Node 24.21.0 
 	>> npm create vite@latest skch-hrmsone-app -- --template react
@@ -11,4 +18,23 @@ This Notes Steps to Project Development:
 	Create Arrow function in App.jsx >> rafce
 5. .env file for environment values inside project root folder
 		import.meta.env.VITE_API_URL
-6.
+6. Install Required node modules
+    --npm list @mui/material
+    --npm ls @mui/material @mui/x-date-pickers dayjs
+    >>npm install @mui/material@9.5.0 @emotion/react @emotion/styled
+    >>npm install @mui/icons-material@9.5.0
+    >>npm install @mui/x-date-pickers@^9 dayjs
+    >>npm install react-icons
+
+7. To Apply Same Font for Entire Project 
+    --> Add CSS Style in index.CSS
+    --> Create a theme.js and Wrap it in main.jsx it will apply to all MUI Components
+
+8. Create the Components folder inside that Create the common Components
+	--> Button
+	--> Dropdown (AutoComplete)
+    --> Typography 
+    --> Chatbot
+    --> Popup
+
+9. create styles folder > globalStyles.jsx to apply the gobal styles 
