@@ -1,0 +1,12 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400; /* Regular */
+  margin: 0;
+  padding: 0;
+}
+
+/* .MuiDataGrid-columnHeader {
+  height: 30px !important;
+  font-size: 12px !important;
+  background-color: aquamarine !important;
+} */
