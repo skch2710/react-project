@@ -25,6 +25,7 @@ c. Jest
     >>npm install @mui/icons-material@9.5.0
     >>npm install @mui/x-date-pickers@^9 dayjs
     >>npm install react-icons
+    >>npm install formik yup
 
 7. To Apply Same Font for Entire Project 
     --> Add CSS Style in index.CSS

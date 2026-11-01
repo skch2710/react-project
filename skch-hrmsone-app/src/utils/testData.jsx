@@ -1,3 +1,31 @@
+import Overview from "./Overview";
+import Users from "./Users";
+import Settings from "./Settings";
+
+export const tabLkp = [
+  {
+    tabId: 1,
+    tabName: "Overview",
+    component: Overview,
+    fields: ["overview.firstName", "overview.email"],
+    disabled: false,
+  },
+  {
+    tabId: 2,
+    tabName: "Users",
+    component: Users,
+    fields: ["users.userName", "users.role"],
+    disabled: true,
+  },
+  {
+    tabId: 3,
+    tabName: "Settings",
+    component: Settings,
+    fields: ["settings.theme"],
+    disabled: true,
+  },
+];
+
 export const genderLkp = [
   {
     genderId: 1,
@@ -30,7 +58,7 @@ export const roleLkp = [
     roleId: 3,
     roleName: "Manager",
     disabled: false,
-  }
+  },
 ];
 
 export const skills = [
