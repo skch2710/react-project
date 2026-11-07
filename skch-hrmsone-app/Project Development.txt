@@ -39,3 +39,6 @@ c. Jest
     --> Popup
 
 9. create styles folder > globalStyles.jsx to apply the gobal styles 
+
+10. To change the Default port number add server port in vite.config.js
+
