@@ -7,6 +7,7 @@ import {
   Radio,
   RadioGroup as MuiRadioGroup,
 } from "@mui/material";
+import { formLabelStyles } from "../form/formStyles";
 
 const RadioGroup = memo(
   ({
@@ -47,18 +48,8 @@ const RadioGroup = memo(
     console.log(">>>>>>RadioGroup render:", name);
 
     return (
-      <FormControl
-        component="fieldset"
-        disabled={disabled}
-        required={required}
-        error={error}
-        sx={sx}
-      >
-        {label && (
-          <FormLabel id={groupLabelId} component="legend">
-            {label}
-          </FormLabel>
-        )}
+      <FormControl fullWidth required={required}>
+        {label && <FormLabel sx={formLabelStyles}>{label}</FormLabel>}
 
         <MuiRadioGroup
           name={name ?? generatedId}
@@ -84,7 +75,9 @@ const RadioGroup = memo(
           })}
         </MuiRadioGroup>
 
-        {helperText && <FormHelperText>{helperText}</FormHelperText>}
+        {helperText && (
+          <FormHelperText sx={{ color: "#d32f2f" }}>{helperText}</FormHelperText>
+        )}
       </FormControl>
     );
   },

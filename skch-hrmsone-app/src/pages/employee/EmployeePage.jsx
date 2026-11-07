@@ -4,6 +4,7 @@ import { Stack } from "@mui/material";
 import Button from "../../components/button/Button";
 import Popup from "../../components/popup/Popup";
 import EmployeeForm from "./EmployeeForm";
+import { DATE_FORMAT } from "../../utils/constants";
 
 const EmployeePage = () => {
   const [formPopup, setFormPopup] = useState(false);
@@ -30,7 +31,12 @@ const EmployeePage = () => {
 
   // Called by Formik after validation succeeds
   const handleEmployeeSubmit = useCallback(async (payload) => {
-    console.log("API called:", payload);
+    const formattedPayload = {
+      ...payload,
+      startDate: payload.startDate?.format(DATE_FORMAT) ?? "",
+      endDate: payload.endDate?.format(DATE_FORMAT) ?? "",
+    };
+    console.log("API called:", formattedPayload);
     await new Promise((resolve) => setTimeout(resolve, 3000));
   }, []);
 
