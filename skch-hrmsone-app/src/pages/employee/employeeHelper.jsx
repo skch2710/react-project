@@ -11,7 +11,7 @@ export const employeeInitialValues = {
   startDate: "",
   endDate: "",
   gender: "",
-  isActive: true,
+  isActive: null,
   acceptTerms: false,
 };
 
@@ -57,7 +57,9 @@ export const employeeValidationSchema = Yup.object({
     .oneOf(["1", "2", "3"], "Select a valid gender")
     .required("Gender is required"),
 
-  isActive: Yup.boolean(),
+  isActive: Yup.boolean()
+    .nullable()
+    .required("Active status is required"),
 
   acceptTerms: Yup.boolean().oneOf([true], "You must accept the terms and conditions"),
 });

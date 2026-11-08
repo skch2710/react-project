@@ -1,8 +1,9 @@
-import { Grid, Stack } from "@mui/material";
+import { Alert, Box, Grid, Stack, Tooltip } from "@mui/material";
 import { memo, useEffect } from "react";
 
 import { Form, Formik, useFormikContext } from "formik";
 
+import { BsInfoCircle } from "react-icons/bs";
 import Button from "../../components/button/Button";
 import FormikTextField from "../../components/form/FormikTextField";
 
@@ -14,12 +15,12 @@ import {
   skillsLkp,
 } from "./employeeHelper";
 
+import FormikCheckBox from "../../components/checkbox/FormikCheckBox";
+import FormikDatePicker from "../../components/datepicker/FormikDatePicker";
 import FormikDropDown from "../../components/dropdown/FormikDropDown";
 import FormicRadioGroup from "../../components/radiogroup/FormicRadioGroup";
-import { REGEX } from "../../utils/constants";
-import FormikDatePicker from "../../components/datepicker/FormikDatePicker";
 import FormikToggle from "../../components/toggle/FormikToggle";
-import FormikCheckBox from "../../components/checkbox/FormikCheckBox";
+import { REGEX } from "../../utils/constants";
 
 // Notify parent about submission status
 const SubmitStatus = memo(({ onChange }) => {
@@ -42,9 +43,10 @@ const EmployeeForm = memo(
           onSuccess?.();
         }}
       >
-        {({ resetForm, submitForm, isSubmitting, errors, touched }) => {
+        {({ resetForm, submitForm, isSubmitting, values, errors, touched }) => {
           // console.log("Errors:", errors);
           // console.log("Touched:", touched);
+          console.log("Values:", values);
           return (
             <Form>
               <SubmitStatus onChange={onSubmittingChange} />
@@ -52,14 +54,28 @@ const EmployeeForm = memo(
               <Grid container spacing={2} sx={{ mt: 2 }}>
                 {/* Employee Name */}
                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                  <FormikTextField
-                    name="employeeName"
-                    label="Employee Name"
-                    required
-                    inputProps={{
-                      maxLength: 100,
-                    }}
-                  />
+                  <Box sx={{ display: "flex", alignItems: "flex-end", gap: 1 }}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <FormikTextField
+                        name="employeeName"
+                        label="Employee Name"
+                        required
+                        inputProps={{
+                          maxLength: 100,
+                        }}
+                      />
+                    </Box>
+                    <Tooltip title="Employee name should be as per official records.">
+                      <BsInfoCircle
+                        fontSize={20}
+                        style={{
+                          marginBottom: "10px",
+                          color: "#1976d2",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </Tooltip>
+                  </Box>
                 </Grid>
 
                 {/* Email */}
@@ -146,9 +162,15 @@ const EmployeeForm = memo(
                 </Grid>
 
                 {/* Active Toggle and Term Checkbox */}
-                <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                  <Stack direction="row" spacing={2}>
-                    <FormikToggle name="active" label="Active" />
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ pt: { md: 3.5 } }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    sx={{
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <FormikToggle name="isActive" label="Active" required />
 
                     <FormikCheckBox
                       name="acceptTerms"
@@ -158,6 +180,14 @@ const EmployeeForm = memo(
                   </Stack>
                 </Grid>
               </Grid>
+
+              {values.isActive && (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ pt: { md: 3.5 } }}>
+                  <Alert severity="info">
+                    Employee is active. Please ensure all details are correct.
+                  </Alert>
+                </Grid>
+              )}
 
               <Stack
                 direction="row"
