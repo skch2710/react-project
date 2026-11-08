@@ -1,4 +1,4 @@
-import { Alert, Box, Grid, Stack, Tooltip } from "@mui/material";
+import { Box, Grid, Stack, Tooltip } from "@mui/material";
 import { memo, useEffect } from "react";
 
 import { Form, Formik, useFormikContext } from "formik";
@@ -21,6 +21,7 @@ import FormikDropDown from "../../components/dropdown/FormikDropDown";
 import FormicRadioGroup from "../../components/radiogroup/FormicRadioGroup";
 import FormikToggle from "../../components/toggle/FormikToggle";
 import { REGEX } from "../../utils/constants";
+import Alert from "../../components/alert/Alert";
 
 // Notify parent about submission status
 const SubmitStatus = memo(({ onChange }) => {
@@ -51,6 +52,12 @@ const EmployeeForm = memo(
             <Form>
               <SubmitStatus onChange={onSubmittingChange} />
 
+              {values.isActive && (
+                <Alert severity="info" showClose>
+                  Employee is active. Please ensure all details are correct.
+                </Alert>
+              )}
+
               <Grid container spacing={2} sx={{ mt: 2 }}>
                 {/* Employee Name */}
                 <Grid size={{ xs: 12, sm: 6, md: 4 }}>
@@ -65,7 +72,7 @@ const EmployeeForm = memo(
                         }}
                       />
                     </Box>
-                    <Tooltip title="Employee name should be as per official records.">
+                    <Tooltip title="Employee name should be as per official records. It should be between 3 to 100 characters long.">
                       <BsInfoCircle
                         fontSize={20}
                         style={{
@@ -180,14 +187,6 @@ const EmployeeForm = memo(
                   </Stack>
                 </Grid>
               </Grid>
-
-              {values.isActive && (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} sx={{ pt: { md: 3.5 } }}>
-                  <Alert severity="info">
-                    Employee is active. Please ensure all details are correct.
-                  </Alert>
-                </Grid>
-              )}
 
               <Stack
                 direction="row"
