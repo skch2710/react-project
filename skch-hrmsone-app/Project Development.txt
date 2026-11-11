@@ -26,6 +26,8 @@ c. Jest
     >>npm install @mui/x-date-pickers@^9 dayjs
     >>npm install react-icons
     >>npm install formik yup
+    >>npm install @reduxjs/toolkit react-redux
+    >>npm install react-toastify
 
 7. To Apply Same Font for Entire Project 
     --> Add CSS Style in index.CSS
@@ -41,4 +43,11 @@ c. Jest
 9. create styles folder > globalStyles.jsx to apply the gobal styles 
 
 10. To change the Default port number add server port in vite.config.js
+
+11. Configure redux store, create store folder in that create store.jsx file and to configure the store 
+    then Inject the store to Application in main.jsx using Provider 
+
+12. Configure Tostify in main.jsx using ToastContainer
+
+13.
 
