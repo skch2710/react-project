@@ -5,8 +5,8 @@ import Counter from "./pages/counter/Counter";
 const App = () => {
   return (
     <div>
-      {/* <EmployeePage /> */}
-      <Counter />
+      <EmployeePage />
+      {/* <Counter /> */}
     </div>
   );
 };

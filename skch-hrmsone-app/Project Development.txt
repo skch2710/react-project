@@ -24,6 +24,7 @@ c. Jest
     >>npm install @mui/material@9.5.0 @emotion/react @emotion/styled
     >>npm install @mui/icons-material@9.5.0
     >>npm install @mui/x-date-pickers@^9 dayjs
+    >>npm install @mui/x-data-grid
     >>npm install react-icons
     >>npm install formik yup
     >>npm install @reduxjs/toolkit react-redux
