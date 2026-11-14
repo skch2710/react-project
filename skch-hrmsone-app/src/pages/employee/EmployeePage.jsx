@@ -9,6 +9,8 @@ import DataGrid from "../../components/datagrid/DataGrid";
 import { employeeRows, employeeColumns } from "./employeeHelper";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { FaRegFilePdf } from "react-icons/fa";
+import PermissionForm from "./PermissionForm";
+import EmployeeGridForm from "./EmployeeGridForm";
 
 const EmployeePage = () => {
   const [formPopup, setFormPopup] = useState(false);
@@ -56,6 +58,9 @@ const EmployeePage = () => {
   return (
     <>
       <Button onClick={handleOpenPopup}>Open Popup</Button>
+
+      <PermissionForm />
+
       <DataGrid
         title={`Employee List (${employeeRows.length})`}
         rows={employeeRows}
@@ -81,6 +86,8 @@ const EmployeePage = () => {
           </Stack>
         }
       />
+
+      <EmployeeGridForm />
 
       <Popup
         open={formPopup}
