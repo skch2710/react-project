@@ -9,6 +9,10 @@ export const dataGridStyles = {
     backgroundColor: "#E0F2FE !important",
   },
 
+  " .MuiDataGrid-scrollbarFiller": {
+    backgroundColor: "#E0F2FE !important",
+  },
+
   "& .MuiDataGrid-columnHeader": {
     backgroundColor: "#E0F2FE",
     borderRight: "1px solid #E5E7EB",

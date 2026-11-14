@@ -1,15 +1,16 @@
-import { memo } from "react";
-import { Badge } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
+import { Badge } from "@mui/material";
 import {
   ColumnsPanelTrigger,
-  DataGrid as MuiDataGrid,
   FilterPanelTrigger,
+  DataGrid as MuiDataGrid,
   ToolbarButton,
 } from "@mui/x-data-grid";
+import { memo, useMemo } from "react";
 
 import { dataGridStyles } from "./dataGridStyles";
+import OverflowTooltipCell from "./OverflowTooltipCell";
 
 const DataGridMainControls = ({
   toolbarActions,
@@ -75,10 +76,29 @@ const DataGrid = memo(
     sx = [],
     ...rest
   }) => {
+    const columnsWithOverflowTooltips = useMemo(
+      () =>
+        columns.map((column) => {
+          const renderCell = column.renderCell;
+          return {
+            ...column,
+            renderCell: (params) => {
+              const value = params.formattedValue ?? params.value;
+              return (
+                <OverflowTooltipCell value={value}>
+                  {renderCell ? renderCell(params) : undefined}
+                </OverflowTooltipCell>
+              );
+            },
+          };
+        }),
+      [columns],
+    );
+
     return (
       <MuiDataGrid
         rows={rows}
-        columns={columns}
+        columns={columnsWithOverflowTooltips}
         loading={loading}
         checkboxSelection={checkboxSelection}
         disableRowSelectionOnClick={disableRowSelectionOnClick}

@@ -62,11 +62,11 @@ const EmployeePage = () => {
         columns={employeeColumns}
         checkboxSelection
         onRowSelectionModelChange={handleRowSelection}
-        // pageSizeOptions={[5, 10, 25]}
-        // initialPageSize={5}
+        pageSizeOptions={[5, 10, 25]}
+        initialPageSize={5}
         height={450}
         loading={false}
-        showPagination={false}
+        showPagination={true}
         toolbarActions={
           <Stack direction="row" spacing={1}>
             <Button onClick={handleOpenPopup}>

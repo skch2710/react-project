@@ -1,4 +1,11 @@
 import * as Yup from "yup";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
+import EditOutlined from "@mui/icons-material/EditOutlined";
+import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
+import PersonOffOutlined from "@mui/icons-material/PersonOffOutlined";
+import { Link } from "@mui/material";
 
 export const employeeInitialValues = {
   employeeName: "Sathish Kumar",
@@ -92,42 +99,146 @@ export const getEmployeePayload = (values) => ({
   salary: Number(values.salary),
 });
 
+const handleEdit = (row) => {
+  console.log("Edit employee:", row);
+};
+
+const handleView = (row) => {
+  console.log("View employee:", row);
+};
+
+const handleTerminate = (row) => {
+  console.log("Terminate employee:", row);
+};
+
+const handleEmployeeClick = (row) => {
+  console.log("Employee clicked:", row);
+}
+
 export const employeeColumns = [
+  {
+    field: "actions",
+    headerName: "Actions",
+    width: 120,
+    sortable: false,
+    filterable: false,
+    disableColumnMenu: true,
+    renderCell: (params) => (
+      <>
+        <Tooltip title="Edit">
+          <IconButton
+            color="primary"
+            size="small"
+            onClick={() => handleEdit(params.row)}
+          >
+            <EditOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="View">
+          <IconButton
+            color="info"
+            size="small"
+            onClick={() => handleView(params.row)}
+          >
+            <VisibilityOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Terminate">
+          <IconButton
+            color="error"
+            size="small"
+            onClick={() => handleTerminate(params.row)}
+          >
+            <PersonOffOutlined fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </>
+    ),
+  },
   {
     field: "employeeId",
     headerName: "Employee ID",
-    // width: 120,
+    width: 140,
+    renderCell: (params) => (
+      <Link
+        component="button"
+        underline="hover"
+        sx={{
+          color: "orange",
+          cursor: "pointer",
+        }}
+        onClick={() => handleEmployeeClick(params.row)}
+      >
+        {params.value}
+      </Link>
+    ),
   },
   {
     field: "employeeName",
     headerName: "Employee Name",
     flex: 1,
-    // minWidth: 180,
+    minWidth: 150,
+    width: 200,
   },
   {
     field: "email",
     headerName: "Email",
-    flex: 1,
-    // minWidth: 200,
+    flex: 1.5,
+    minWidth: 200,
+    width: 200,
   },
   {
     field: "department",
     headerName: "Department",
-    // width: 150,
+    width: 140,
   },
   {
     field: "salary",
     headerName: "Salary",
-    width: 120,
+    width: 130,
     type: "number",
   },
+  {
+    field: "startDate",
+    headerName: "Start Date",
+    width: 130,
+  },
+  {
+    field: "endDate",
+    headerName: "End Date",
+    width: 130,
+  },
+  {
+    field: "gender",
+    headerName: "Gender",
+    width: 100,
+  },
+  {
+    field: "isActive",
+    headerName: "Is Active",
+    width: 100,
+  },
+  {
+    field: "skills",
+    headerName: "Skills",
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "designation",
+    headerName: "Designation",
+    flex: 1,
+    minWidth: 150,
+  }
 ];
 
 export const employeeRows = [
   {
     id: 1,
     employeeId: "EMP001",
-    employeeName: "Sathish",
+    employeeName: "Sathish Kumar Chittipothula",
     email: "sathish@example.com",
     department: "IT",
     salary: 12584000,
@@ -219,5 +330,5 @@ export const employeeRows = [
     email: "raj@example.com",
     department: "Finance",
     salary: 70000,
-  }
+  },
 ];
