@@ -59,6 +59,7 @@ const DataGrid = memo(
     columns = [],
     loading = false,
     checkboxSelection = false,
+    disableMultipleRowSelection = false,
     disableRowSelectionOnClick = true,
     disableColumnMenu = true,
     pageSizeOptions = [5, 10, 25, 50, 100],
@@ -101,6 +102,10 @@ const DataGrid = memo(
         columns={columnsWithOverflowTooltips}
         loading={loading}
         checkboxSelection={checkboxSelection}
+        disableMultipleRowSelection={
+          disableMultipleRowSelection ||
+          (checkboxSelection && rows.length === 0)
+        }
         disableRowSelectionOnClick={disableRowSelectionOnClick}
         disableColumnMenu={disableColumnMenu}
         pageSizeOptions={pageSizeOptions}

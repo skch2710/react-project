@@ -1,12 +1,10 @@
-import React from "react";
-import EmployeePage from "./pages/employee/EmployeePage";
-import Counter from "./pages/counter/Counter";
+import TwoGridDataHandle from "./pages/employee/TwoGridDataHandle";
+import { employeeColumns, employeeRows } from "./pages/employee/employeeHelper";
 
 const App = () => {
   return (
     <div>
-      <EmployeePage />
-      {/* <Counter /> */}
+      <TwoGridDataHandle rows={employeeRows} columns={employeeColumns} />
     </div>
   );
 };

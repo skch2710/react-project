@@ -30,15 +30,12 @@ axiosInterceptor.interceptors.response.use(
         error.response?.data?.error ||
         error.message ||
         "Something went wrong",
-
       status: error.response?.status ?? null,
       data: error.response?.data ?? null,
       code: error.code ?? null,
-
       isNetworkError: !error.response && !error.request,
       isCanceled: axios.isCancel(error),
     };
-
     // Do not swallow the original error
     return Promise.reject(normalizedError);
   },
