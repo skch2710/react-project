@@ -29,6 +29,7 @@ c. Jest
     >>npm install formik yup
     >>npm install @reduxjs/toolkit react-redux
     >>npm install react-toastify
+    >>npm install axios file-saver
 
 7. To Apply Same Font for Entire Project 
     --> Add CSS Style in index.CSS
