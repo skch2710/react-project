@@ -1,11 +1,7 @@
 import * as Yup from "yup";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-
-import EditOutlined from "@mui/icons-material/EditOutlined";
-import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
-import PersonOffOutlined from "@mui/icons-material/PersonOffOutlined";
 import { Link } from "@mui/material";
+
+import GridActions from "../../components/datagrid/GridActions";
 
 export const employeeInitialValues = {
   employeeName: "Sathish Kumar",
@@ -113,7 +109,14 @@ const handleTerminate = (row) => {
 
 const handleEmployeeClick = (row) => {
   console.log("Employee clicked:", row);
-}
+};
+
+const employeeActions = [
+  { type: "edit", tooltip: "Edit", onClick: handleEdit },
+  { type: "view", tooltip: "View", onClick: handleView },
+  { type: "terminate", tooltip: "Terminate", onClick: handleTerminate, disabled: (row) => !row.isActive },
+  { type: "plus", tooltip: "More Actions", onClick: () => console.log("More actions clicked") },
+];
 
 export const employeeColumns = [
   {
@@ -123,44 +126,13 @@ export const employeeColumns = [
     sortable: false,
     filterable: false,
     disableColumnMenu: true,
-    renderCell: (params) => (
-      <>
-        <Tooltip title="Edit">
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={() => handleEdit(params.row)}
-          >
-            <EditOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title="View">
-          <IconButton
-            color="info"
-            size="small"
-            onClick={() => handleView(params.row)}
-          >
-            <VisibilityOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title="Terminate">
-          <IconButton
-            color="error"
-            size="small"
-            onClick={() => handleTerminate(params.row)}
-          >
-            <PersonOffOutlined fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </>
+    renderCell: ({ row }) => (
+      <GridActions actions={employeeActions} row={row} />
     ),
   },
   {
     field: "employeeId",
     headerName: "Employee ID",
-    width: 140,
     renderCell: (params) => (
       <Link
         component="button"
@@ -179,59 +151,50 @@ export const employeeColumns = [
     field: "employeeName",
     headerName: "Employee Name",
     flex: 1,
-    minWidth: 150,
-    width: 200,
+    minWidth: 200,
   },
   {
     field: "email",
     headerName: "Email",
     flex: 1.5,
     minWidth: 200,
-    width: 200,
   },
   {
     field: "department",
     headerName: "Department",
-    width: 140,
+    flex: 1,
+    minWidth: 150,
   },
   {
     field: "salary",
     headerName: "Salary",
-    width: 130,
     type: "number",
+    minWidth: 120,
   },
   {
     field: "startDate",
     headerName: "Start Date",
-    width: 130,
   },
   {
     field: "endDate",
     headerName: "End Date",
-    width: 130,
   },
   {
     field: "gender",
     headerName: "Gender",
-    width: 100,
   },
   {
     field: "isActive",
     headerName: "Is Active",
-    width: 100,
   },
   {
     field: "skills",
     headerName: "Skills",
-    flex: 1,
-    minWidth: 150,
   },
   {
     field: "designation",
     headerName: "Designation",
-    flex: 1,
-    minWidth: 150,
-  }
+  },
 ];
 
 export const employeeRows = [

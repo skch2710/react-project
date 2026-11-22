@@ -12,8 +12,28 @@ const theme = createTheme({
   },
   colors: {
     blue: {
+      dark: "#053C6A",
       btnBgm: "#053C6A",
       btnBgmHover: "#031253",
+    },
+    monochrome: {
+      tableBordersColor: "#E2E2E2",
+      border: "#E2E2E2",
+      offWhite: "#FFFFFF",
+      tableHeaderBackground: "#F0F2FF",
+      tableHeaderText: "#022038",
+      tableCellColor: "#333333",
+    },
+    grey: {
+      500: "#9E9E9E",
+      inactive: "#9E9E9E",
+    },
+    green: {
+      700: "#2E7D32",
+      800: "#1B5E20",
+    },
+    red: {
+      900: "#B71C1C",
     },
     white: {
       btn: "#FFFFFF",

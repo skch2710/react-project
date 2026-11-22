@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { Grid, IconButton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 
 import Button from "../../components/button/Button";
 import Popup from "../../components/popup/Popup";
@@ -7,8 +7,6 @@ import EmployeeForm from "./EmployeeForm";
 import { DATE_FORMAT } from "../../utils/constants";
 import DataGrid from "../../components/datagrid/DataGrid";
 import { employeeRows, employeeColumns } from "./employeeHelper";
-import { RiFileExcel2Fill } from "react-icons/ri";
-import { FaRegFilePdf } from "react-icons/fa";
 import PermissionForm from "./PermissionForm";
 import EmployeeGridForm from "./EmployeeGridForm";
 
@@ -55,11 +53,44 @@ const EmployeePage = () => {
     console.log("Export to Excel clicked");
   }, []);
 
+  const emptyRows = [];
+
+  const toolbarActions = [
+          {
+            type: "add",
+            label: "Add Employee",
+            onClick: handleOpenPopup,
+            variant: "contained",
+            tooltip: "Add a new employee",
+          },
+          {
+            type: "exportExcel",
+            label: "Export Excel",
+            onClick: handleExcel,
+            variant: "outlined",
+            tooltip: "Export employee data to Excel",
+          },
+          {
+            type: "exportPdf",
+            label: "Export PDF",
+            onClick: handleExcel,
+            variant: "outlined",
+            tooltip: "Export employee data to PDF",
+          },
+           {
+            type: "exportZip",
+            // label: "Export ZIP",
+            onClick: handleExcel,
+            variant: "outlined",
+            tooltip: "Export employee data to ZIP",
+          },
+        ];
+
   return (
     <>
       <Button onClick={handleOpenPopup}>Open Popup</Button>
 
-      <PermissionForm />
+      {/* <PermissionForm /> */}
 
       <DataGrid
         title={`Employee List (${employeeRows.length})`}
@@ -67,27 +98,14 @@ const EmployeePage = () => {
         columns={employeeColumns}
         checkboxSelection
         onRowSelectionModelChange={handleRowSelection}
-        pageSizeOptions={[5, 10, 25]}
-        initialPageSize={5}
-        height={450}
+        minHeight={250}
+        maxHeight={600}
         loading={false}
         showPagination={true}
-        toolbarActions={
-          <Stack direction="row" spacing={1}>
-            <Button onClick={handleOpenPopup}>
-              Add Employee
-            </Button>
-            <IconButton onClick={handleExcel} aria-label="Export to Excel">
-              <RiFileExcel2Fill />
-            </IconButton>
-            <IconButton onClick={handleExcel} aria-label="Export to Pdf">
-              <FaRegFilePdf />
-            </IconButton>
-          </Stack>
-        }
+        toolbarActions={toolbarActions}
       />
 
-      <EmployeeGridForm />
+      {/* <EmployeeGridForm /> */}
 
       <Popup
         open={formPopup}

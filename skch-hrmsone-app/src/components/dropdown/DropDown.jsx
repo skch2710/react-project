@@ -14,6 +14,7 @@ import { formLabelStyles } from "../form/formStyles";
 const ALL_VALUE = "__DROPDOWN_SELECT_ALL__";
 const PAGE_SIZE = 100;
 const EMPTY_OPTIONS = [];
+const EMPTY_OBJECT = {};
 
 const DropDown = memo(
   ({
@@ -26,6 +27,7 @@ const DropDown = memo(
     label,
     labelKey,
     valueKey,
+    inputProps = EMPTY_OBJECT,
     disabled = false,
     required = false,
     error = false,
@@ -183,7 +185,7 @@ const DropDown = memo(
           inputValue={multiple ? inputValue : undefined}
           onInputChange={multiple ? handleInputChange : undefined}
           // disabled={disabled}
-          disableCloseOnSelect
+          disableCloseOnSelect={multiple}
           onChange={handleChange}
           getOptionKey={(option) => String(option?.[valueKey])}
           getOptionLabel={(option) => String(option?.[labelKey] ?? "")}
@@ -235,6 +237,7 @@ const DropDown = memo(
               {...params}
               // label={label}
               placeholder={placeholder}
+              inputProps={{ ...params.inputProps, ...inputProps }}
               required={required}
               error={error}
               helperText={helperText}

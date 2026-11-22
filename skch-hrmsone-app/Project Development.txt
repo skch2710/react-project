@@ -51,5 +51,5 @@ c. Jest
 
 12. Configure Tostify in main.jsx using ToastContainer
 
-13.
+13.  "start": "vite",  This in scripts will work fro >>npm start
 
