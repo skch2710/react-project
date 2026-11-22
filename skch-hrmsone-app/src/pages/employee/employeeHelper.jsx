@@ -213,6 +213,7 @@ export const employeeRows = [
     email: "ravi@example.com",
     department: "HR",
     salary: 60000,
+    inActive: "Y",
   },
   {
     id: 3,

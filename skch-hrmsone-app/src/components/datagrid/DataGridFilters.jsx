@@ -15,7 +15,7 @@ import { DATE_FORMAT } from "../../utils/constants";
 
 dayjs.extend(customParseFormat);
 
-export const FILTER_ROW_HEIGHT = 40;
+export const FILTER_ROW_HEIGHT = 50;
 
 const toOption = (opt) =>
   typeof opt === "object" ? opt : { label: opt, value: opt };
@@ -80,7 +80,9 @@ export const FilterField = memo(({ column, onChange, initialValue }) => {
             )
           }
           slotProps={{
-            textField: { inputProps: { "aria-label": ariaLabel } },
+            textField: {
+              slotProps: { htmlInput: { "aria-label": ariaLabel } },
+            },
           }}
         />
       )}
@@ -89,7 +91,7 @@ export const FilterField = memo(({ column, onChange, initialValue }) => {
           placeholder={label}
           defaultValue={initialValue ?? ""}
           onChange={(e) => onChange(column.field, e.target.value)}
-          inputProps={{ "aria-label": ariaLabel }}
+          slotProps={{ htmlInput: { "aria-label": ariaLabel } }}
         />
       )}
     </div>

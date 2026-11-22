@@ -232,18 +232,26 @@ const DropDown = memo(
               maxWidth: "60%",
             },
           }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              // label={label}
-              placeholder={placeholder}
-              inputProps={{ ...params.inputProps, ...inputProps }}
-              required={required}
-              error={error}
-              helperText={helperText}
-              onBlur={onBlur}
-            />
-          )}
+          renderInput={(params) => {
+            const { inputProps: autocompleteInputProps, ...textFieldProps } =
+              params;
+
+            return (
+              <TextField
+                {...textFieldProps}
+                // label={label}
+                placeholder={placeholder}
+                slotProps={{
+                  ...textFieldProps.slotProps,
+                  htmlInput: { ...autocompleteInputProps, ...inputProps },
+                }}
+                required={required}
+                error={error}
+                helperText={helperText}
+                onBlur={onBlur}
+              />
+            );
+          }}
         />
       </FormControl>
     );

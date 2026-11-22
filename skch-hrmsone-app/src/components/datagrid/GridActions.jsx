@@ -109,7 +109,7 @@ export const GridActionIcon = ({
           color:
             resolveColor(theme, type, { disabled, isBlocked, isTerminated }) ??
             theme.colors.blue.dark,
-          fontSize: toolbar ? "22px" : "14px",
+          fontSize: toolbar ? "24px" : "14px",
           height: toolbar ? 30 : undefined,
           padding: "4px",
           "&.Mui-disabled": { color: theme.colors.grey[500] },
@@ -213,11 +213,12 @@ export const ActionButton = ({
 
 // Renders a row's actions: [{ type, onClick, disabled, tooltip, ... }]
 const GridActions = ({ actions = [], row }) =>
-  actions.map(({ type, onClick, ...action }) => (
+  actions.map(({ type, onClick, disabled, ...action }) => (
     <GridActionIcon
       key={type}
       type={type}
       onClick={onClick ? () => onClick(row) : undefined}
+      disabled={typeof disabled === "function" ? disabled(row) : disabled}
       {...action}
     />
   ));

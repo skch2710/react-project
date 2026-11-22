@@ -308,8 +308,8 @@ const ChatBot = () => {
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={handleKeyDown}
               autoComplete="off"
-              inputProps={{
-                "aria-label": "Type your message",
+              slotProps={{
+                htmlInput: { "aria-label": "Type your message" },
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {

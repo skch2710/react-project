@@ -4,58 +4,49 @@ import { Grid, Stack } from "@mui/material";
 import Button from "../../components/button/Button";
 import DataGrid from "../../components/datagrid/DataGrid";
 
-const createEmptySelectionModel = () => ({
-  type: "include",
-  ids: new Set(),
-});
-
 const TwoGridDataHandle = ({ rows = [], columns = [], onChange }) => {
   const [availableRows, setAvailableRows] = useState(rows);
   const [selectedRows, setSelectedRows] = useState([]);
 
-  const [leftSelection, setLeftSelection] = useState(createEmptySelectionModel);
-  const [rightSelection, setRightSelection] = useState(
-    createEmptySelectionModel,
-  );
+  const [leftSelectedRows, setLeftSelectedRows] = useState(() => new Map());
+  const [rightSelectedRows, setRightSelectedRows] = useState(() => new Map());
 
   // Move selected rows from left to right
   const handleAdd = () => {
-    const movingRows = availableRows.filter((row) =>
-      leftSelection.ids.has(row.id),
-    );
+    const movingRows = Array.from(leftSelectedRows.values());
 
     if (!movingRows.length) return;
 
+    const movingIds = new Set(leftSelectedRows.keys());
     const updatedAvailable = availableRows.filter(
-      (row) => !leftSelection.ids.has(row.id),
+      (row) => !movingIds.has(row.id),
     );
 
     const updatedSelected = [...selectedRows, ...movingRows];
 
     setAvailableRows(updatedAvailable);
     setSelectedRows(updatedSelected);
-    setLeftSelection(createEmptySelectionModel());
+    setLeftSelectedRows(new Map());
 
     onChange?.(updatedSelected);
   };
 
   // Move selected rows from right to left
   const handleRemove = () => {
-    const movingRows = selectedRows.filter((row) =>
-      rightSelection.ids.has(row.id),
-    );
+    const movingRows = Array.from(rightSelectedRows.values());
 
     if (!movingRows.length) return;
 
+    const movingIds = new Set(rightSelectedRows.keys());
     const updatedSelected = selectedRows.filter(
-      (row) => !rightSelection.ids.has(row.id),
+      (row) => !movingIds.has(row.id),
     );
 
     const updatedAvailable = [...availableRows, ...movingRows];
 
     setSelectedRows(updatedSelected);
     setAvailableRows(updatedAvailable);
-    setRightSelection(createEmptySelectionModel());
+    setRightSelectedRows(new Map());
 
     onChange?.(updatedSelected);
   };
@@ -69,8 +60,7 @@ const TwoGridDataHandle = ({ rows = [], columns = [], onChange }) => {
           columns={columns}
           checkboxSelection
           disableRowSelectionExcludeModel
-          rowSelectionModel={leftSelection}
-          onRowSelectionModelChange={setLeftSelection}
+          onSelectionChange={setLeftSelectedRows}
         />
       </Grid>
 
@@ -88,11 +78,11 @@ const TwoGridDataHandle = ({ rows = [], columns = [], onChange }) => {
           spacing={2}
           sx={{ width: "100%" }}
         >
-          <Button onClick={handleAdd} disabled={!leftSelection.ids.size}>
+          <Button onClick={handleAdd} disabled={!leftSelectedRows.size}>
             Add &gt;&gt;
           </Button>
 
-          <Button onClick={handleRemove} disabled={!rightSelection.ids.size}>
+          <Button onClick={handleRemove} disabled={!rightSelectedRows.size}>
             &lt;&lt; Remove
           </Button>
         </Stack>
@@ -105,8 +95,7 @@ const TwoGridDataHandle = ({ rows = [], columns = [], onChange }) => {
           columns={columns}
           checkboxSelection
           disableRowSelectionExcludeModel
-          rowSelectionModel={rightSelection}
-          onRowSelectionModelChange={setRightSelection}
+          onSelectionChange={setRightSelectedRows}
         />
       </Grid>
     </Grid>

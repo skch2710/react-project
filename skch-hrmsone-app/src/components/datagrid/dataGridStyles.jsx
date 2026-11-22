@@ -9,15 +9,6 @@ export const dataGridStyles = (theme) => {
     boxShadow: "0 0 18px rgb(78 125 150 / 8%)",
     padding: "10px 20px",
 
-    // "& .MuiDataGrid-toolbarLabel": {
-    //   font: "inherit",
-    //   fontFamily: theme.typography.h5.fontFamily,
-    //   fontSize: theme.typography.h5.fontSize,
-    //   fontWeight: theme.typography.h5.fontWeight,
-    //   lineHeight: theme.typography.h5.lineHeight,
-    //   color: theme.typography.h5.color,
-    // },
-
     "& .MuiDataGrid-columnHeaders, & .MuiDataGrid-columnHeader": {
       backgroundColor: monochrome.tableHeaderBackground,
       color: monochrome.tableHeaderText,
@@ -32,11 +23,6 @@ export const dataGridStyles = (theme) => {
       borderLeft: 0,
       "&:last-of-type": { borderRight: 0 },
     },
-
-    // "& .MuiDataGrid-main": {
-    //     borderLeft: border,
-    //     borderRight: border,
-    // },
 
     "& .MuiDataGrid-columnHeaderTitle": {
       color: monochrome.tableHeaderText,
@@ -78,6 +64,7 @@ export const dataGridStyles = (theme) => {
     // "& .MuiDataGrid-virtualScrollerContent": {
     //   marginBottom: "12px",
     // },
+
     "& .MuiDataGrid-virtualScroller": {
       borderLeft: border,
       borderRight: border,

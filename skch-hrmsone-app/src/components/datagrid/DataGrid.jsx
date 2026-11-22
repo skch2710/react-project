@@ -1,6 +1,9 @@
 import { DataGrid as MuiDataGrid } from "@mui/x-data-grid";
 import { memo, useCallback, useMemo, useRef, useState } from "react";
-import { ActionButton as GridActionButton, GridActionIcon } from "./GridActions";
+import {
+  ActionButton as GridActionButton,
+  GridActionIcon,
+} from "./GridActions";
 
 import {
   buildTitleGroups,
@@ -14,12 +17,15 @@ import {
 } from "./DataGridFilters";
 import DataGridPagination from "./DataGridPagination";
 import { dataGridStyles } from "./dataGridStyles";
+import { getHeaderWidth, getSelectedRowsMap } from "./dataGridHelper";
 import OverflowTooltipCell from "./OverflowTooltipCell";
 
 // Module-level defaults keep prop identities stable across renders.
 const EMPTY_ARRAY = [];
 const EMPTY_OBJECT = {};
-const DEFAULT_PAGE_SIZE_OPTIONS = [25, 50, 75, 100];
+const DEFAULT_IS_ROW_SELECTABLE = () => true;
+const DEFAULT_PAGE_SIZE_OPTIONS = [5, 25, 50, 75, 100];
+const INITIAL_PAGE_SIZE = 25;
 const INITIAL_SORT = { field: null, direction: null };
 const EMPTY_SELECTION = { type: "include", ids: new Set() };
 const DEFAULT_TOOLBAR_PROPS = {
@@ -28,46 +34,35 @@ const DEFAULT_TOOLBAR_PROPS = {
   printOptions: { disableToolbarButton: true },
 };
 const DEFAULT_LOCALE_TEXT = { noRowsLabel: "No Records Found." };
-
-// Approximates 12px header text plus cell padding and the sort caret.
-const getHeaderWidth = (column) =>
-  Math.max(
-    100,
-    Math.ceil(String(column.headerName ?? column.field).length * 7) + 30,
-  );
+const ROW_HEIGHT = 35;
+const COLUMN_HEADER_HEIGHT = 30;
 
 const DataGrid = memo(
   ({
+    title = "",
     rows = EMPTY_ARRAY,
     columns = EMPTY_ARRAY,
+    getRowId,
     loading = false,
     checkboxSelection = false,
     disableMultipleRowSelection = false,
-    isRowSelectable = () => true,
-    disableRowSelectionOnClick = true,
-    disableColumnMenu = true,
-    pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
-    initialPageSize = 25,
-    rowHeight = 35,
-    columnHeaderHeight = 30,
-    showPagination = true,
-    title = "",
+    isRowSelectable = DEFAULT_IS_ROW_SELECTABLE,
+    onSelectionChange,
     toolbarActions,
     showFilterIcon = true,
-    minHeight = 200,
-    maxHeight = 200,
-    getRowId,
+    showPagination = true,
     paginationMode = "client",
-    sortingMode = "client",
-    initialSort = INITIAL_SORT,
+    pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+    initialPageSize = INITIAL_PAGE_SIZE,
+    paginationModel,
     rowCount,
     onPaginationModelChange,
+    sortingMode = "client",
+    initialSort = INITIAL_SORT,
     onSortChange,
     onFilterChange,
-    onRowSelectionModelChange,
-    onSelectionChange,
-    rowSelectionModel,
-    localeText = DEFAULT_LOCALE_TEXT,
+    minHeight = 250,
+    maxHeight = 500,
     slotProps = EMPTY_OBJECT,
     slots = EMPTY_OBJECT,
     sx = EMPTY_ARRAY,
@@ -79,38 +74,17 @@ const DataGrid = memo(
     const [sort, setSort] = useState(initialSort);
     const isEmpty = rows.length === 0;
     const [internalSelection, setInternalSelection] = useState(EMPTY_SELECTION);
-    const selectionModel = rowSelectionModel ?? internalSelection;
 
     // Reports selection as Map<GridRowId, row>.
     const handleSelectionChange = useCallback(
-      (model, details) => {
+      (model) => {
         setInternalSelection(model);
-        onRowSelectionModelChange?.(model, details);
         if (!onSelectionChange) return;
-        const { type, ids } = model;
-        const selected = new Map();
-        rows.forEach((row) => {
-          const id = getRowId ? getRowId(row) : row.id;
-          if (!isRowSelectable({ id, row })) return;
-          if (type === "exclude" ? !ids.has(id) : ids.has(id)) {
-            selected.set(id, row);
-          }
-        });
-        onSelectionChange(selected);
+        onSelectionChange(
+          getSelectedRowsMap(model, rows, getRowId, isRowSelectable),
+        );
       },
-      [
-        rows,
-        getRowId,
-        isRowSelectable,
-        onRowSelectionModelChange,
-        onSelectionChange,
-      ],
-    );
-
-    // Closing the filter row only hides it; typed values and the applied filter are kept.
-    const handleFilterToggle = useCallback(
-      () => setShowFilters((prev) => !prev),
-      [],
+      [rows, getRowId, isRowSelectable, onSelectionChange],
     );
 
     const handleFilterChange = useCallback(
@@ -133,7 +107,7 @@ const DataGrid = memo(
         setSort(next);
         onSortChange?.(next);
       },
-      [sort.direction, onSortChange],
+      [sort.field, sort.direction, onSortChange],
     );
 
     const sortContext = useMemo(
@@ -225,7 +199,7 @@ const DataGrid = memo(
               toolbar
               disabled={isEmpty && !showFilters}
               tooltip={`${showFilters ? "Close" : "Open"} Filters`}
-              onClick={handleFilterToggle}
+              onClick={() => setShowFilters((prev) => !prev)}
             />
           )}
           {Array.isArray(toolbarActions)
@@ -235,13 +209,7 @@ const DataGrid = memo(
             : toolbarActions}
         </>
       ),
-      [
-        showFilterIcon,
-        isEmpty,
-        showFilters,
-        handleFilterToggle,
-        toolbarActions,
-      ],
+      [showFilterIcon, isEmpty, showFilters, toolbarActions],
     );
 
     const mergedSlots = useMemo(
@@ -284,39 +252,39 @@ const DataGrid = memo(
     return (
       <SortContext.Provider value={sortContext}>
         <MuiDataGrid
+          label={title}
           rows={filteredRows}
           columns={columnsWithOverflowTooltips}
+          getRowId={getRowId}
           loading={loading}
           checkboxSelection={checkboxSelection}
           disableMultipleRowSelection={
             disableMultipleRowSelection || (checkboxSelection && isEmpty)
           }
           isRowSelectable={isRowSelectable}
-          disableRowSelectionOnClick={disableRowSelectionOnClick}
-          disableColumnMenu={disableColumnMenu}
+          disableRowSelectionOnClick
+          disableColumnMenu
           pageSizeOptions={pageSizeOptions}
-          rowHeight={rowHeight}
-          
+          rowHeight={ROW_HEIGHT}
           columnHeaderHeight={
-            showFilters ? FILTER_ROW_HEIGHT : columnHeaderHeight
+            showFilters ? FILTER_ROW_HEIGHT : COLUMN_HEADER_HEIGHT
           }
-          columnGroupHeaderHeight={columnHeaderHeight}
+          columnGroupHeaderHeight={COLUMN_HEADER_HEIGHT}
           columnGroupingModel={columnGroupingModel}
           sortModel={sortModel}
           sortingMode={sortingMode}
           paginationMode={paginationMode}
           rowCount={rowCount}
+          paginationModel={paginationModel}
           onPaginationModelChange={onPaginationModelChange}
           hideFooter={!showPagination}
-          label={title}
           showToolbar
           slots={mergedSlots}
           slotProps={mergedSlotProps}
-          localeText={localeText}
+          localeText={DEFAULT_LOCALE_TEXT}
           initialState={initialState}
-          getRowId={getRowId}
           onRowSelectionModelChange={handleSelectionChange}
-          rowSelectionModel={selectionModel}
+          rowSelectionModel={internalSelection}
           sx={mergedSx}
           className={showFilters ? "filters-open" : undefined}
           style={style}

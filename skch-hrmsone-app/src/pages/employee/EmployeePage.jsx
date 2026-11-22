@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Stack } from "@mui/material";
 
 import Button from "../../components/button/Button";
@@ -10,14 +10,101 @@ import { employeeRows, employeeColumns } from "./employeeHelper";
 import PermissionForm from "./PermissionForm";
 import EmployeeGridForm from "./EmployeeGridForm";
 
+const isEmployeeRowSelectable = ({ row }) => row.inActive !== "Y";
+
+const getRowId = (row) => row.employeeId;
+
+const INITIAL_EMPLOYEE_QUERY = {
+  pageNumber: 1,
+  pageSize: 25,
+  sortBy: "employeeId",
+  sortOrder: "asc",
+  filters: [],
+};
+const INITIAL_EMPLOYEE_SORT = {
+  field: INITIAL_EMPLOYEE_QUERY.sortBy,
+  direction: INITIAL_EMPLOYEE_QUERY.sortOrder,
+};
+
+const getMockEmployeePage = (rows, query) => {
+  const filteredRows = rows.filter((row) =>
+    query.filters.every(({ field, value }) =>
+      String(row[field] ?? "")
+        .toLowerCase()
+        .startsWith(String(value).toLowerCase()),
+    ),
+  );
+  const direction = query.sortOrder === "desc" ? -1 : 1;
+  const sortedRows = [...filteredRows].sort((left, right) =>
+    direction *
+    String(left[query.sortBy] ?? "").localeCompare(
+      String(right[query.sortBy] ?? ""),
+      undefined,
+      { numeric: true, sensitivity: "base" },
+    ),
+  );
+  const start = (query.pageNumber - 1) * query.pageSize;
+
+  return {
+    rows: sortedRows.slice(start, start + query.pageSize),
+    rowCount: filteredRows.length,
+  };
+};
+
 const EmployeePage = () => {
   const [formPopup, setFormPopup] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [queryPayload, setQueryPayload] = useState(INITIAL_EMPLOYEE_QUERY);
 
-  const handleRowSelection = useCallback((selectionModel) => {
-    setSelectedRows(selectionModel);
+  useEffect(() => {
+    console.log("Query Payload changed:", queryPayload);
+  }, [queryPayload]);
+
+  const handleSelectionChange = useCallback((selectedRows) => {
+    console.log("Selected Rows:", selectedRows);
   }, []);
+
+  const handlePaginationModelChange = useCallback(({ page, pageSize }) => {
+    setQueryPayload((current) => ({
+      ...current,
+      pageNumber: page + 1,
+      pageSize,
+    }));
+  }, []);
+
+  const handleSortChange = useCallback(({ field, direction }) => {
+    setQueryPayload((current) => ({
+      ...current,
+      pageNumber: 1,
+      sortBy: field,
+      sortOrder: direction,
+    }));
+  }, []);
+
+  const handleFilterChange = useCallback((filterValues) => {
+    const filters = Object.entries(filterValues)
+      .filter(([, value]) => value != null && String(value).trim() !== "")
+      .map(([field, value]) => ({ field, type: "startWith", value }));
+
+    setQueryPayload((current) => ({
+      ...current,
+      pageNumber: 1,
+      filters,
+    }));
+  }, []);
+
+  const paginationModel = useMemo(
+    () => ({
+      page: queryPayload.pageNumber - 1,
+      pageSize: queryPayload.pageSize,
+    }),
+    [queryPayload.pageNumber, queryPayload.pageSize],
+  );
+  
+  const { rows, rowCount } = useMemo(
+    () => getMockEmployeePage(employeeRows, queryPayload),
+    [queryPayload],
+  );
 
   const formikRef = useRef(null);
 
@@ -55,36 +142,39 @@ const EmployeePage = () => {
 
   const emptyRows = [];
 
-  const toolbarActions = [
-          {
-            type: "add",
-            label: "Add Employee",
-            onClick: handleOpenPopup,
-            variant: "contained",
-            tooltip: "Add a new employee",
-          },
-          {
-            type: "exportExcel",
-            label: "Export Excel",
-            onClick: handleExcel,
-            variant: "outlined",
-            tooltip: "Export employee data to Excel",
-          },
-          {
-            type: "exportPdf",
-            label: "Export PDF",
-            onClick: handleExcel,
-            variant: "outlined",
-            tooltip: "Export employee data to PDF",
-          },
-           {
-            type: "exportZip",
-            // label: "Export ZIP",
-            onClick: handleExcel,
-            variant: "outlined",
-            tooltip: "Export employee data to ZIP",
-          },
-        ];
+  const toolbarActions = useMemo(
+    () => [
+      {
+        type: "add",
+        label: "Add Employee",
+        onClick: handleOpenPopup,
+        variant: "contained",
+        tooltip: "Add a new employee",
+      },
+      {
+        type: "exportExcel",
+        label: "Export Excel",
+        onClick: handleExcel,
+        variant: "outlined",
+        tooltip: "Export employee data to Excel",
+      },
+      {
+        type: "exportPdf",
+        label: "Export PDF",
+        onClick: handleExcel,
+        variant: "outlined",
+        tooltip: "Export employee data to PDF",
+      },
+      {
+        type: "exportZip",
+        label: "Export ZIP",
+        onClick: handleExcel,
+        variant: "outlined",
+        tooltip: "Export employee data to ZIP",
+      },
+    ],
+    [handleOpenPopup, handleExcel],
+  );
 
   return (
     <>
@@ -93,15 +183,22 @@ const EmployeePage = () => {
       {/* <PermissionForm /> */}
 
       <DataGrid
-        title={`Employee List (${employeeRows.length})`}
-        rows={employeeRows}
+        title={`Employee List (${rowCount})`}
+        rows={rows}
         columns={employeeColumns}
+        getRowId={getRowId}
         checkboxSelection
-        onRowSelectionModelChange={handleRowSelection}
-        minHeight={250}
-        maxHeight={600}
-        loading={false}
-        showPagination={true}
+        onSelectionChange={handleSelectionChange}
+        isRowSelectable={isEmployeeRowSelectable}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={handlePaginationModelChange}
+        initialPageSize={INITIAL_EMPLOYEE_QUERY.pageSize}
+        sortingMode="server"
+        initialSort={INITIAL_EMPLOYEE_SORT}
+        onSortChange={handleSortChange}
+        onFilterChange={handleFilterChange}
+        rowCount={rowCount}
         toolbarActions={toolbarActions}
       />
 
