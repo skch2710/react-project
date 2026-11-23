@@ -5,8 +5,8 @@ import EmployeePage from "./pages/employee/EmployeePage";
 const App = () => {
   return (
     <div>
-      {/* <TwoGridDataHandle rows={employeeRows} columns={employeeColumns} /> */}
-      <EmployeePage />
+      <TwoGridDataHandle rows={employeeRows} columns={employeeColumns} />
+      {/* <EmployeePage /> */}
     </div>
   );
 };
